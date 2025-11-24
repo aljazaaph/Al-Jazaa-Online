@@ -476,8 +476,23 @@
     }
 
     function sendData(payload) {
-        fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) })
-        .then(res => res.json())
+        console.log("Sending payload...", payload); // Debug 1
+
+        fetch(WEB_APP_URL, { 
+            method: 'POST', 
+            body: JSON.stringify(payload) 
+        })
+        .then(response => {
+            // Read response as text first to catch HTML errors (like Permission Denied)
+            return response.text().then(text => {
+                console.log("Raw Server Response:", text); // Debug 2: Print actual error to Console
+                try {
+                    return JSON.parse(text); // Try to convert to JSON
+                } catch (e) {
+                    throw new Error("Server Error: " + text); // Throw specific error if not JSON
+                }
+            });
+        })
         .then(data => {
             if(data.status === 'success') {
                 cart = []; saveCart();
@@ -488,10 +503,23 @@
                     confirmButtonColor: '#1b4d3e'
                 }).then(() => { routeTo('home'); });
             } else {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'Something went wrong.' });
+                // Show the specific error from the sheet
+                Swal.fire({ 
+                    icon: 'error', 
+                    title: 'System Error', 
+                    text: data.error || 'Unknown script error' 
+                });
             }
         })
-        .catch(err => Swal.fire({ icon: 'error', title: 'Network Error', text: 'Please check connection.' }));
+        .catch(err => {
+            console.error(err);
+            // Show the actual error message in the alert
+            Swal.fire({ 
+                icon: 'error', 
+                title: 'Connection Error', 
+                text: err.message 
+            });
+        });
     }
 
     function trackOrder() {
