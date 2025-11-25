@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Jazaa Ph.</title>
+    <title>Al-Jazaa Ph</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -388,17 +388,17 @@
     // --- UPDATED RENDER PRODUCTS (Clean Version) ---
 function renderProds(list) {
     document.getElementById('product-grid').innerHTML = list.map(p => {
-        // Use the images from the sheet (Column H), or fall back to single image (Column E)
-        let imgs = (p.images && p.images.length > 0) ? p.images : [p.image];
+        // USE THE LIST FROM GOOGLE SHEET
+        let imgs = p.images; 
 
-        // Build Carousel Indicators and Inner items
+        // Build Carousel
         let itemsHtml = imgs.map((url, idx) => `
             <div class="carousel-item ${idx===0?'active':''}">
-                <img src="${url.trim()}" class="d-block w-100" loading="lazy">
+                <img src="${url}" class="d-block w-100" loading="lazy">
             </div>
         `).join('');
 
-        // Only show arrows if there is more than 1 image
+        // Only add arrows if more than 1 image
         let controlsHtml = '';
         if(imgs.length > 1) {
             controlsHtml = `
