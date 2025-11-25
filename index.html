@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Jazaa Ph</title>
+    <title>Al-Jazaa Ph.</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -22,6 +22,7 @@
             --bg-color: #f8f9fa; 
             --text: #2c3e50;
             --card-radius: 12px;
+            --nav-height: 70px; /* Define nav height for calculations */
         }
 
         body { 
@@ -43,6 +44,8 @@
             font-weight: 500;
             letter-spacing: 1px; 
             text-transform: uppercase; 
+            position: relative;
+            z-index: 1031;
         }
 
         /* Modern Glass Navbar */
@@ -50,8 +53,9 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             box-shadow: 0 2px 15px rgba(0,0,0,0.04);
-            padding: 12px 0;
+            padding: 10px 0;
             transition: all 0.3s;
+            height: var(--nav-height);
         }
         .navbar-brand { font-weight: 700; font-size: 1.5rem; color: var(--primary) !important; }
         .nav-link { 
@@ -86,14 +90,27 @@
         .carousel-item img { height: 100%; object-fit: cover; filter: brightness(0.8); }
         .carousel-caption h5 { font-size: 3rem; font-weight: 700; margin-bottom: 20px; }
         
-        /* Modern Horizontal Category Filter */
+        /* 
+           STICKY CATEGORY BAR 
+           Updated to stick below navbar 
+        */
         .category-scroll-container {
             overflow-x: auto;
             white-space: nowrap;
-            padding-bottom: 10px;
+            /* Sticky Logic */
+            position: sticky;
+            top: var(--nav-height); /* Sticks exactly below the navbar */
+            z-index: 100; /* Above products, below modals */
+            background: rgba(248, 249, 250, 0.95); /* Match background, slightly transparent */
+            backdrop-filter: blur(8px);
+            
+            padding: 15px 0 15px 0;
             margin-bottom: 20px;
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            
+            /* Hide Scrollbar */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
         .category-scroll-container::-webkit-scrollbar { display: none; }
         
@@ -109,9 +126,10 @@
             transition: all 0.2s ease;
             font-size: 0.9rem;
             font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
-        .cat-pill:hover { border-color: var(--primary); color: var(--primary); }
-        .cat-pill.active { background-color: var(--primary); color: white; border-color: var(--primary); }
+        .cat-pill:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+        .cat-pill.active { background-color: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 10px rgba(27, 77, 62, 0.2); }
 
         /* Compact Product Cards */
         .product-card { 
@@ -277,7 +295,7 @@
                     <i class="fas fa-search position-absolute text-muted" style="right: 20px; top: 13px;"></i>
                 </div>
 
-                <!-- Horizontal Categories (Modern) -->
+                <!-- STICKY Horizontal Categories -->
                 <div id="category-list" class="category-scroll-container">
                     <!-- Categories injected here -->
                 </div>
