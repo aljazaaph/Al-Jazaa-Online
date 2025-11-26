@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Jazaa Ph. | Online Shop</title>
+    <title>Al-Jazaa Ph | Online Shop</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -72,7 +72,7 @@
         .cat-pill { display: inline-block; background: white; border: 1px solid #e0e0e0; color: #666; padding: 8px 20px; border-radius: 50px; margin-right: 10px; cursor: pointer; transition: 0.2s; }
         .cat-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Product Card */
+        /* Product Card & Gallery */
         .product-card { border: none; background: white; transition: 0.3s; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); height: 100%; position: relative; }
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
         .card-img-wrapper { position: relative; width: 100%; padding-top: 133%; overflow: hidden; background: #f4f4f4; }
@@ -84,21 +84,11 @@
         .sale-badge { position: absolute; top: 10px; right: 10px; background: #d32f2f; color: white; padding: 4px 8px; font-size: 0.7rem; font-weight: 700; border-radius: 4px; z-index: 10; }
         .original-price { text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 5px; }
         .sale-price-text { color: #d32f2f; font-weight: 700; }
-
-        /* --- NEW: GALLERY STYLING --- */
-        .dt-main-img {
-            width: 100%; border-radius: 12px; object-fit: cover; aspect-ratio: 3/4; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: 0.3s;
-        }
-        .gallery-container {
-            display: flex; gap: 10px; overflow-x: auto; margin-top: 15px; padding-bottom: 5px;
-            scrollbar-width: none; -ms-overflow-style: none;
-        }
+        
+        .dt-main-img { width: 100%; border-radius: 12px; object-fit: cover; aspect-ratio: 3/4; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: 0.3s; }
+        .gallery-container { display: flex; gap: 10px; overflow-x: auto; margin-top: 15px; padding-bottom: 5px; scrollbar-width: none; -ms-overflow-style: none; }
         .gallery-container::-webkit-scrollbar { display: none; }
-        .thumb-img {
-            width: 70px; height: 70px; border-radius: 8px; object-fit: cover; cursor: pointer;
-            border: 2px solid transparent; opacity: 0.6; transition: 0.2s; flex-shrink: 0;
-        }
+        .thumb-img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; cursor: pointer; border: 2px solid transparent; opacity: 0.6; transition: 0.2s; flex-shrink: 0; }
         .thumb-img:hover { opacity: 1; }
         .thumb-img.active { border-color: var(--primary); opacity: 1; transform: scale(1.05); }
 
@@ -114,7 +104,7 @@
         .option-btn:hover { border-color: var(--primary); }
         .option-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Related & Utils */
+        /* Utils & Donation */
         .related-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; -ms-overflow-style: none; scrollbar-width: none; }
         .related-scroll::-webkit-scrollbar { display: none; }
         .related-card { min-width: 140px; width: 140px; border: none; cursor: pointer; }
@@ -126,6 +116,18 @@
         .donate-pill:hover, .donate-pill.selected { background: var(--primary); color: white; }
         .file-upload-wrapper { position: relative; }
         .upload-helper { font-size: 0.75rem; color: #d32f2f; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
+
+        /* --- NEW: REVIEWS STYLING --- */
+        .rating-stars { display: flex; flex-direction: row-reverse; justify-content: start; gap: 5px; }
+        .rating-stars input { display: none; }
+        .rating-stars label { cursor: pointer; color: #ddd; font-size: 1.5rem; transition: 0.2s; }
+        .rating-stars input:checked ~ label { color: var(--gold); }
+        .rating-stars label:hover, .rating-stars label:hover ~ label { color: var(--gold); }
+        
+        .review-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 15px; }
+        .rating-summary-bar { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; flex-grow: 1; margin: 0 10px; }
+        .rating-fill { height: 100%; background: var(--gold); }
+        .review-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
 
         footer { background: #1a1a1a; color: #888; padding: 60px 0 30px; margin-top: 80px; }
         .footer-heading { color: white; font-family: 'Playfair Display'; margin-bottom: 20px; }
@@ -157,7 +159,6 @@
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
         <a class="navbar-brand" href="#" onclick="routeTo('home')">Al-Jazaa Ph.</a>
-        
         <div class="d-flex align-items-center order-lg-3 ms-auto ms-lg-0">
              <div class="cart-btn-wrap" onclick="routeTo('cart')">
                 <i class="fas fa-shopping-bag fa-lg" style="color:#333;"></i>
@@ -179,6 +180,9 @@
     <div class="offcanvas-body d-flex flex-column">
         <a href="#" class="sidebar-link" onclick="routeTo('home'); closeSidebar();">Shop Home <i class="fas fa-chevron-right"></i></a>
         <a href="#" class="sidebar-link" onclick="routeTo('track'); closeSidebar();">Track Order <i class="fas fa-chevron-right"></i></a>
+        <!-- NEW LINK -->
+        <a href="#" class="sidebar-link" onclick="routeTo('reviews'); closeSidebar();">Customer Care & Feedback <i class="fas fa-chevron-right"></i></a>
+        
         <hr class="my-3 opacity-25">
         <p class="small text-uppercase text-muted fw-bold ms-2 mb-2">Categories</p>
         <div id="sidebar-categories"></div>
@@ -218,65 +222,30 @@
     </div>
 </div>
 
-<!-- DETAIL VIEW (UPDATED WITH GALLERY) -->
+<!-- DETAIL VIEW -->
 <div id="detail-view">
     <div class="container py-5">
         <button class="btn btn-light rounded-circle shadow-sm mb-4" style="width:40px;height:40px;" onclick="window.history.back()">
             <i class="fas fa-arrow-left"></i>
         </button>
         <div class="row gx-5">
-            <!-- Left Column: Images -->
             <div class="col-md-5 mb-4">
-                <!-- Main Image -->
                 <img id="dt-img" src="" class="dt-main-img">
-                
-                <!-- Gallery Thumbnails (Scrollable) -->
-                <div id="dt-gallery" class="gallery-container">
-                    <!-- Thumbnails injected via JS -->
-                </div>
+                <div id="dt-gallery" class="gallery-container"></div>
             </div>
-
-            <!-- Right Column: Details -->
             <div class="col-md-7">
                 <span class="badge bg-light text-dark mb-2 border" id="dt-cat"></span>
                 <h1 id="dt-name" class="display-6 fw-bold"></h1>
-                <div class="my-3">
-                    <span id="dt-old-price" class="original-price fs-4 d-none"></span>
-                    <span id="dt-price" class="text-success fw-bold fs-3"></span>
-                    <span id="dt-sale-badge" class="badge bg-danger ms-2 d-none">SALE</span>
-                </div>
+                <div class="my-3"><span id="dt-old-price" class="original-price fs-4 d-none"></span><span id="dt-price" class="text-success fw-bold fs-3"></span><span id="dt-sale-badge" class="badge bg-danger ms-2 d-none">SALE</span></div>
                 <p id="dt-desc" class="text-muted mb-4"></p>
-                
-                <div class="mb-3">
-                    <label class="fw-bold mb-2 small text-uppercase">Size <span class="text-danger">*</span></label>
-                    <div id="size-area" class="d-flex flex-wrap"></div>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="fw-bold mb-2 small text-uppercase">Color <span class="text-danger">*</span></label>
-                    <div id="color-area" class="d-flex flex-wrap"></div>
-                </div>
-                
+                <div class="mb-3"><label class="fw-bold mb-2 small text-uppercase">Size <span class="text-danger">*</span></label><div id="size-area" class="d-flex flex-wrap"></div></div>
+                <div class="mb-3"><label class="fw-bold mb-2 small text-uppercase">Color <span class="text-danger">*</span></label><div id="color-area" class="d-flex flex-wrap"></div></div>
                 <div class="row mb-4">
-                    <div class="col-6">
-                        <label class="fw-bold mb-2 small text-uppercase">Height <span class="text-danger">*</span></label>
-                        <input type="text" id="height-input" class="form-control" placeholder="e.g. 5'4">
-                    </div>
-                    <div class="col-6">
-                        <label class="fw-bold mb-2 small text-uppercase">Quantity</label>
-                        <div class="qty-selector w-100 justify-content-between">
-                            <button class="qty-btn" onclick="dtQty(-1)">-</button>
-                            <input type="number" id="dt-qty-val" class="qty-input" value="1" readonly>
-                            <button class="qty-btn" onclick="dtQty(1)">+</button>
-                        </div>
-                    </div>
+                    <div class="col-6"><label class="fw-bold mb-2 small text-uppercase">Height <span class="text-danger">*</span></label><input type="text" id="height-input" class="form-control" placeholder="e.g. 5'4"></div>
+                    <div class="col-6"><label class="fw-bold mb-2 small text-uppercase">Quantity</label><div class="qty-selector w-100 justify-content-between"><button class="qty-btn" onclick="dtQty(-1)">-</button><input type="number" id="dt-qty-val" class="qty-input" value="1" readonly><button class="qty-btn" onclick="dtQty(1)">+</button></div></div>
                 </div>
-
                 <button id="add-btn" class="btn btn-custom w-100 py-3 shadow-lg mb-5" onclick="addToCart()">ADD TO CART</button>
-                
-                <hr>
-                <h5 class="font-playfair mb-3">You might also like</h5>
-                <div id="related-products" class="related-scroll"></div>
+                <hr><h5 class="font-playfair mb-3">You might also like</h5><div id="related-products" class="related-scroll"></div>
             </div>
         </div>
     </div>
@@ -287,18 +256,8 @@
     <h2 class="mb-4 text-center">Your Shopping Bag</h2>
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
-                <div class="table-responsive">
-                    <table class="table align-middle mb-0"><tbody id="cart-table"></tbody></table>
-                </div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center bg-white p-4 rounded-4 shadow-sm border">
-                <div>
-                    <small class="text-muted d-block">Total Amount</small>
-                    <div class="fs-4 fw-bold text-success" id="cart-total">₱0.00</div>
-                </div>
-                <button id="btn-checkout" class="btn btn-custom px-4" onclick="routeTo('checkout')">CHECKOUT</button>
-            </div>
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden"><div class="table-responsive"><table class="table align-middle mb-0"><tbody id="cart-table"></tbody></table></div></div>
+            <div class="d-flex justify-content-between align-items-center bg-white p-4 rounded-4 shadow-sm border"><div><small class="text-muted d-block">Total Amount</small><div class="fs-4 fw-bold text-success" id="cart-total">₱0.00</div></div><button id="btn-checkout" class="btn btn-custom px-4" onclick="routeTo('checkout')">CHECKOUT</button></div>
         </div>
     </div>
 </div>
@@ -310,75 +269,23 @@
         <p class="text-center text-muted small mb-4">Complete your details to place order</p>
         <form id="checkout-form" onsubmit="submitOrder(event)" oninput="validateCheckoutForm()">
             <div class="mb-4 bg-light p-3 rounded border">
-                <div class="marquee-container shadow-sm mb-3">
-                    <div class="marquee-content">✨ DONATE TO ORPHANS • SADQA JARIYAH • HELP THOSE IN NEED • AL-JAZAA PH CHARITY ✨</div>
-                </div>
+                <div class="marquee-container shadow-sm mb-3"><div class="marquee-content">✨ DONATE TO ORPHANS • SADQA JARIYAH • HELP THOSE IN NEED • AL-JAZAA PH CHARITY ✨</div></div>
                 <p class="small text-muted mb-2 text-center fw-bold">Select donation amount (Added to Total)</p>
-                <div class="d-flex gap-2 flex-wrap justify-content-center mb-3">
-                    <button type="button" class="donate-pill" onclick="selectDonation(0.05, this)">5%</button>
-                    <button type="button" class="donate-pill" onclick="selectDonation(0.10, this)">10%</button>
-                    <button type="button" class="donate-pill" onclick="selectDonation(0.20, this)">20%</button>
-                    <button type="button" class="donate-pill" onclick="selectDonation(0.50, this)">50%</button>
-                    <button type="button" class="donate-pill" onclick="selectDonation(0, this)">None</button>
-                </div>
+                <div class="d-flex gap-2 flex-wrap justify-content-center mb-3"><button type="button" class="donate-pill" onclick="selectDonation(0.05, this)">5%</button><button type="button" class="donate-pill" onclick="selectDonation(0.10, this)">10%</button><button type="button" class="donate-pill" onclick="selectDonation(0.20, this)">20%</button><button type="button" class="donate-pill" onclick="selectDonation(0.50, this)">50%</button><button type="button" class="donate-pill" onclick="selectDonation(0, this)">None</button></div>
                 <textarea id="donation-note" class="form-control d-none" rows="2" placeholder="Special Note / Intention (Optional)"></textarea>
             </div>
-
             <h6 class="text-uppercase fw-bold text-muted small mb-3">1. Delivery & Address</h6>
             <div class="row g-3 mb-4">
-                <div class="col-12">
-                     <select class="form-select py-3" id="del-method" onchange="toggleDeliveryOptions()" required>
-                        <option value="" disabled selected>Select Delivery Method</option>
-                        <option value="Pick-up">Pick-up (Free)</option>
-                        <option value="Delivery">Delivery (Courier)</option>
-                    </select>
-                </div>
-                <div class="col-md-6"><input type="text" class="form-control" id="c-name" placeholder="Full Name" required></div>
-                <div class="col-md-6"><input type="number" class="form-control" id="c-phone" placeholder="Phone Number" required></div>
-                <div class="col-12"><input type="email" class="form-control" id="c-email" placeholder="Email Address" required></div>
-                <div class="col-12 delivery-fields" style="display:none;">
-                    <hr class="opacity-25 my-1">
-                    <label class="small fw-bold text-primary mt-2">Shipping Address</label>
-                </div>
-                <div class="col-md-8 delivery-fields"><input type="text" class="form-control" id="addr-street" placeholder="House / Street / Subdivision"></div>
-                <div class="col-md-4 delivery-fields"><input type="text" class="form-control" id="addr-brgy" placeholder="Barangay"></div>
-                <div class="col-md-6 delivery-fields"><input type="text" class="form-control" id="addr-city" placeholder="City"></div>
-                <div class="col-md-6 delivery-fields"><input type="text" class="form-control" id="addr-prov" placeholder="Province"></div>
-                <div class="col-md-8 delivery-fields">
-                     <select class="form-select" id="addr-region" onchange="calcShipping()">
-                        <option value="" disabled selected>Select Region</option>
-                        <option value="Metro Manila">Metro Manila</option>
-                        <option value="Luzon">Luzon</option>
-                        <option value="Visayas">Visayas</option>
-                        <option value="Mindanao">Mindanao</option>
-                        <option value="Island">Island / Remote Areas</option>
-                    </select>
-                </div>
-                 <div class="col-md-4 delivery-fields"><input type="text" class="form-control" id="addr-zip" placeholder="Zip Code"></div>
+                <div class="col-12"><select class="form-select py-3" id="del-method" onchange="toggleDeliveryOptions()" required><option value="" disabled selected>Select Delivery Method</option><option value="Pick-up">Pick-up (Free)</option><option value="Delivery">Delivery (Courier)</option></select></div>
+                <div class="col-md-6"><input type="text" class="form-control" id="c-name" placeholder="Full Name" required></div><div class="col-md-6"><input type="number" class="form-control" id="c-phone" placeholder="Phone Number" required></div><div class="col-12"><input type="email" class="form-control" id="c-email" placeholder="Email Address" required></div>
+                <div class="col-12 delivery-fields" style="display:none;"><hr class="opacity-25 my-1"><label class="small fw-bold text-primary mt-2">Shipping Address</label></div>
+                <div class="col-md-8 delivery-fields"><input type="text" class="form-control" id="addr-street" placeholder="House / Street / Subdivision"></div><div class="col-md-4 delivery-fields"><input type="text" class="form-control" id="addr-brgy" placeholder="Barangay"></div><div class="col-md-6 delivery-fields"><input type="text" class="form-control" id="addr-city" placeholder="City"></div><div class="col-md-6 delivery-fields"><input type="text" class="form-control" id="addr-prov" placeholder="Province"></div>
+                <div class="col-md-8 delivery-fields"><select class="form-select" id="addr-region" onchange="calcShipping()"><option value="" disabled selected>Select Region</option><option value="Metro Manila">Metro Manila</option><option value="Luzon">Luzon</option><option value="Visayas">Visayas</option><option value="Mindanao">Mindanao</option><option value="Island">Island / Remote Areas</option></select></div><div class="col-md-4 delivery-fields"><input type="text" class="form-control" id="addr-zip" placeholder="Zip Code"></div>
             </div>
-
-            <hr class="opacity-25">
-            <h6 class="text-uppercase fw-bold text-muted small mb-3">2. Payment Summary</h6>
-            <div class="bg-white p-3 border rounded mb-3">
-                <div class="d-flex justify-content-between mb-1"><span>Subtotal:</span><span id="sum-subtotal">₱0</span></div>
-                <div class="d-flex justify-content-between mb-1"><span>Delivery Fee:</span><span id="sum-shipping" class="text-danger">₱0</span></div>
-                <div class="d-flex justify-content-between mb-1 d-none" id="sum-donate-row"><span>Donation:</span><span id="sum-donation" class="text-success">₱0</span></div>
-                <hr>
-                <div class="d-flex justify-content-between fw-bold fs-5"><span>Grand Total:</span><span id="pay-total" class="text-primary">₱0</span></div>
-            </div>
-            
-            <div class="bg-light p-3 rounded-3 border mb-3 d-flex align-items-center">
-                <div class="bg-white p-2 rounded shadow-sm me-3"><i class="fas fa-qrcode fa-2x"></i></div>
-                <div><div class="fw-bold">GCash: 0921-429-5887</div><div class="small text-muted">Scan or Send exact amount.</div></div>
-            </div>
-            
-            <div class="row g-3">
-                <div class="col-md-6"><input type="text" class="form-control" id="c-ref" placeholder="GCash Reference No." required></div>
-                <div class="col-md-6 file-upload-wrapper">
-                    <input type="file" class="form-control" id="c-proof" accept="image/*" required>
-                    <div class="upload-helper"><i class="fas fa-info-circle"></i> Please upload screenshot of payment</div>
-                </div>
-            </div>
+            <hr class="opacity-25"><h6 class="text-uppercase fw-bold text-muted small mb-3">2. Payment Summary</h6>
+            <div class="bg-white p-3 border rounded mb-3"><div class="d-flex justify-content-between mb-1"><span>Subtotal:</span><span id="sum-subtotal">₱0</span></div><div class="d-flex justify-content-between mb-1"><span>Delivery Fee:</span><span id="sum-shipping" class="text-danger">₱0</span></div><div class="d-flex justify-content-between mb-1 d-none" id="sum-donate-row"><span>Donation:</span><span id="sum-donation" class="text-success">₱0</span></div><hr><div class="d-flex justify-content-between fw-bold fs-5"><span>Grand Total:</span><span id="pay-total" class="text-primary">₱0</span></div></div>
+            <div class="bg-light p-3 rounded-3 border mb-3 d-flex align-items-center"><div class="bg-white p-2 rounded shadow-sm me-3"><i class="fas fa-qrcode fa-2x"></i></div><div><div class="fw-bold">GCash: 0921-429-5887</div><div class="small text-muted">Scan or Send exact amount.</div></div></div>
+            <div class="row g-3"><div class="col-md-6"><input type="text" class="form-control" id="c-ref" placeholder="GCash Reference No." required></div><div class="col-md-6 file-upload-wrapper"><input type="file" class="form-control" id="c-proof" accept="image/*" required><div class="upload-helper"><i class="fas fa-info-circle"></i> Please upload screenshot of payment</div></div></div>
             <div class="mt-4"><button id="btn-place-order" type="submit" class="btn btn-custom w-100 py-3" disabled>FILL DETAILS</button></div>
         </form>
     </div>
@@ -387,35 +294,62 @@
 <!-- TRACKING -->
 <div id="page-track" class="container my-5 d-none text-center" style="max-width:500px; min-height:50vh;">
     <h3 class="mb-3">Track Order</h3>
-    <div class="input-group mb-4 shadow-sm rounded-pill overflow-hidden">
-        <input type="text" id="track-id" class="form-control border-0 ps-4" placeholder="Enter Order ID">
-        <button class="btn btn-custom px-4" onclick="trackOrder()">Search</button>
-    </div>
-    <div id="track-result" class="card p-4 shadow-sm border-0 rounded-4 d-none text-start bg-white">
-        <div class="fw-bold text-success fs-4 text-center mb-3" id="t-status"></div>
-        <hr>
-        <div class="d-flex justify-content-between"><span>Date:</span> <span id="t-date"></span></div>
-        <div class="d-flex justify-content-between mt-2"><span>Total:</span> <span id="t-total"></span></div>
+    <div class="input-group mb-4 shadow-sm rounded-pill overflow-hidden"><input type="text" id="track-id" class="form-control border-0 ps-4" placeholder="Enter Order ID"><button class="btn btn-custom px-4" onclick="trackOrder()">Search</button></div>
+    <div id="track-result" class="card p-4 shadow-sm border-0 rounded-4 d-none text-start bg-white"><div class="fw-bold text-success fs-4 text-center mb-3" id="t-status"></div><hr><div class="d-flex justify-content-between"><span>Date:</span> <span id="t-date"></span></div><div class="d-flex justify-content-between mt-2"><span>Total:</span> <span id="t-total"></span></div></div>
+</div>
+
+<!-- NEW: CUSTOMER CARE & FEEDBACK PAGE -->
+<div id="page-reviews" class="container my-5 d-none">
+    <div class="row g-5">
+        <!-- Form Section -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-lg rounded-4 p-4 sticky-top" style="top: 100px;">
+                <h3 class="font-playfair text-center mb-3">Customer Care</h3>
+                <p class="text-center text-muted small mb-4">We value your feedback. Let us know how we did!</p>
+                <form onsubmit="submitReview(event)">
+                    <div class="mb-3"><label class="small fw-bold">Name <span class="text-danger">*</span></label><input type="text" class="form-control" id="r-name" required></div>
+                    <div class="mb-3"><label class="small fw-bold">Email <span class="text-danger">*</span></label><input type="email" class="form-control" id="r-email" required></div>
+                    <div class="mb-3"><label class="small fw-bold">Mobile Number <span class="text-danger">*</span></label><input type="number" class="form-control" id="r-phone" required></div>
+                    
+                    <div class="mb-3">
+                        <label class="small fw-bold mb-1">Rate Us <span class="text-danger">*</span></label>
+                        <div class="rating-stars">
+                            <input type="radio" name="rating" id="star5" value="5" required><label for="star5"><i class="fas fa-star"></i></label>
+                            <input type="radio" name="rating" id="star4" value="4"><label for="star4"><i class="fas fa-star"></i></label>
+                            <input type="radio" name="rating" id="star3" value="3"><label for="star3"><i class="fas fa-star"></i></label>
+                            <input type="radio" name="rating" id="star2" value="2"><label for="star2"><i class="fas fa-star"></i></label>
+                            <input type="radio" name="rating" id="star1" value="1"><label for="star1"><i class="fas fa-star"></i></label>
+                        </div>
+                    </div>
+
+                    <div class="mb-4"><label class="small fw-bold">Suggestion / Feedback <span class="text-danger">*</span></label><textarea class="form-control" id="r-feedback" rows="4" required></textarea></div>
+                    <button type="submit" class="btn btn-custom w-100">Submit Feedback</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Display Reviews Section -->
+        <div class="col-lg-7">
+            <h3 class="font-playfair mb-4">What our customers say</h3>
+            
+            <!-- Rating Graph -->
+            <div class="bg-white p-4 rounded-4 shadow-sm mb-4">
+                <div class="d-flex align-items-center mb-3"><h1 class="mb-0 me-3 fw-bold text-primary" id="avg-rating-display">0.0</h1><div><div class="text-warning" id="avg-stars"></div><small class="text-muted" id="total-reviews">0 Reviews</small></div></div>
+                <div id="rating-bars"></div>
+            </div>
+
+            <!-- List -->
+            <div id="reviews-list"></div>
+        </div>
     </div>
 </div>
 
 <footer>
     <div class="container">
         <div class="row gy-4">
-            <div class="col-md-4">
-                <h3 class="footer-heading">Al-Jazaa Ph.</h3>
-                <p class="small text-muted">Providing timeless modesty with modern elegance.</p>
-            </div>
-            <div class="col-md-4">
-                <h5 class="text-white mb-3" style="font-family:'Outfit'">Links</h5>
-                <a href="#" class="footer-link" onclick="routeTo('home')">Shop Collection</a>
-                <a href="#" class="footer-link" onclick="routeTo('track')">Track Order</a>
-            </div>
-            <div class="col-md-4">
-                <h5 class="text-white mb-3" style="font-family:'Outfit'">Contact</h5>
-                <p class="footer-link mb-1">aljazaa.ph@gmail.com</p>
-                <p class="footer-link">0921-429-5887</p>
-            </div>
+            <div class="col-md-4"><h3 class="footer-heading">Al-Jazaa Ph.</h3><p class="small text-muted">Providing timeless modesty with modern elegance.</p></div>
+            <div class="col-md-4"><h5 class="text-white mb-3" style="font-family:'Outfit'">Links</h5><a href="#" class="footer-link" onclick="routeTo('home')">Shop Collection</a><a href="#" class="footer-link" onclick="routeTo('track')">Track Order</a><a href="#" class="footer-link" onclick="routeTo('reviews')">Customer Care</a></div>
+            <div class="col-md-4"><h5 class="text-white mb-3" style="font-family:'Outfit'">Contact</h5><p class="footer-link mb-1">aljazaa.ph@gmail.com</p><p class="footer-link">0921-429-5887</p></div>
         </div>
         <hr class="border-secondary mt-5"><p class="text-center small text-muted mb-0">&copy; 2024 Al-Jazaa Ph. All rights reserved.</p>
     </div>
@@ -437,7 +371,7 @@
 
     function routeTo(pageId) { window.history.pushState({ page: pageId }, '', ''); renderPage(pageId); }
     function renderPage(pageId) {
-        ['page-home', 'page-cart', 'page-checkout', 'page-track'].forEach(id => document.getElementById(id).classList.add('d-none'));
+        ['page-home', 'page-cart', 'page-checkout', 'page-track', 'page-reviews'].forEach(id => document.getElementById(id).classList.add('d-none'));
         document.getElementById('detail-view').style.display = 'none'; 
         document.getElementById('heroCarousel').classList.add('d-none'); 
         window.scrollTo(0,0);
@@ -445,226 +379,150 @@
         else { document.getElementById('page-' + pageId).classList.remove('d-none'); }
         if(pageId === 'cart') renderCart();
         if(pageId === 'checkout') { if(cart.length === 0) { Swal.fire({icon:'warning', title:'Empty Bag', text:'Please add items first'}); routeTo('home'); return; } initCheckout(); }
+        if(pageId === 'reviews') fetchReviews();
     }
 
-    function fetchProducts() {
-        fetch(WEB_APP_URL + "?action=getProducts").then(r => r.json()).then(data => {
-            allProducts = data; document.getElementById('loader').style.display = 'none';
-            renderCats(); renderProds(allProducts);
-        });
-    }
+    // --- PRODUCTS & MAIN LOGIC ---
+    function fetchProducts() { fetch(WEB_APP_URL + "?action=getProducts").then(r => r.json()).then(data => { allProducts = data; document.getElementById('loader').style.display = 'none'; renderCats(); renderProds(allProducts); }); }
+    function renderCats() { const cats = ['All', ...new Set(allProducts.map(p => p.category))]; document.getElementById('category-list').innerHTML = cats.map(c => `<span class="cat-pill ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">${c}</span>`).join(''); document.getElementById('sidebar-categories').innerHTML = cats.map(c => `<a href="#" class="sidebar-link" onclick="filterCat('${c}', null, true)">${c} <i class="fas fa-chevron-right"></i></a>`).join(''); }
+    function filterCat(c, el, fromSidebar = false) { if(el) { document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active')); el.classList.add('active'); } renderProds(c === 'All' ? allProducts : allProducts.filter(p => p.category === c)); if(fromSidebar) { closeSidebar(); routeTo('home'); document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); } }
+    function renderProds(list) { document.getElementById('product-grid').innerHTML = list.map(p => { let imgs = (p.images && p.images.length > 0) ? p.images : [p.image]; let itemsHtml = imgs.map((url, idx) => `<div class="carousel-item ${idx===0?'active':''}"><img src="${url.trim()}" class="d-block w-100" loading="lazy"></div>`).join(''); let saleBadge = (p.salePercent > 0) ? `<span class="sale-badge">${p.salePercent}% OFF</span>` : ''; let priceDisplay = (p.salePercent > 0) ? `<span class="original-price">₱${p.originalPrice}</span> <span class="sale-price-text">₱${p.price}</span>` : `<div class="fw-bold text-dark">₱${p.price}</div>`; return `<div class="col"><div class="card product-card"><span class="stock-label ${p.inStock?'in-stock':'out-stock'}">${p.inStock?'In Stock':'Out of Stock'}</span>${saleBadge}<div class="card-img-wrapper" onclick="openDetail('${p.id}')" style="cursor:pointer"><div class="carousel slide mini-carousel" data-bs-interval="false"><div class="carousel-inner">${itemsHtml}</div></div></div><div class="card-body" onclick="openDetail('${p.id}')" style="cursor:pointer"><h6 class="card-title text-dark mb-1 text-truncate">${p.name}</h6>${priceDisplay}</div></div></div>`; }).join(''); }
 
-    function renderCats() {
-        const cats = ['All', ...new Set(allProducts.map(p => p.category))];
-        document.getElementById('category-list').innerHTML = cats.map(c => `<span class="cat-pill ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">${c}</span>`).join('');
-        document.getElementById('sidebar-categories').innerHTML = cats.map(c => `<a href="#" class="sidebar-link" onclick="filterCat('${c}', null, true)">${c} <i class="fas fa-chevron-right"></i></a>`).join('');
-    }
-
-    function filterCat(c, el, fromSidebar = false) {
-        if(el) { document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active')); el.classList.add('active'); }
-        renderProds(c === 'All' ? allProducts : allProducts.filter(p => p.category === c));
-        if(fromSidebar) { closeSidebar(); routeTo('home'); document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); }
-    }
-
-    function renderProds(list) {
-        document.getElementById('product-grid').innerHTML = list.map(p => {
-            let imgs = (p.images && p.images.length > 0) ? p.images : [p.image];
-            let itemsHtml = imgs.map((url, idx) => `<div class="carousel-item ${idx===0?'active':''}"><img src="${url.trim()}" class="d-block w-100" loading="lazy"></div>`).join('');
-            let saleBadge = (p.salePercent > 0) ? `<span class="sale-badge">${p.salePercent}% OFF</span>` : '';
-            let priceDisplay = (p.salePercent > 0) ? `<span class="original-price">₱${p.originalPrice}</span> <span class="sale-price-text">₱${p.price}</span>` : `<div class="fw-bold text-dark">₱${p.price}</div>`;
-
-            return `<div class="col"><div class="card product-card">
-                <span class="stock-label ${p.inStock?'in-stock':'out-stock'}">${p.inStock?'In Stock':'Out of Stock'}</span>${saleBadge}
-                <div class="card-img-wrapper" onclick="openDetail('${p.id}')" style="cursor:pointer">
-                     <div class="carousel slide mini-carousel" data-bs-interval="false"><div class="carousel-inner">${itemsHtml}</div></div>
-                </div>
-                <div class="card-body" onclick="openDetail('${p.id}')" style="cursor:pointer">
-                    <h6 class="card-title text-dark mb-1 text-truncate">${p.name}</h6>${priceDisplay}
-                </div>
-            </div></div>`;
-        }).join('');
-    }
-
-    // --- UPDATED DETAIL VIEW ---
+    // --- DETAIL VIEW ---
     function openDetail(id) {
-        window.history.pushState({ page: 'detail' }, '', '');
-        curProduct = allProducts.find(p => p.id == id); 
-        selectedSize = null; selectedColor = null;
-        document.getElementById('height-input').value = "";
-        document.getElementById('dt-qty-val').value = 1;
-        
-        // Handle Images
+        window.history.pushState({ page: 'detail' }, '', ''); curProduct = allProducts.find(p => p.id == id); selectedSize = null; selectedColor = null;
+        document.getElementById('height-input').value = ""; document.getElementById('dt-qty-val').value = 1;
         let imgList = (curProduct.images && curProduct.images.length > 0) ? curProduct.images : [curProduct.image];
-        
-        // Set Main Image
         document.getElementById('dt-img').src = imgList[0];
-
-        // Render Thumbnails
-        document.getElementById('dt-gallery').innerHTML = imgList.map((src, i) => 
-            `<img src="${src}" class="thumb-img ${i===0?'active':''}" onclick="swapImage('${src}', this)">`
-        ).join('');
-
-        document.getElementById('dt-cat').innerText = curProduct.category;
-        document.getElementById('dt-name').innerText = curProduct.name;
-        document.getElementById('dt-desc').innerText = curProduct.desc;
-        
-        if(curProduct.salePercent > 0) {
-            document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice;
-            document.getElementById('dt-old-price').classList.remove('d-none');
-            document.getElementById('dt-sale-badge').innerText = curProduct.salePercent + "% OFF";
-            document.getElementById('dt-sale-badge').classList.remove('d-none');
-            document.getElementById('dt-price').innerText = "₱" + curProduct.price;
-            document.getElementById('dt-price').classList.add('text-danger');
-        } else {
-            document.getElementById('dt-old-price').classList.add('d-none');
-            document.getElementById('dt-sale-badge').classList.add('d-none');
-            document.getElementById('dt-price').innerText = "₱" + curProduct.price;
-            document.getElementById('dt-price').classList.remove('text-danger');
-        }
-
+        document.getElementById('dt-gallery').innerHTML = imgList.map((src, i) => `<img src="${src}" class="thumb-img ${i===0?'active':''}" onclick="swapImage('${src}', this)">`).join('');
+        document.getElementById('dt-cat').innerText = curProduct.category; document.getElementById('dt-name').innerText = curProduct.name; document.getElementById('dt-desc').innerText = curProduct.desc;
+        if(curProduct.salePercent > 0) { document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice; document.getElementById('dt-old-price').classList.remove('d-none'); document.getElementById('dt-sale-badge').innerText = curProduct.salePercent + "% OFF"; document.getElementById('dt-sale-badge').classList.remove('d-none'); document.getElementById('dt-price').innerText = "₱" + curProduct.price; document.getElementById('dt-price').classList.add('text-danger'); } else { document.getElementById('dt-old-price').classList.add('d-none'); document.getElementById('dt-sale-badge').classList.add('d-none'); document.getElementById('dt-price').innerText = "₱" + curProduct.price; document.getElementById('dt-price').classList.remove('text-danger'); }
         document.getElementById('size-area').innerHTML = ["S","M","L","XL"].map(s => `<div class="option-btn size-opt" onclick="pickOption('size','${s}', this)">${s}</div>`).join('');
-        let colorList = curProduct.colors ? curProduct.colors.split(',') : ["Default"];
-        document.getElementById('color-area').innerHTML = colorList.map(c => `<div class="option-btn color-opt" onclick="pickOption('color','${c.trim()}', this)">${c.trim()}</div>`).join('');
-
-        const btn = document.getElementById('add-btn'); 
-        btn.disabled = !curProduct.inStock; 
-        btn.innerText = curProduct.inStock ? "ADD TO CART" : "OUT OF STOCK";
-
-        renderRelated(curProduct.category, curProduct.id);
-        document.getElementById('detail-view').style.display = 'block';
+        let colorList = curProduct.colors ? curProduct.colors.split(',') : ["Default"]; document.getElementById('color-area').innerHTML = colorList.map(c => `<div class="option-btn color-opt" onclick="pickOption('color','${c.trim()}', this)">${c.trim()}</div>`).join('');
+        const btn = document.getElementById('add-btn'); btn.disabled = !curProduct.inStock; btn.innerText = curProduct.inStock ? "ADD TO CART" : "OUT OF STOCK";
+        renderRelated(curProduct.category, curProduct.id); document.getElementById('detail-view').style.display = 'block';
     }
-
-    function swapImage(src, el) {
-        document.getElementById('dt-img').src = src;
-        document.querySelectorAll('.thumb-img').forEach(img => img.classList.remove('active'));
-        el.classList.add('active');
-    }
-
-    function renderRelated(cat, currentId) {
-        let related = allProducts.filter(p => p.category === cat && p.id !== currentId).sort(() => 0.5 - Math.random()).slice(0,5);
-        document.getElementById('related-products').innerHTML = related.map(p => 
-            `<div class="related-card" onclick="openDetail('${p.id}')"><img src="${p.image}"><div class="small fw-bold text-truncate">${p.name}</div><div class="small text-muted">₱${p.price}</div></div>`
-        ).join('');
-    }
-
-    function pickOption(type, val, el) {
-        let grp = type === 'size' ? '.size-opt' : '.color-opt';
-        document.querySelectorAll(grp).forEach(b => b.classList.remove('selected')); 
-        el.classList.add('selected'); 
-        if(type==='size') selectedSize = val; else selectedColor = val;
-    }
-    
-    function dtQty(change) {
-        let el = document.getElementById('dt-qty-val');
-        let val = parseInt(el.value) + change;
-        if(val < 1) val = 1;
-        el.value = val;
-    }
-
+    function swapImage(src, el) { document.getElementById('dt-img').src = src; document.querySelectorAll('.thumb-img').forEach(img => img.classList.remove('active')); el.classList.add('active'); }
+    function renderRelated(cat, currentId) { let related = allProducts.filter(p => p.category === cat && p.id !== currentId).sort(() => 0.5 - Math.random()).slice(0,5); document.getElementById('related-products').innerHTML = related.map(p => `<div class="related-card" onclick="openDetail('${p.id}')"><img src="${p.image}"><div class="small fw-bold text-truncate">${p.name}</div><div class="small text-muted">₱${p.price}</div></div>`).join(''); }
+    function pickOption(type, val, el) { let grp = type === 'size' ? '.size-opt' : '.color-opt'; document.querySelectorAll(grp).forEach(b => b.classList.remove('selected')); el.classList.add('selected'); if(type==='size') selectedSize = val; else selectedColor = val; }
+    function dtQty(change) { let el = document.getElementById('dt-qty-val'); let val = parseInt(el.value) + change; if(val < 1) val = 1; el.value = val; }
     function addToCart() {
-        if(!selectedSize) { Swal.fire({icon: 'error', title: 'Missing Size', text: 'Please select a SIZE option.', confirmButtonColor: '#1b4d3e'}); return; }
-        if(!selectedColor) { Swal.fire({icon: 'error', title: 'Missing Color', text: 'Please select a COLOR option.', confirmButtonColor: '#1b4d3e'}); return; }
+        if(!selectedSize) { Swal.fire({icon: 'error', title: 'Missing Size', text: 'Please select a SIZE.', confirmButtonColor: '#1b4d3e'}); return; }
+        if(!selectedColor) { Swal.fire({icon: 'error', title: 'Missing Color', text: 'Please select a COLOR.', confirmButtonColor: '#1b4d3e'}); return; }
         const heightVal = document.getElementById('height-input').value.trim();
         if(!heightVal) { Swal.fire({icon: 'error', title: 'Missing Height', text: 'Please enter your HEIGHT.', confirmButtonColor: '#1b4d3e'}); return; }
-        
-        let qty = parseInt(document.getElementById('dt-qty-val').value);
-        cart.push({...curProduct, size: selectedSize, color: selectedColor, height: heightVal, qty: qty});
-        localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); updateCartCount();
-        Swal.fire({icon: 'success', title: 'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1500}); 
-        window.history.back();
+        let qty = parseInt(document.getElementById('dt-qty-val').value); cart.push({...curProduct, size: selectedSize, color: selectedColor, height: heightVal, qty: qty}); localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); updateCartCount(); Swal.fire({icon: 'success', title: 'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1500}); window.history.back();
     }
-    
     function updateCartCount() { document.getElementById('cart-count').innerText = cart.length; }
-
-    function renderCart() {
-        let total = 0; const tb = document.getElementById('cart-table');
-        if(cart.length === 0) { 
-            tb.innerHTML = '<tr><td class="text-center py-5">Shopping bag is empty</td></tr>'; 
-            document.getElementById('btn-checkout').disabled = true; 
-        } else {
-            document.getElementById('btn-checkout').disabled = false;
-            tb.innerHTML = cart.map((i,x) => { 
-                total += (i.price * i.qty); 
-                return `<tr style="border-bottom:1px solid #f0f0f0;"><td class="ps-3" style="width:70px;"><img src="${i.image}" width="60" class="rounded-3 shadow-sm"></td><td><div class="fw-bold">${i.name}</div><div class="small text-muted mb-1">Size: ${i.size} | Color: ${i.color}</div><div class="small text-muted mb-1">Height: ${i.height}</div><div class="text-primary fw-bold">₱${i.price}</div></td><td style="width:120px;"><div class="qty-selector"><button class="qty-btn small" onclick="updateCartQty(${x}, -1)">-</button><input type="text" class="qty-input small" value="${i.qty}" readonly style="width:30px;"><button class="qty-btn small" onclick="updateCartQty(${x}, 1)">+</button></div></td><td class="text-end pe-4"><i class="fas fa-trash-alt text-danger" style="cursor:pointer; opacity:0.6;" onclick="delItem(${x})"></i></td></tr>`; 
-            }).join('');
-        }
-        document.getElementById('cart-total').innerText = "₱" + total.toLocaleString();
-    }
-
-    function updateCartQty(index, change) {
-        cart[index].qty += change;
-        if(cart[index].qty < 1) { Swal.fire({ title: 'Remove item?', text: "Remove from bag?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33' }).then((result) => { if (result.isConfirmed) delItem(index); else { cart[index].qty = 1; renderCart(); } }); } 
-        else { localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); renderCart(); }
-    }
+    function renderCart() { let total = 0; const tb = document.getElementById('cart-table'); if(cart.length === 0) { tb.innerHTML = '<tr><td class="text-center py-5">Shopping bag is empty</td></tr>'; document.getElementById('btn-checkout').disabled = true; } else { document.getElementById('btn-checkout').disabled = false; tb.innerHTML = cart.map((i,x) => { total += (i.price * i.qty); return `<tr style="border-bottom:1px solid #f0f0f0;"><td class="ps-3" style="width:70px;"><img src="${i.image}" width="60" class="rounded-3 shadow-sm"></td><td><div class="fw-bold">${i.name}</div><div class="small text-muted mb-1">Size: ${i.size} | Color: ${i.color}</div><div class="small text-muted mb-1">Height: ${i.height}</div><div class="text-primary fw-bold">₱${i.price}</div></td><td style="width:120px;"><div class="qty-selector"><button class="qty-btn small" onclick="updateCartQty(${x}, -1)">-</button><input type="text" class="qty-input small" value="${i.qty}" readonly style="width:30px;"><button class="qty-btn small" onclick="updateCartQty(${x}, 1)">+</button></div></td><td class="text-end pe-4"><i class="fas fa-trash-alt text-danger" style="cursor:pointer; opacity:0.6;" onclick="delItem(${x})"></i></td></tr>`; }).join(''); } document.getElementById('cart-total').innerText = "₱" + total.toLocaleString(); }
+    function updateCartQty(index, change) { cart[index].qty += change; if(cart[index].qty < 1) { Swal.fire({ title: 'Remove item?', text: "Remove from bag?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33' }).then((result) => { if (result.isConfirmed) delItem(index); else { cart[index].qty = 1; renderCart(); } }); } else { localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); renderCart(); } }
     function delItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); updateCartCount(); renderCart(); }
-
-    function initCheckout() {
-        cartTotalAmount = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
-        currentDonationPercent = 0; currentShippingFee = 0;
-        document.getElementById('del-method').value = "";
-        ['addr-street','addr-brgy','addr-city','addr-prov','addr-region','addr-zip'].forEach(id=>document.getElementById(id).value="");
-        document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = 'none');
-        document.querySelectorAll('.donate-pill').forEach(b => b.classList.remove('selected'));
-        updateCheckoutCalculations(); validateCheckoutForm();
-    }
-    function toggleDeliveryOptions() { 
-        const m = document.getElementById('del-method').value; const isDel = m === 'Delivery';
-        document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = isDel ? 'block' : 'none');
-        document.querySelectorAll('.delivery-fields input, .delivery-fields select').forEach(el => el.required = isDel);
-        calcShipping(); validateCheckoutForm(); 
-    }
-    function calcShipping() {
-        const method = document.getElementById('del-method').value; const region = document.getElementById('addr-region').value; 
-        if (method !== 'Delivery' || !region) { currentShippingFee = 0; } 
-        else {
-            const itemCount = cart.reduce((sum, item) => sum + item.qty, 0); let fee = 0;
-            if (region === 'Metro Manila') fee = itemCount===1?90 : itemCount<=3?140 : 250;
-            else if (region === 'Luzon') fee = itemCount===1?100 : itemCount<=3?170 : 320;
-            else if (region === 'Visayas') fee = itemCount===1?140 : itemCount<=3?210 : 370;
-            else if (region === 'Mindanao') fee = itemCount===1?145 : itemCount<=3?220 : 380;
-            else if (region === 'Island') fee = itemCount===1?150 : itemCount<=3?250 : 400;
-            currentShippingFee = fee;
-        }
-        updateCheckoutCalculations();
-    }
+    
+    // --- CHECKOUT ---
+    function initCheckout() { cartTotalAmount = cart.reduce((acc, item) => acc + (item.price * item.qty), 0); currentDonationPercent = 0; currentShippingFee = 0; document.getElementById('del-method').value = ""; ['addr-street','addr-brgy','addr-city','addr-prov','addr-region','addr-zip'].forEach(id=>document.getElementById(id).value=""); document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = 'none'); document.querySelectorAll('.donate-pill').forEach(b => b.classList.remove('selected')); updateCheckoutCalculations(); validateCheckoutForm(); }
+    function toggleDeliveryOptions() { const m = document.getElementById('del-method').value; const isDel = m === 'Delivery'; document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = isDel ? 'block' : 'none'); document.querySelectorAll('.delivery-fields input, .delivery-fields select').forEach(el => el.required = isDel); calcShipping(); validateCheckoutForm(); }
+    function calcShipping() { const method = document.getElementById('del-method').value; const region = document.getElementById('addr-region').value; if (method !== 'Delivery' || !region) { currentShippingFee = 0; } else { const itemCount = cart.reduce((sum, item) => sum + item.qty, 0); let fee = 0; if (region === 'Metro Manila') fee = itemCount===1?90 : itemCount<=3?140 : 250; else if (region === 'Luzon') fee = itemCount===1?100 : itemCount<=3?170 : 320; else if (region === 'Visayas') fee = itemCount===1?140 : itemCount<=3?210 : 370; else if (region === 'Mindanao') fee = itemCount===1?145 : itemCount<=3?220 : 380; else if (region === 'Island') fee = itemCount===1?150 : itemCount<=3?250 : 400; currentShippingFee = fee; } updateCheckoutCalculations(); }
     function selectDonation(p, b) { currentDonationPercent=p; document.querySelectorAll('.donate-pill').forEach(btn=>btn.classList.remove('selected')); b.classList.add('selected'); document.getElementById('donation-note').classList.toggle('d-none', p===0); updateCheckoutCalculations(); }
-    function updateCheckoutCalculations() {
-        const d = Math.ceil(cartTotalAmount * currentDonationPercent);
-        const g = cartTotalAmount + currentShippingFee + d;
-        document.getElementById('sum-subtotal').innerText = "₱" + cartTotalAmount.toLocaleString();
-        document.getElementById('sum-shipping').innerText = "₱" + currentShippingFee;
-        const dr = document.getElementById('sum-donate-row');
-        if (currentDonationPercent > 0) { dr.classList.remove('d-none'); document.getElementById('sum-donation').innerText = "₱" + d; } else dr.classList.add('d-none');
-        document.getElementById('pay-total').innerText = "₱" + g.toLocaleString();
-    }
+    function updateCheckoutCalculations() { const d = Math.ceil(cartTotalAmount * currentDonationPercent); const g = cartTotalAmount + currentShippingFee + d; document.getElementById('sum-subtotal').innerText = "₱" + cartTotalAmount.toLocaleString(); document.getElementById('sum-shipping').innerText = "₱" + currentShippingFee; const dr = document.getElementById('sum-donate-row'); if (currentDonationPercent > 0) { dr.classList.remove('d-none'); document.getElementById('sum-donation').innerText = "₱" + d; } else dr.classList.add('d-none'); document.getElementById('pay-total').innerText = "₱" + g.toLocaleString(); }
     function validateCheckoutForm() { const f=document.getElementById('checkout-form'); const b=document.getElementById('btn-place-order'); if(f.checkValidity()) { b.disabled=false; b.innerText="PLACE ORDER"; } else { b.disabled=true; b.innerText="FILL DETAILS"; } }
     function submitOrder(e) {
-        e.preventDefault();
-        const f = document.getElementById('c-proof').files[0]; if(!f) return;
+        e.preventDefault(); const f = document.getElementById('c-proof').files[0]; if(!f) return;
         Swal.fire({ title: 'Processing...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-        const r = new FileReader();
-        r.onload = function(evt) {
-            const d = Math.ceil(cartTotalAmount * currentDonationPercent);
-            const g = cartTotalAmount + currentShippingFee + d;
+        const r = new FileReader(); r.onload = function(evt) {
+            const d = Math.ceil(cartTotalAmount * currentDonationPercent); const g = cartTotalAmount + currentShippingFee + d;
             let addr = "Pick-up"; if(document.getElementById('del-method').value === 'Delivery'){ addr = `${document.getElementById('addr-street').value}, ${document.getElementById('addr-brgy').value}, ${document.getElementById('addr-city').value}, ${document.getElementById('addr-prov').value}, ${document.getElementById('addr-region').value}, ${document.getElementById('addr-zip').value}`; }
             const p = { action: 'placeOrder', cust: { name:document.getElementById('c-name').value, phone:document.getElementById('c-phone').value, email:document.getElementById('c-email').value, addr:addr }, pay: { ref:document.getElementById('c-ref').value, image:evt.target.result, mime:f.type }, cart: cart, total: "₱" + g.toLocaleString(), donation: { percent: (currentDonationPercent * 100) + "%", amount: d, note: document.getElementById('donation-note').value }, delivery: { method: document.getElementById('del-method').value, region: document.getElementById('addr-region').value || "N/A", fee: currentShippingFee } };
-            fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(p) }).then(res => res.json()).then(d => {
-                if(d.status === 'success') { cart = []; localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); Swal.fire({icon: 'success', title: 'Order Placed!', html: `Tracking ID: <b>${d.orderId}</b><br>Save this ID to track your order.`, confirmButtonColor: '#1b4d3e'}).then(() => routeTo('home')); }
-                else Swal.fire('Error', d.error, 'error');
-            });
-        };
-        r.readAsDataURL(f);
+            fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(p) }).then(res => res.json()).then(d => { if(d.status === 'success') { cart = []; localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); Swal.fire({icon: 'success', title: 'Order Placed!', html: `Tracking ID: <b>${d.orderId}</b>`, confirmButtonColor: '#1b4d3e'}).then(() => routeTo('home')); } else Swal.fire('Error', d.error, 'error'); });
+        }; r.readAsDataURL(f);
     }
     function doSearch() { const q = document.getElementById('searchBox').value.toLowerCase(); renderProds(allProducts.filter(p => p.name.toLowerCase().includes(q))); }
     function scrollToProducts() { document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); }
     function trackOrder() {
-        const id = document.getElementById('track-id').value.trim(); if(!id) return;
+        const id = document.getElementById('track-id').value.trim(); if(!id) return; document.getElementById('loader').style.display = 'flex';
+        fetch(WEB_APP_URL + `?action=trackOrder&orderId=${id}`).then(r => r.json()).then(d => { document.getElementById('loader').style.display = 'none'; document.getElementById('track-result').classList.remove('d-none'); document.getElementById('t-status').innerText = d.status === 'found' ? d.currStatus : "Order Not Found"; document.getElementById('t-date').innerText = d.status === 'found' ? d.date : "-"; document.getElementById('t-total').innerText = d.status === 'found' ? d.total : "-"; });
+    }
+
+    // --- NEW: REVIEWS LOGIC ---
+    function fetchReviews() {
         document.getElementById('loader').style.display = 'flex';
-        fetch(WEB_APP_URL + `?action=trackOrder&orderId=${id}`).then(r => r.json()).then(d => {
-            document.getElementById('loader').style.display = 'none'; document.getElementById('track-result').classList.remove('d-none');
-            document.getElementById('t-status').innerText = d.status === 'found' ? d.currStatus : "Order Not Found";
-            document.getElementById('t-date').innerText = d.status === 'found' ? d.date : "-";
-            document.getElementById('t-total').innerText = d.status === 'found' ? d.total : "-";
+        fetch(WEB_APP_URL + "?action=getReviews").then(r=>r.json()).then(data => {
+            document.getElementById('loader').style.display = 'none';
+            renderReviewList(data);
+        });
+    }
+
+    function renderReviewList(reviews) {
+        document.getElementById('total-reviews').innerText = reviews.length + " Reviews";
+        
+        // Calculate Stats
+        let total = 0, counts = {5:0, 4:0, 3:0, 2:0, 1:0};
+        reviews.forEach(r => { 
+            let rt = parseInt(r.rating); 
+            total += rt; 
+            if(counts[rt] !== undefined) counts[rt]++; 
+        });
+        
+        let avg = reviews.length ? (total / reviews.length).toFixed(1) : "0.0";
+        document.getElementById('avg-rating-display').innerText = avg;
+        document.getElementById('avg-stars').innerHTML = getStarsHtml(Math.round(avg));
+        
+        // Render Bars
+        document.getElementById('rating-bars').innerHTML = [5,4,3,2,1].map(num => {
+            let pct = reviews.length ? (counts[num] / reviews.length * 100) : 0;
+            return `<div class="d-flex align-items-center mb-2"><span class="small fw-bold me-2" style="width:10px;">${num}</span><i class="fas fa-star text-warning small me-2"></i><div class="rating-summary-bar"><div class="rating-fill" style="width:${pct}%"></div></div><span class="small text-muted" style="width:30px;text-align:right;">${counts[num]}</span></div>`;
+        }).join('');
+
+        // Render List
+        document.getElementById('reviews-list').innerHTML = reviews.map(r => `
+            <div class="review-card">
+                <div class="review-header">
+                    <div>
+                        <div class="fw-bold">${r.name}</div>
+                        <div class="text-warning small">${getStarsHtml(r.rating)}</div>
+                    </div>
+                    <small class="text-muted">${r.date}</small>
+                </div>
+                <p class="text-secondary small mb-0">${r.feedback}</p>
+            </div>
+        `).join('');
+    }
+
+    function getStarsHtml(rating) {
+        let h = '';
+        for(let i=0; i<5; i++) h += `<i class="${i < rating ? 'fas' : 'far'} fa-star"></i>`;
+        return h;
+    }
+
+    function submitReview(e) {
+        e.preventDefault();
+        const rName = document.getElementById('r-name').value;
+        const rEmail = document.getElementById('r-email').value;
+        const rPhone = document.getElementById('r-phone').value;
+        const rFeedback = document.getElementById('r-feedback').value;
+        
+        let rRating = 0;
+        document.querySelectorAll('input[name="rating"]').forEach(r => { if(r.checked) rRating = r.value; });
+        if(rRating === 0) { Swal.fire('Error','Please select a star rating','warning'); return; }
+
+        Swal.fire({ title: 'Submitting...', didOpen: () => Swal.showLoading() });
+
+        const p = {
+            action: 'submitReview',
+            name: rName, email: rEmail, phone: rPhone, feedback: rFeedback, rating: rRating
+        };
+
+        fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(p) }).then(r=>r.json()).then(d => {
+            if(d.status === 'success') {
+                Swal.fire('Thank You!', 'Your feedback has been submitted.', 'success');
+                document.getElementById('r-name').value = "";
+                document.getElementById('r-email').value = "";
+                document.getElementById('r-phone').value = "";
+                document.getElementById('r-feedback').value = "";
+                document.querySelectorAll('input[name="rating"]').forEach(r => r.checked = false);
+                fetchReviews(); // Refresh list
+            } else {
+                Swal.fire('Error', d.error, 'error');
+            }
         });
     }
 </script>
