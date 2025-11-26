@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Jazaa Ph | Online Shop</title>
+    <title>Al-Jazaa Ph. | Online Shop</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- SweetAlert2 (Pop-up Alerts) -->
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
@@ -53,58 +53,23 @@
         .offcanvas-header { background: var(--primary); color: white; }
         .offcanvas-title { font-family: 'Playfair Display'; letter-spacing: 1px; }
         .btn-close-white { filter: invert(1) grayscale(100%) brightness(200%); }
-        
-        .sidebar-link {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 12px 15px; color: var(--text); 
-            text-decoration: none; font-weight: 500; border-bottom: 1px solid #f0f0f0;
-            transition: 0.2s;
-        }
+        .sidebar-link { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; color: var(--text); text-decoration: none; font-weight: 500; border-bottom: 1px solid #f0f0f0; transition: 0.2s; }
         .sidebar-link:hover { background: #f8f9fa; color: var(--primary); padding-left: 20px; }
-
-        .policy-box {
-            background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;
-            padding: 15px; margin-top: 20px;
-            max-height: 200px; overflow-y: auto; font-size: 0.85rem; color: #666;
-        }
+        .policy-box { background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 15px; margin-top: 20px; max-height: 200px; overflow-y: auto; font-size: 0.85rem; color: #666; }
         .policy-box h6 { color: var(--primary); font-weight: 700; margin-top: 10px; }
 
         /* Hero Button */
-        .btn-hero {
-            background-color: var(--primary); color: var(--gold);
-            border: 2px solid var(--gold);
-            padding: 12px 40px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
-            border-radius: 50px; transition: all 0.3s ease;
-            font-family: 'Playfair Display', serif;
-        }
-        .btn-hero:hover {
-            background-color: var(--gold); color: var(--primary);
-            box-shadow: 0 0 20px rgba(197, 160, 40, 0.5); transform: translateY(-2px);
-        }
+        .btn-hero { background-color: var(--primary); color: var(--gold); border: 2px solid var(--gold); padding: 12px 40px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 50px; transition: all 0.3s ease; font-family: 'Playfair Display', serif; }
+        .btn-hero:hover { background-color: var(--gold); color: var(--primary); box-shadow: 0 0 20px rgba(197, 160, 40, 0.5); transform: translateY(-2px); }
 
         /* Cart Badge */
         .cart-btn-wrap { position: relative; display: inline-flex; align-items: center; text-decoration: none; margin-right: 15px; cursor: pointer;}
-        .cart-badge { 
-            background: var(--gold); color: white; 
-            border-radius: 50%; width: 18px; height: 18px; 
-            display: flex; align-items: center; justify-content: center; 
-            font-size: 0.65rem; font-weight: bold;
-            position: absolute; top: -5px; right: -8px; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
+        .cart-badge { background: var(--gold); color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: bold; position: absolute; top: -5px; right: -8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
         /* Category Scroll */
-        .category-scroll-container { 
-            overflow-x: auto; white-space: nowrap; position: sticky; top: var(--nav-height); z-index: 900; 
-            background: rgba(248,249,250,0.95); backdrop-filter: blur(8px); 
-            padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.05); 
-            -ms-overflow-style: none; scrollbar-width: none; 
-        }
+        .category-scroll-container { overflow-x: auto; white-space: nowrap; position: sticky; top: var(--nav-height); z-index: 900; background: rgba(248,249,250,0.95); backdrop-filter: blur(8px); padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.05); -ms-overflow-style: none; scrollbar-width: none; }
         .category-scroll-container::-webkit-scrollbar { display: none; }
-        .cat-pill { 
-            display: inline-block; background: white; border: 1px solid #e0e0e0; color: #666; 
-            padding: 8px 20px; border-radius: 50px; margin-right: 10px; cursor: pointer; transition: 0.2s; 
-        }
+        .cat-pill { display: inline-block; background: white; border: 1px solid #e0e0e0; color: #666; padding: 8px 20px; border-radius: 50px; margin-right: 10px; cursor: pointer; transition: 0.2s; }
         .cat-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
 
         /* Product Card */
@@ -113,43 +78,52 @@
         .card-img-wrapper { position: relative; width: 100%; padding-top: 133%; overflow: hidden; background: #f4f4f4; }
         .mini-carousel { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         .mini-carousel img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
-        
         .stock-label { position: absolute; top: 10px; left: 10px; padding: 4px 10px; font-size: 0.65rem; color: white; font-weight: 700; text-transform: uppercase; border-radius: 4px; z-index: 10; }
         .in-stock { background: rgba(27, 77, 62, 0.9); }
         .out-stock { background: rgba(150, 150, 150, 0.9); }
-        
         .sale-badge { position: absolute; top: 10px; right: 10px; background: #d32f2f; color: white; padding: 4px 8px; font-size: 0.7rem; font-weight: 700; border-radius: 4px; z-index: 10; }
         .original-price { text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 5px; }
         .sale-price-text { color: #d32f2f; font-weight: 700; }
+
+        /* --- NEW: GALLERY STYLING --- */
+        .dt-main-img {
+            width: 100%; border-radius: 12px; object-fit: cover; aspect-ratio: 3/4; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: 0.3s;
+        }
+        .gallery-container {
+            display: flex; gap: 10px; overflow-x: auto; margin-top: 15px; padding-bottom: 5px;
+            scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .gallery-container::-webkit-scrollbar { display: none; }
+        .thumb-img {
+            width: 70px; height: 70px; border-radius: 8px; object-fit: cover; cursor: pointer;
+            border: 2px solid transparent; opacity: 0.6; transition: 0.2s; flex-shrink: 0;
+        }
+        .thumb-img:hover { opacity: 1; }
+        .thumb-img.active { border-color: var(--primary); opacity: 1; transform: scale(1.05); }
 
         /* Controls */
         .qty-selector { display: inline-flex; align-items: center; border: 1px solid #ddd; border-radius: 50px; overflow: hidden; height: 40px; }
         .qty-btn { background: white; border: none; padding: 0 15px; font-weight: bold; cursor: pointer; color: var(--primary); height: 100%; }
         .qty-btn:hover { background: #f0f0f0; }
         .qty-input { width: 40px; border: none; text-align: center; font-weight: 600; outline: none; background: white; }
-
         .btn-custom { background: var(--primary); color: white; border-radius: 50px; padding: 12px 30px; font-weight: 600; border: none; text-transform: uppercase; transition: 0.3s; }
         .btn-custom:hover { background: var(--primary-dark); color: white; transform: translateY(-2px); shadow: 0 5px 15px rgba(27, 77, 62, 0.3); }
         .btn-custom:disabled { background: #ccc; cursor: not-allowed; transform: none; }
-        
         .option-btn { min-width: 40px; height: 40px; padding: 0 15px; border: 1px solid #ddd; background: white; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; margin-right: 8px; margin-bottom: 8px; font-size: 0.9rem; }
         .option-btn:hover { border-color: var(--primary); }
         .option-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Related Products */
+        /* Related & Utils */
         .related-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; -ms-overflow-style: none; scrollbar-width: none; }
         .related-scroll::-webkit-scrollbar { display: none; }
         .related-card { min-width: 140px; width: 140px; border: none; cursor: pointer; }
         .related-card img { border-radius: 8px; width: 100%; aspect-ratio: 3/4; object-fit: cover; margin-bottom: 8px; }
-
-        /* Donation & Checkout */
         .marquee-container { width: 100%; overflow: hidden; background: var(--primary); color: var(--gold); padding: 10px 0; border-radius: 8px; margin-bottom: 10px; }
         .marquee-content { display: inline-block; white-space: nowrap; animation: marquee 15s linear infinite; font-weight: 700; letter-spacing: 2px; font-family: 'Playfair Display'; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-
         .donate-pill { flex: 1; border: 1px solid var(--primary); color: var(--primary); background: transparent; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; }
         .donate-pill:hover, .donate-pill.selected { background: var(--primary); color: white; }
-
         .file-upload-wrapper { position: relative; }
         .upload-helper { font-size: 0.75rem; color: #d32f2f; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
 
@@ -160,7 +134,6 @@
 
         #detail-view { position: fixed; inset: 0; background: #fff; z-index: 2000; overflow-y: auto; display: none; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
         #loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
     </style>
 </head>
@@ -206,19 +179,14 @@
     <div class="offcanvas-body d-flex flex-column">
         <a href="#" class="sidebar-link" onclick="routeTo('home'); closeSidebar();">Shop Home <i class="fas fa-chevron-right"></i></a>
         <a href="#" class="sidebar-link" onclick="routeTo('track'); closeSidebar();">Track Order <i class="fas fa-chevron-right"></i></a>
-        
         <hr class="my-3 opacity-25">
         <p class="small text-uppercase text-muted fw-bold ms-2 mb-2">Categories</p>
         <div id="sidebar-categories"></div>
-
         <div class="mt-auto">
             <div class="policy-box">
-                <h6>About Al-Jazaa Ph.</h6>
-                <p>Al-Jazaa Ph. is committed to providing timeless modesty with modern elegance.</p>
-                <h6>Payment Policy</h6>
-                <p>We strictly accept GCash payments. Verification required via screenshot.</p>
-                <h6>Delivery Policy</h6>
-                <p>Nationwide delivery via courier. Shipping fees vary by region and weight. 3-7 days.</p>
+                <h6>About Al-Jazaa Ph.</h6><p>Al-Jazaa Ph. is committed to providing timeless modesty with modern elegance.</p>
+                <h6>Payment Policy</h6><p>We strictly accept GCash payments. Verification required via screenshot.</p>
+                <h6>Delivery Policy</h6><p>Nationwide delivery via courier. Shipping fees vary by region and weight. 3-7 days.</p>
             </div>
         </div>
     </div>
@@ -230,16 +198,10 @@
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%201.png?raw=true" class="d-block w-100" alt="Slide 1">
-                <div class="carousel-caption">
-                    <button class="btn-hero shadow-lg" onclick="scrollToProducts()">Shop Now</button>
-                </div>
+                <div class="carousel-caption"><button class="btn-hero shadow-lg" onclick="scrollToProducts()">Shop Now</button></div>
             </div>
-            <div class="carousel-item">
-                <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%202.png?raw=true" class="d-block w-100" alt="Slide 2">
-            </div>
-            <div class="carousel-item">
-                <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%203.png?raw=true" class="d-block w-100" alt="Slide 3">
-            </div>
+            <div class="carousel-item"><img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%202.png?raw=true" class="d-block w-100" alt="Slide 2"></div>
+            <div class="carousel-item"><img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%203.png?raw=true" class="d-block w-100" alt="Slide 3"></div>
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
         <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
@@ -256,16 +218,25 @@
     </div>
 </div>
 
-<!-- DETAIL VIEW -->
+<!-- DETAIL VIEW (UPDATED WITH GALLERY) -->
 <div id="detail-view">
     <div class="container py-5">
         <button class="btn btn-light rounded-circle shadow-sm mb-4" style="width:40px;height:40px;" onclick="window.history.back()">
             <i class="fas fa-arrow-left"></i>
         </button>
         <div class="row gx-5">
+            <!-- Left Column: Images -->
             <div class="col-md-5 mb-4">
-                <img id="dt-img" src="" class="img-fluid rounded-4 shadow-sm w-100" style="object-fit:cover;aspect-ratio:3/4;">
+                <!-- Main Image -->
+                <img id="dt-img" src="" class="dt-main-img">
+                
+                <!-- Gallery Thumbnails (Scrollable) -->
+                <div id="dt-gallery" class="gallery-container">
+                    <!-- Thumbnails injected via JS -->
+                </div>
             </div>
+
+            <!-- Right Column: Details -->
             <div class="col-md-7">
                 <span class="badge bg-light text-dark mb-2 border" id="dt-cat"></span>
                 <h1 id="dt-name" class="display-6 fw-bold"></h1>
@@ -276,7 +247,6 @@
                 </div>
                 <p id="dt-desc" class="text-muted mb-4"></p>
                 
-                <!-- Options -->
                 <div class="mb-3">
                     <label class="fw-bold mb-2 small text-uppercase">Size <span class="text-danger">*</span></label>
                     <div id="size-area" class="d-flex flex-wrap"></div>
@@ -304,7 +274,6 @@
 
                 <button id="add-btn" class="btn btn-custom w-100 py-3 shadow-lg mb-5" onclick="addToCart()">ADD TO CART</button>
                 
-                <!-- Related Items -->
                 <hr>
                 <h5 class="font-playfair mb-3">You might also like</h5>
                 <div id="related-products" class="related-scroll"></div>
@@ -339,9 +308,7 @@
     <div class="card p-4 p-md-5 shadow-lg border-0 rounded-4">
         <h3 class="text-center mb-2 font-playfair">Checkout</h3>
         <p class="text-center text-muted small mb-4">Complete your details to place order</p>
-        
         <form id="checkout-form" onsubmit="submitOrder(event)" oninput="validateCheckoutForm()">
-            <!-- Donation Always Visible -->
             <div class="mb-4 bg-light p-3 rounded border">
                 <div class="marquee-container shadow-sm mb-3">
                     <div class="marquee-content">✨ DONATE TO ORPHANS • SADQA JARIYAH • HELP THOSE IN NEED • AL-JAZAA PH CHARITY ✨</div>
@@ -369,7 +336,6 @@
                 <div class="col-md-6"><input type="text" class="form-control" id="c-name" placeholder="Full Name" required></div>
                 <div class="col-md-6"><input type="number" class="form-control" id="c-phone" placeholder="Phone Number" required></div>
                 <div class="col-12"><input type="email" class="form-control" id="c-email" placeholder="Email Address" required></div>
-                
                 <div class="col-12 delivery-fields" style="display:none;">
                     <hr class="opacity-25 my-1">
                     <label class="small fw-bold text-primary mt-2">Shipping Address</label>
@@ -380,7 +346,7 @@
                 <div class="col-md-6 delivery-fields"><input type="text" class="form-control" id="addr-prov" placeholder="Province"></div>
                 <div class="col-md-8 delivery-fields">
                      <select class="form-select" id="addr-region" onchange="calcShipping()">
-                        <option value="" disabled selected>Select Region (Calculates Fee)</option>
+                        <option value="" disabled selected>Select Region</option>
                         <option value="Metro Manila">Metro Manila</option>
                         <option value="Luzon">Luzon</option>
                         <option value="Visayas">Visayas</option>
@@ -451,14 +417,13 @@
                 <p class="footer-link">0921-429-5887</p>
             </div>
         </div>
-        <hr class="border-secondary mt-5">
-        <p class="text-center small text-muted mb-0">&copy; 2024 Al-Jazaa Ph. All rights reserved.</p>
+        <hr class="border-secondary mt-5"><p class="text-center small text-muted mb-0">&copy; 2024 Al-Jazaa Ph. All rights reserved.</p>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v13'))||[], curProduct={}, selectedSize=null, selectedColor=null;
+    let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v14'))||[], curProduct={}, selectedSize=null, selectedColor=null;
     let cartTotalAmount=0, currentDonationPercent=0, currentShippingFee=0;
     
     const getSidebar = () => bootstrap.Offcanvas.getInstance(document.getElementById('sidebarMenu'));
@@ -476,37 +441,23 @@
         document.getElementById('detail-view').style.display = 'none'; 
         document.getElementById('heroCarousel').classList.add('d-none'); 
         window.scrollTo(0,0);
-        
-        if(pageId === 'home') { 
-            document.getElementById('page-home').classList.remove('d-none'); 
-            document.getElementById('heroCarousel').classList.remove('d-none'); 
-        }
+        if(pageId === 'home') { document.getElementById('page-home').classList.remove('d-none'); document.getElementById('heroCarousel').classList.remove('d-none'); }
         else { document.getElementById('page-' + pageId).classList.remove('d-none'); }
-        
         if(pageId === 'cart') renderCart();
-        if(pageId === 'checkout') { 
-            if(cart.length === 0) { Swal.fire({icon:'warning', title:'Empty Bag', text:'Please add items first'}); routeTo('home'); return; } 
-            initCheckout(); 
-        }
+        if(pageId === 'checkout') { if(cart.length === 0) { Swal.fire({icon:'warning', title:'Empty Bag', text:'Please add items first'}); routeTo('home'); return; } initCheckout(); }
     }
 
-    // --- PRODUCTS ---
     function fetchProducts() {
         fetch(WEB_APP_URL + "?action=getProducts").then(r => r.json()).then(data => {
-            allProducts = data; 
-            document.getElementById('loader').style.display = 'none';
+            allProducts = data; document.getElementById('loader').style.display = 'none';
             renderCats(); renderProds(allProducts);
         });
     }
 
     function renderCats() {
         const cats = ['All', ...new Set(allProducts.map(p => p.category))];
-        document.getElementById('category-list').innerHTML = cats.map(c => 
-            `<span class="cat-pill ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">${c}</span>`
-        ).join('');
-        document.getElementById('sidebar-categories').innerHTML = cats.map(c => 
-            `<a href="#" class="sidebar-link" onclick="filterCat('${c}', null, true)">${c} <i class="fas fa-chevron-right"></i></a>`
-        ).join('');
+        document.getElementById('category-list').innerHTML = cats.map(c => `<span class="cat-pill ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">${c}</span>`).join('');
+        document.getElementById('sidebar-categories').innerHTML = cats.map(c => `<a href="#" class="sidebar-link" onclick="filterCat('${c}', null, true)">${c} <i class="fas fa-chevron-right"></i></a>`).join('');
     }
 
     function filterCat(c, el, fromSidebar = false) {
@@ -519,27 +470,22 @@
         document.getElementById('product-grid').innerHTML = list.map(p => {
             let imgs = (p.images && p.images.length > 0) ? p.images : [p.image];
             let itemsHtml = imgs.map((url, idx) => `<div class="carousel-item ${idx===0?'active':''}"><img src="${url.trim()}" class="d-block w-100" loading="lazy"></div>`).join('');
-            
             let saleBadge = (p.salePercent > 0) ? `<span class="sale-badge">${p.salePercent}% OFF</span>` : '';
-            let priceDisplay = (p.salePercent > 0) 
-                ? `<span class="original-price">₱${p.originalPrice}</span> <span class="sale-price-text">₱${p.price}</span>` 
-                : `<div class="fw-bold text-dark">₱${p.price}</div>`;
+            let priceDisplay = (p.salePercent > 0) ? `<span class="original-price">₱${p.originalPrice}</span> <span class="sale-price-text">₱${p.price}</span>` : `<div class="fw-bold text-dark">₱${p.price}</div>`;
 
             return `<div class="col"><div class="card product-card">
-                <span class="stock-label ${p.inStock?'in-stock':'out-stock'}">${p.inStock?'In Stock':'Out of Stock'}</span>
-                ${saleBadge}
+                <span class="stock-label ${p.inStock?'in-stock':'out-stock'}">${p.inStock?'In Stock':'Out of Stock'}</span>${saleBadge}
                 <div class="card-img-wrapper" onclick="openDetail('${p.id}')" style="cursor:pointer">
                      <div class="carousel slide mini-carousel" data-bs-interval="false"><div class="carousel-inner">${itemsHtml}</div></div>
                 </div>
                 <div class="card-body" onclick="openDetail('${p.id}')" style="cursor:pointer">
-                    <h6 class="card-title text-dark mb-1 text-truncate">${p.name}</h6>
-                    ${priceDisplay}
+                    <h6 class="card-title text-dark mb-1 text-truncate">${p.name}</h6>${priceDisplay}
                 </div>
             </div></div>`;
         }).join('');
     }
 
-    // --- DETAIL VIEW ---
+    // --- UPDATED DETAIL VIEW ---
     function openDetail(id) {
         window.history.pushState({ page: 'detail' }, '', '');
         curProduct = allProducts.find(p => p.id == id); 
@@ -547,12 +493,21 @@
         document.getElementById('height-input').value = "";
         document.getElementById('dt-qty-val').value = 1;
         
-        document.getElementById('dt-img').src = curProduct.image;
+        // Handle Images
+        let imgList = (curProduct.images && curProduct.images.length > 0) ? curProduct.images : [curProduct.image];
+        
+        // Set Main Image
+        document.getElementById('dt-img').src = imgList[0];
+
+        // Render Thumbnails
+        document.getElementById('dt-gallery').innerHTML = imgList.map((src, i) => 
+            `<img src="${src}" class="thumb-img ${i===0?'active':''}" onclick="swapImage('${src}', this)">`
+        ).join('');
+
         document.getElementById('dt-cat').innerText = curProduct.category;
         document.getElementById('dt-name').innerText = curProduct.name;
         document.getElementById('dt-desc').innerText = curProduct.desc;
         
-        // Price Logic
         if(curProduct.salePercent > 0) {
             document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice;
             document.getElementById('dt-old-price').classList.remove('d-none');
@@ -567,10 +522,7 @@
             document.getElementById('dt-price').classList.remove('text-danger');
         }
 
-        // Render Options
         document.getElementById('size-area').innerHTML = ["S","M","L","XL"].map(s => `<div class="option-btn size-opt" onclick="pickOption('size','${s}', this)">${s}</div>`).join('');
-        
-        // Parse Colors
         let colorList = curProduct.colors ? curProduct.colors.split(',') : ["Default"];
         document.getElementById('color-area').innerHTML = colorList.map(c => `<div class="option-btn color-opt" onclick="pickOption('color','${c.trim()}', this)">${c.trim()}</div>`).join('');
 
@@ -580,6 +532,12 @@
 
         renderRelated(curProduct.category, curProduct.id);
         document.getElementById('detail-view').style.display = 'block';
+    }
+
+    function swapImage(src, el) {
+        document.getElementById('dt-img').src = src;
+        document.querySelectorAll('.thumb-img').forEach(img => img.classList.remove('active'));
+        el.classList.add('active');
     }
 
     function renderRelated(cat, currentId) {
@@ -603,54 +561,21 @@
         el.value = val;
     }
 
-    // --- ACCURATE VALIDATION & ADD TO CART ---
     function addToCart() {
-        // 1. Check Size
-        if(!selectedSize) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Missing Size',
-                text: 'Please select a SIZE option before adding to bag.',
-                confirmButtonColor: '#1b4d3e'
-            });
-            return; // Stops execution
-        }
-
-        // 2. Check Color
-        if(!selectedColor) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Missing Color',
-                text: 'Please select a COLOR option before adding to bag.',
-                confirmButtonColor: '#1b4d3e'
-            });
-            return; // Stops execution
-        }
-
-        // 3. Check Height
+        if(!selectedSize) { Swal.fire({icon: 'error', title: 'Missing Size', text: 'Please select a SIZE option.', confirmButtonColor: '#1b4d3e'}); return; }
+        if(!selectedColor) { Swal.fire({icon: 'error', title: 'Missing Color', text: 'Please select a COLOR option.', confirmButtonColor: '#1b4d3e'}); return; }
         const heightVal = document.getElementById('height-input').value.trim();
-        if(!heightVal) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Missing Height',
-                text: 'Please enter your HEIGHT for proper fitting.',
-                confirmButtonColor: '#1b4d3e'
-            });
-            return; // Stops execution
-        }
+        if(!heightVal) { Swal.fire({icon: 'error', title: 'Missing Height', text: 'Please enter your HEIGHT.', confirmButtonColor: '#1b4d3e'}); return; }
         
-        // If all checks pass:
         let qty = parseInt(document.getElementById('dt-qty-val').value);
         cart.push({...curProduct, size: selectedSize, color: selectedColor, height: heightVal, qty: qty});
-        localStorage.setItem('alj_cart_v13', JSON.stringify(cart)); 
-        updateCartCount();
+        localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); updateCartCount();
         Swal.fire({icon: 'success', title: 'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1500}); 
         window.history.back();
     }
     
     function updateCartCount() { document.getElementById('cart-count').innerText = cart.length; }
 
-    // --- CART RENDER ---
     function renderCart() {
         let total = 0; const tb = document.getElementById('cart-table');
         if(cart.length === 0) { 
@@ -660,26 +585,7 @@
             document.getElementById('btn-checkout').disabled = false;
             tb.innerHTML = cart.map((i,x) => { 
                 total += (i.price * i.qty); 
-                return `
-                <tr style="border-bottom:1px solid #f0f0f0;">
-                    <td class="ps-3" style="width:70px;"><img src="${i.image}" width="60" class="rounded-3 shadow-sm"></td>
-                    <td>
-                        <div class="fw-bold">${i.name}</div>
-                        <div class="small text-muted mb-1">Size: ${i.size} | Color: ${i.color}</div>
-                        <div class="small text-muted mb-1">Height: ${i.height}</div>
-                        <div class="text-primary fw-bold">₱${i.price}</div>
-                    </td>
-                    <td style="width:120px;">
-                        <div class="qty-selector">
-                            <button class="qty-btn small" onclick="updateCartQty(${x}, -1)">-</button>
-                            <input type="text" class="qty-input small" value="${i.qty}" readonly style="width:30px;">
-                            <button class="qty-btn small" onclick="updateCartQty(${x}, 1)">+</button>
-                        </div>
-                    </td>
-                    <td class="text-end pe-4">
-                        <i class="fas fa-trash-alt text-danger" style="cursor:pointer; opacity:0.6;" onclick="delItem(${x})"></i>
-                    </td>
-                </tr>`; 
+                return `<tr style="border-bottom:1px solid #f0f0f0;"><td class="ps-3" style="width:70px;"><img src="${i.image}" width="60" class="rounded-3 shadow-sm"></td><td><div class="fw-bold">${i.name}</div><div class="small text-muted mb-1">Size: ${i.size} | Color: ${i.color}</div><div class="small text-muted mb-1">Height: ${i.height}</div><div class="text-primary fw-bold">₱${i.price}</div></td><td style="width:120px;"><div class="qty-selector"><button class="qty-btn small" onclick="updateCartQty(${x}, -1)">-</button><input type="text" class="qty-input small" value="${i.qty}" readonly style="width:30px;"><button class="qty-btn small" onclick="updateCartQty(${x}, 1)">+</button></div></td><td class="text-end pe-4"><i class="fas fa-trash-alt text-danger" style="cursor:pointer; opacity:0.6;" onclick="delItem(${x})"></i></td></tr>`; 
             }).join('');
         }
         document.getElementById('cart-total').innerText = "₱" + total.toLocaleString();
@@ -687,45 +593,31 @@
 
     function updateCartQty(index, change) {
         cart[index].qty += change;
-        if(cart[index].qty < 1) {
-            Swal.fire({ title: 'Remove item?', text: "Remove from bag?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33' })
-            .then((result) => { if (result.isConfirmed) delItem(index); else { cart[index].qty = 1; renderCart(); } });
-        } else {
-            localStorage.setItem('alj_cart_v13', JSON.stringify(cart));
-            renderCart();
-        }
+        if(cart[index].qty < 1) { Swal.fire({ title: 'Remove item?', text: "Remove from bag?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33' }).then((result) => { if (result.isConfirmed) delItem(index); else { cart[index].qty = 1; renderCart(); } }); } 
+        else { localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); renderCart(); }
     }
+    function delItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); updateCartCount(); renderCart(); }
 
-    function delItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v13', JSON.stringify(cart)); updateCartCount(); renderCart(); }
-
-    // --- CHECKOUT ---
     function initCheckout() {
         cartTotalAmount = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
         currentDonationPercent = 0; currentShippingFee = 0;
         document.getElementById('del-method').value = "";
-        
         ['addr-street','addr-brgy','addr-city','addr-prov','addr-region','addr-zip'].forEach(id=>document.getElementById(id).value="");
         document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = 'none');
         document.querySelectorAll('.donate-pill').forEach(b => b.classList.remove('selected'));
         updateCheckoutCalculations(); validateCheckoutForm();
     }
-
     function toggleDeliveryOptions() { 
-        const m = document.getElementById('del-method').value;
-        const isDel = m === 'Delivery';
+        const m = document.getElementById('del-method').value; const isDel = m === 'Delivery';
         document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = isDel ? 'block' : 'none');
         document.querySelectorAll('.delivery-fields input, .delivery-fields select').forEach(el => el.required = isDel);
         calcShipping(); validateCheckoutForm(); 
     }
-
     function calcShipping() {
-        const method = document.getElementById('del-method').value;
-        const region = document.getElementById('addr-region').value; 
-        
+        const method = document.getElementById('del-method').value; const region = document.getElementById('addr-region').value; 
         if (method !== 'Delivery' || !region) { currentShippingFee = 0; } 
         else {
-            const itemCount = cart.reduce((sum, item) => sum + item.qty, 0); 
-            let fee = 0;
+            const itemCount = cart.reduce((sum, item) => sum + item.qty, 0); let fee = 0;
             if (region === 'Metro Manila') fee = itemCount===1?90 : itemCount<=3?140 : 250;
             else if (region === 'Luzon') fee = itemCount===1?100 : itemCount<=3?170 : 320;
             else if (region === 'Visayas') fee = itemCount===1?140 : itemCount<=3?210 : 370;
@@ -735,9 +627,7 @@
         }
         updateCheckoutCalculations();
     }
-
     function selectDonation(p, b) { currentDonationPercent=p; document.querySelectorAll('.donate-pill').forEach(btn=>btn.classList.remove('selected')); b.classList.add('selected'); document.getElementById('donation-note').classList.toggle('d-none', p===0); updateCheckoutCalculations(); }
-
     function updateCheckoutCalculations() {
         const d = Math.ceil(cartTotalAmount * currentDonationPercent);
         const g = cartTotalAmount + currentShippingFee + d;
@@ -747,9 +637,7 @@
         if (currentDonationPercent > 0) { dr.classList.remove('d-none'); document.getElementById('sum-donation').innerText = "₱" + d; } else dr.classList.add('d-none');
         document.getElementById('pay-total').innerText = "₱" + g.toLocaleString();
     }
-
     function validateCheckoutForm() { const f=document.getElementById('checkout-form'); const b=document.getElementById('btn-place-order'); if(f.checkValidity()) { b.disabled=false; b.innerText="PLACE ORDER"; } else { b.disabled=true; b.innerText="FILL DETAILS"; } }
-
     function submitOrder(e) {
         e.preventDefault();
         const f = document.getElementById('c-proof').files[0]; if(!f) return;
@@ -758,41 +646,22 @@
         r.onload = function(evt) {
             const d = Math.ceil(cartTotalAmount * currentDonationPercent);
             const g = cartTotalAmount + currentShippingFee + d;
-            
-            let addr = "Pick-up";
-            if(document.getElementById('del-method').value === 'Delivery'){
-                 addr = `${document.getElementById('addr-street').value}, ${document.getElementById('addr-brgy').value}, ${document.getElementById('addr-city').value}, ${document.getElementById('addr-prov').value}, ${document.getElementById('addr-region').value}, ${document.getElementById('addr-zip').value}`;
-            }
-
-            const p = {
-                action: 'placeOrder',
-                cust: { name:document.getElementById('c-name').value, phone:document.getElementById('c-phone').value, email:document.getElementById('c-email').value, addr:addr },
-                pay: { ref:document.getElementById('c-ref').value, image:evt.target.result, mime:f.type },
-                cart: cart, 
-                total: "₱" + g.toLocaleString(),
-                donation: { percent: (currentDonationPercent * 100) + "%", amount: d, note: document.getElementById('donation-note').value },
-                delivery: { method: document.getElementById('del-method').value, region: document.getElementById('addr-region').value || "N/A", fee: currentShippingFee }
-            };
+            let addr = "Pick-up"; if(document.getElementById('del-method').value === 'Delivery'){ addr = `${document.getElementById('addr-street').value}, ${document.getElementById('addr-brgy').value}, ${document.getElementById('addr-city').value}, ${document.getElementById('addr-prov').value}, ${document.getElementById('addr-region').value}, ${document.getElementById('addr-zip').value}`; }
+            const p = { action: 'placeOrder', cust: { name:document.getElementById('c-name').value, phone:document.getElementById('c-phone').value, email:document.getElementById('c-email').value, addr:addr }, pay: { ref:document.getElementById('c-ref').value, image:evt.target.result, mime:f.type }, cart: cart, total: "₱" + g.toLocaleString(), donation: { percent: (currentDonationPercent * 100) + "%", amount: d, note: document.getElementById('donation-note').value }, delivery: { method: document.getElementById('del-method').value, region: document.getElementById('addr-region').value || "N/A", fee: currentShippingFee } };
             fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(p) }).then(res => res.json()).then(d => {
-                if(d.status === 'success') { 
-                    cart = []; localStorage.setItem('alj_cart_v13', JSON.stringify(cart)); 
-                    Swal.fire({icon: 'success', title: 'Order Placed!', html: `Tracking ID: <b>${d.orderId}</b><br>Save this ID to track your order.`, confirmButtonColor: '#1b4d3e'}).then(() => routeTo('home')); 
-                }
+                if(d.status === 'success') { cart = []; localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); Swal.fire({icon: 'success', title: 'Order Placed!', html: `Tracking ID: <b>${d.orderId}</b><br>Save this ID to track your order.`, confirmButtonColor: '#1b4d3e'}).then(() => routeTo('home')); }
                 else Swal.fire('Error', d.error, 'error');
             });
         };
         r.readAsDataURL(f);
     }
-    
     function doSearch() { const q = document.getElementById('searchBox').value.toLowerCase(); renderProds(allProducts.filter(p => p.name.toLowerCase().includes(q))); }
     function scrollToProducts() { document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); }
-    
     function trackOrder() {
         const id = document.getElementById('track-id').value.trim(); if(!id) return;
         document.getElementById('loader').style.display = 'flex';
         fetch(WEB_APP_URL + `?action=trackOrder&orderId=${id}`).then(r => r.json()).then(d => {
-            document.getElementById('loader').style.display = 'none'; 
-            document.getElementById('track-result').classList.remove('d-none');
+            document.getElementById('loader').style.display = 'none'; document.getElementById('track-result').classList.remove('d-none');
             document.getElementById('t-status').innerText = d.status === 'found' ? d.currStatus : "Order Not Found";
             document.getElementById('t-date').innerText = d.status === 'found' ? d.date : "-";
             document.getElementById('t-total').innerText = d.status === 'found' ? d.total : "-";
