@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Jazaa Ph. | Online Shop</title>
+    <title>Al-Jazaa Ph | Online Shop</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <!-- SweetAlert2 -->
+    <!-- SweetAlert2 (Pop-up Alerts) -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
@@ -19,7 +19,6 @@
             --primary: #1b4d3e; 
             --primary-dark: #143a2f;
             --gold: #c5a028;
-            --gold-light: #e6c860;
             --bg-color: #f8f9fa; 
             --text: #2c3e50;
             --nav-height: 70px;
@@ -49,7 +48,7 @@
         }
         .navbar-brand { font-weight: 700; font-size: 1.5rem; color: var(--primary) !important; }
         
-        /* Modern Offcanvas (Sidebar) */
+        /* Sidebar */
         .offcanvas { border-radius: 0 20px 20px 0; border: none; }
         .offcanvas-header { background: var(--primary); color: white; }
         .offcanvas-title { font-family: 'Playfair Display'; letter-spacing: 1px; }
@@ -70,7 +69,7 @@
         }
         .policy-box h6 { color: var(--primary); font-weight: 700; margin-top: 10px; }
 
-        /* Hero Button (Gold & Green) */
+        /* Hero Button */
         .btn-hero {
             background-color: var(--primary); color: var(--gold);
             border: 2px solid var(--gold);
@@ -123,7 +122,7 @@
         .original-price { text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 5px; }
         .sale-price-text { color: #d32f2f; font-weight: 700; }
 
-        /* Detail View Controls */
+        /* Controls */
         .qty-selector { display: inline-flex; align-items: center; border: 1px solid #ddd; border-radius: 50px; overflow: hidden; height: 40px; }
         .qty-btn { background: white; border: none; padding: 0 15px; font-weight: bold; cursor: pointer; color: var(--primary); height: 100%; }
         .qty-btn:hover { background: #f0f0f0; }
@@ -151,7 +150,6 @@
         .donate-pill { flex: 1; border: 1px solid var(--primary); color: var(--primary); background: transparent; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; }
         .donate-pill:hover, .donate-pill.selected { background: var(--primary); color: white; }
 
-        /* Upload File Tooltip Styling */
         .file-upload-wrapper { position: relative; }
         .upload-helper { font-size: 0.75rem; color: #d32f2f; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
 
@@ -199,7 +197,7 @@
     </div>
 </nav>
 
-<!-- Modern Sidebar -->
+<!-- Sidebar -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Menu</h5>
@@ -280,18 +278,18 @@
                 
                 <!-- Options -->
                 <div class="mb-3">
-                    <label class="fw-bold mb-2 small text-uppercase">Size</label>
+                    <label class="fw-bold mb-2 small text-uppercase">Size <span class="text-danger">*</span></label>
                     <div id="size-area" class="d-flex flex-wrap"></div>
                 </div>
                 
                 <div class="mb-3">
-                    <label class="fw-bold mb-2 small text-uppercase">Color</label>
+                    <label class="fw-bold mb-2 small text-uppercase">Color <span class="text-danger">*</span></label>
                     <div id="color-area" class="d-flex flex-wrap"></div>
                 </div>
                 
                 <div class="row mb-4">
                     <div class="col-6">
-                        <label class="fw-bold mb-2 small text-uppercase">Height</label>
+                        <label class="fw-bold mb-2 small text-uppercase">Height <span class="text-danger">*</span></label>
                         <input type="text" id="height-input" class="form-control" placeholder="e.g. 5'4">
                     </div>
                     <div class="col-6">
@@ -460,7 +458,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v12'))||[], curProduct={}, selectedSize=null, selectedColor=null;
+    let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v13'))||[], curProduct={}, selectedSize=null, selectedColor=null;
     let cartTotalAmount=0, currentDonationPercent=0, currentShippingFee=0;
     
     const getSidebar = () => bootstrap.Offcanvas.getInstance(document.getElementById('sidebarMenu'));
@@ -607,23 +605,44 @@
 
     // --- ACCURATE VALIDATION & ADD TO CART ---
     function addToCart() {
-        // Strict Validation
-        if(!selectedSize) { 
-            Swal.fire({ icon: 'error', title: 'Size Required', text: 'Please select a Size option before adding to bag.' });
-            return; 
+        // 1. Check Size
+        if(!selectedSize) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Missing Size',
+                text: 'Please select a SIZE option before adding to bag.',
+                confirmButtonColor: '#1b4d3e'
+            });
+            return; // Stops execution
         }
-        if(!selectedColor) { 
-            Swal.fire({ icon: 'error', title: 'Color Required', text: 'Please select a Color option before adding to bag.' });
-            return; 
+
+        // 2. Check Color
+        if(!selectedColor) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Missing Color',
+                text: 'Please select a COLOR option before adding to bag.',
+                confirmButtonColor: '#1b4d3e'
+            });
+            return; // Stops execution
         }
-        if(!document.getElementById('height-input').value) { 
-            Swal.fire({ icon: 'error', title: 'Height Required', text: 'Please enter your Height for proper fitting.' });
-            return; 
+
+        // 3. Check Height
+        const heightVal = document.getElementById('height-input').value.trim();
+        if(!heightVal) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Missing Height',
+                text: 'Please enter your HEIGHT for proper fitting.',
+                confirmButtonColor: '#1b4d3e'
+            });
+            return; // Stops execution
         }
         
+        // If all checks pass:
         let qty = parseInt(document.getElementById('dt-qty-val').value);
-        cart.push({...curProduct, size: selectedSize, color: selectedColor, height: document.getElementById('height-input').value, qty: qty});
-        localStorage.setItem('alj_cart_v12', JSON.stringify(cart)); 
+        cart.push({...curProduct, size: selectedSize, color: selectedColor, height: heightVal, qty: qty});
+        localStorage.setItem('alj_cart_v13', JSON.stringify(cart)); 
         updateCartCount();
         Swal.fire({icon: 'success', title: 'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1500}); 
         window.history.back();
@@ -672,12 +691,12 @@
             Swal.fire({ title: 'Remove item?', text: "Remove from bag?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33' })
             .then((result) => { if (result.isConfirmed) delItem(index); else { cart[index].qty = 1; renderCart(); } });
         } else {
-            localStorage.setItem('alj_cart_v12', JSON.stringify(cart));
+            localStorage.setItem('alj_cart_v13', JSON.stringify(cart));
             renderCart();
         }
     }
 
-    function delItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v12', JSON.stringify(cart)); updateCartCount(); renderCart(); }
+    function delItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v13', JSON.stringify(cart)); updateCartCount(); renderCart(); }
 
     // --- CHECKOUT ---
     function initCheckout() {
@@ -756,7 +775,7 @@
             };
             fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(p) }).then(res => res.json()).then(d => {
                 if(d.status === 'success') { 
-                    cart = []; localStorage.setItem('alj_cart_v12', JSON.stringify(cart)); 
+                    cart = []; localStorage.setItem('alj_cart_v13', JSON.stringify(cart)); 
                     Swal.fire({icon: 'success', title: 'Order Placed!', html: `Tracking ID: <b>${d.orderId}</b><br>Save this ID to track your order.`, confirmButtonColor: '#1b4d3e'}).then(() => routeTo('home')); 
                 }
                 else Swal.fire('Error', d.error, 'error');
