@@ -1,571 +1,786 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import Layout from './components/Layout';
-import { api } from './services/api';
-import { Product, CartItem, ViewState, OrderData, CustomerDetails } from './types';
-import { HERO_IMAGES, SIZES, DELIVERY_REGIONS } from './constants';
-// @ts-ignore
-import Swal from 'sweetalert2';
-
-const App: React.FC = () => {
-  const [view, setView] = useState<ViewState>('home');
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [cart, setCart] = useState<CartItem[]>(() => {
-    const saved = localStorage.getItem('alj_cart_v10');
-    return saved ? JSON.parse(saved) : [];
-  });
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  
-  // Detail State
-  const [detailProduct, setDetailProduct] = useState<Product | null>(null);
-  const [detailSize, setDetailSize] = useState<string | null>(null);
-  const [detailHeight, setDetailHeight] = useState('');
-  const [detailQty, setDetailQty] = useState(1);
-
-  // Search State
-  const [searchQuery, setSearchQuery] = useState('');
-
-  // Checkout State
-  const [checkoutStep, setCheckoutStep] = useState(1); // 1: Details, 2: Payment
-  
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('alj_cart_v10', JSON.stringify(cart));
-  }, [cart]);
-
-  const fetchProducts = async () => {
-    setLoading(true);
-    const data = await api.getProducts();
-    setProducts(data);
-    setLoading(false);
-  };
-
-  const categories = useMemo(() => ['All', ...Array.from(new Set(products.map(p => p.category)))], [products]);
-
-  const filteredProducts = useMemo(() => {
-    return products.filter(p => {
-      const matchCat = selectedCategory === 'All' || p.category === selectedCategory;
-      const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchCat && matchSearch;
-    });
-  }, [products, selectedCategory, searchQuery]);
-
-  const openDetail = (product: Product) => {
-    setDetailProduct(product);
-    setDetailSize(null);
-    setDetailHeight('');
-    setDetailQty(1);
-    setView('detail');
-  };
-
-  const addToCart = () => {
-    if (!detailProduct || !detailSize || !detailHeight) {
-      Swal.fire({ title: 'Missing Info', text: 'Please select Size and Height', icon: 'warning', confirmButtonColor: '#1b4d3e' });
-      return;
-    }
-    const newItem: CartItem = {
-      ...detailProduct,
-      size: detailSize,
-      height: detailHeight,
-      qty: detailQty
-    };
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Jazaa Ph. | Online Shop</title>
     
-    // Check if same item exists to merge
-    const existingIdx = cart.findIndex(c => c.id === newItem.id && c.size === newItem.size && c.height === newItem.height);
-    if (existingIdx > -1) {
-      const newCart = [...cart];
-      newCart[existingIdx].qty += newItem.qty;
-      setCart(newCart);
-    } else {
-      setCart([...cart, newItem]);
-    }
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
-    Swal.fire({ icon: 'success', title: 'Added to Cart', toast: true, position: 'top-end', showConfirmButton: false, timer: 1500 });
-    setView('home');
-  };
-
-  const updateCartQty = (index: number, delta: number) => {
-    const newCart = [...cart];
-    newCart[index].qty += delta;
-    if (newCart[index].qty <= 0) {
-      newCart.splice(index, 1);
-    }
-    setCart(newCart);
-  };
-
-  // --- VIEWS ---
-
-  const renderHome = () => (
-    <div className="animate-fade-in">
-      {/* Hero */}
-      <div className="relative w-full h-[50vh] md:h-[60vh] overflow-hidden bg-gray-200">
-        <div id="heroCarousel" className="carousel slide h-full w-full relative" data-bs-ride="carousel">
-          {HERO_IMAGES.map((img, idx) => (
-             <div key={idx} className={`absolute inset-0 transition-opacity duration-1000 ${idx === 0 ? 'opacity-100' : 'opacity-0 animate-pulse'}`}>
-                {/* Note: Simplified carousel for React without Bootstrap JS dependency, in real prod use Swiper.js. 
-                    Using a simple static image 1 for now to ensure stability if no carousel lib is added.
-                    To follow instructions strictly to "add on this code", I'll just use the first image for stability or simple CSS mapping if array.
-                */}
-               <img src={img} className="w-full h-full object-cover" alt="Hero" />
-               <div className="absolute inset-0 bg-black/20"></div>
-             </div>
-          ))}
-          {/* Force show first image for MVP if carousel logic isn't fully implemented manually */}
-          <img src={HERO_IMAGES[0]} className="w-full h-full object-cover" alt="Hero Main" />
-           <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-              <div className="text-center text-white px-4">
-                  <h1 className="font-serif text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">Timeless Elegance</h1>
-                  <button onClick={() => document.getElementById('shop-section')?.scrollIntoView({ behavior: 'smooth' })} className="bg-white text-primary px-8 py-3 rounded-full font-bold uppercase tracking-widest hover:bg-gold hover:text-white transition-all shadow-lg transform hover:scale-105">
-                    Shop Collection
-                  </button>
-              </div>
-           </div>
-        </div>
-      </div>
-
-      <div id="shop-section" className="container mx-auto px-4 py-12">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-          <h2 className="font-serif text-3xl text-primary font-bold">{selectedCategory === 'All' ? 'Latest Collection' : selectedCategory}</h2>
-          
-          <div className="relative w-full md:w-80">
-            <input 
-              type="text" 
-              placeholder="Search products..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-5 pr-10 py-2 rounded-full border border-gray-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
-            />
-            <i className="fas fa-search absolute right-4 top-3 text-gray-400"></i>
-          </div>
-        </div>
-
-        {/* Categories Pills */}
-        <div className="flex overflow-x-auto gap-3 pb-6 mb-4 no-scrollbar">
-          {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setSelectedCategory(cat)}
-              className={`px-6 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all border ${selectedCategory === cat ? 'bg-primary text-white border-primary shadow-md' : 'bg-white text-gray-600 border-gray-200 hover:border-primary hover:text-primary'}`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {loading ? (
-          <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div></div>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredProducts.map(product => (
-              <div key={product.id} className="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer border border-gray-50" onClick={() => openDetail(product)}>
-                <div className="relative pt-[133%] bg-gray-100 overflow-hidden">
-                  <img src={product.image} className="absolute top-0 left-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={product.name} />
-                  
-                  {/* Badges */}
-                  <div className="absolute top-3 left-3 flex flex-col gap-1">
-                     {!product.inStock && <span className="bg-gray-500/90 text-white text-[10px] font-bold px-2 py-1 rounded uppercase backdrop-blur-sm">Out of Stock</span>}
-                     {product.inStock && <span className="bg-primary/90 text-white text-[10px] font-bold px-2 py-1 rounded uppercase backdrop-blur-sm">In Stock</span>}
-                  </div>
-                  {product.salePercent > 0 && (
-                     <div className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded shadow-sm">
-                       {product.salePercent}% OFF
-                     </div>
-                  )}
-                </div>
-                <div className="p-4">
-                  <h3 className="font-serif font-bold text-gray-800 text-lg mb-1 truncate">{product.name}</h3>
-                  <div className="flex items-center gap-2">
-                    {product.salePercent > 0 && <span className="text-gray-400 line-through text-sm">₱{product.originalPrice}</span>}
-                    <span className={`font-bold text-lg ${product.salePercent > 0 ? 'text-red-600' : 'text-primary'}`}>₱{product.price}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  const renderDetail = () => {
-    if (!detailProduct) return null;
-    return (
-      <div className="container mx-auto px-4 py-8 animate-fade-in">
-        <button onClick={() => setView('home')} className="mb-6 flex items-center text-gray-500 hover:text-primary transition-colors">
-          <i className="fas fa-arrow-left mr-2"></i> Back to Shop
-        </button>
-
-        <div className="bg-white rounded-3xl shadow-lg p-6 md:p-10 border border-gray-50">
-          <div className="flex flex-col md:flex-row gap-10">
-            {/* Image */}
-            <div className="w-full md:w-1/2">
-               <div className="rounded-2xl overflow-hidden shadow-inner bg-gray-100 relative pt-[133%]">
-                 <img src={detailProduct.image} className="absolute top-0 left-0 w-full h-full object-cover" alt={detailProduct.name} />
-               </div>
-            </div>
-
-            {/* Info */}
-            <div className="w-full md:w-1/2 flex flex-col">
-              <span className="text-sm text-gold font-bold uppercase tracking-wider mb-2">{detailProduct.category}</span>
-              <h1 className="font-serif text-4xl md:text-5xl font-bold text-primary mb-4">{detailProduct.name}</h1>
-              
-              <div className="flex items-center gap-4 mb-6">
-                 {detailProduct.salePercent > 0 && (
-                   <span className="text-xl text-gray-400 line-through">₱{detailProduct.originalPrice}</span>
-                 )}
-                 <span className={`text-3xl font-bold ${detailProduct.salePercent > 0 ? 'text-red-600' : 'text-primary'}`}>
-                   ₱{detailProduct.price}
-                 </span>
-                 {detailProduct.salePercent > 0 && <span className="bg-red-100 text-red-600 text-xs font-bold px-2 py-1 rounded">SALE</span>}
-              </div>
-
-              <p className="text-gray-600 leading-relaxed mb-8 border-b border-gray-100 pb-8">
-                {detailProduct.desc}
-              </p>
-
-              {/* Controls */}
-              <div className="space-y-6">
-                <div>
-                  <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Size</label>
-                  <div className="flex gap-3">
-                    {SIZES.map(s => (
-                      <button 
-                        key={s} 
-                        onClick={() => setDetailSize(s)}
-                        className={`w-12 h-12 rounded-full flex items-center justify-center font-bold transition-all ${detailSize === s ? 'bg-primary text-white shadow-lg scale-110' : 'bg-white border border-gray-200 text-gray-600 hover:border-primary'}`}
-                      >
-                        {s}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Height</label>
-                  <input 
-                    type="text" 
-                    value={detailHeight}
-                    onChange={(e) => setDetailHeight(e.target.value)}
-                    placeholder="e.g., 5'4"
-                    className="w-full md:w-1/2 px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold uppercase text-gray-500 mb-2">Quantity</label>
-                  <div className="flex items-center bg-gray-50 rounded-lg w-fit border border-gray-200">
-                    <button onClick={() => setDetailQty(Math.max(1, detailQty - 1))} className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary"><i className="fas fa-minus"></i></button>
-                    <span className="w-10 text-center font-bold text-primary">{detailQty}</span>
-                    <button onClick={() => setDetailQty(detailQty + 1)} className="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary"><i className="fas fa-plus"></i></button>
-                  </div>
-                </div>
-
-                <button 
-                  onClick={addToCart}
-                  disabled={!detailProduct.inStock}
-                  className={`w-full py-4 rounded-full font-bold uppercase tracking-wider shadow-lg transition-transform active:scale-95 ${detailProduct.inStock ? 'bg-primary text-white hover:bg-primary-light hover:shadow-xl' : 'bg-gray-300 text-gray-500 cursor-not-allowed'}`}
-                >
-                  {detailProduct.inStock ? 'Add to Cart' : 'Out of Stock'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const renderCart = () => {
-    const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
-    
-    return (
-      <div className="container mx-auto px-4 py-12 animate-fade-in max-w-4xl">
-        <h2 className="font-serif text-3xl font-bold text-center mb-8">Shopping Cart</h2>
-        
-        {cart.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl shadow-sm">
-            <i className="fas fa-shopping-basket text-6xl text-gray-200 mb-4"></i>
-            <p className="text-gray-500">Your cart is empty.</p>
-            <button onClick={() => setView('home')} className="mt-4 text-primary font-bold hover:underline">Start Shopping</button>
-          </div>
-        ) : (
-          <>
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
-              {cart.map((item, idx) => (
-                <div key={idx} className="flex items-center p-4 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
-                   <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100">
-                     <img src={item.image} className="w-full h-full object-cover" alt={item.name} />
-                   </div>
-                   <div className="ml-4 flex-grow">
-                      <h4 className="font-bold text-gray-800">{item.name}</h4>
-                      <p className="text-xs text-gray-500">Size: {item.size} | Height: {item.height}</p>
-                      <div className="text-primary font-bold mt-1">₱{item.price}</div>
-                   </div>
-                   
-                   <div className="flex flex-col items-end gap-2">
-                      <div className="flex items-center bg-white rounded-md border border-gray-200 shadow-sm h-8">
-                        <button onClick={() => updateCartQty(idx, -1)} className="px-2 h-full text-gray-500 hover:text-red-500"><i className="fas fa-minus text-xs"></i></button>
-                        <span className="px-2 text-sm font-bold w-8 text-center">{item.qty}</span>
-                        <button onClick={() => updateCartQty(idx, 1)} className="px-2 h-full text-gray-500 hover:text-green-600"><i className="fas fa-plus text-xs"></i></button>
-                      </div>
-                      <div className="text-sm font-bold text-gray-800">₱{item.price * item.qty}</div>
-                   </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="bg-white rounded-2xl shadow-lg p-6 flex flex-col md:flex-row justify-between items-center border border-gray-100">
-               <div className="mb-4 md:mb-0 text-center md:text-left">
-                  <span className="text-gray-500 block text-sm">Total Amount</span>
-                  <span className="text-3xl font-serif font-bold text-primary">₱{total.toLocaleString()}</span>
-               </div>
-               <button onClick={() => setView('checkout')} className="bg-primary text-white px-10 py-3 rounded-full font-bold uppercase tracking-wider hover:bg-primary-light shadow-md transition-all">
-                 Proceed to Checkout
-               </button>
-            </div>
-          </>
-        )}
-      </div>
-    );
-  };
-
-  // --- CHECKOUT LOGIC ---
-  const CheckoutView: React.FC<{ cart: CartItem[], onBack: () => void, clearCart: () => void }> = ({ cart, onBack, clearCart }) => {
-     const [formData, setFormData] = useState<CustomerDetails>({
-       name: '', phone: '', email: '',
-       address: { street: '', brgy: '', city: '', prov: '', region: '', zip: '' }
-     });
-     const [deliveryMethod, setDeliveryMethod] = useState('');
-     const [donationPercent, setDonationPercent] = useState(0);
-     const [donationNote, setDonationNote] = useState('');
-     const [proofFile, setProofFile] = useState<File | null>(null);
-     const [refNo, setRefNo] = useState('');
-     const [isSubmitting, setIsSubmitting] = useState(false);
-
-     const subtotal = cart.reduce((a, c) => a + (c.price * c.qty), 0);
-     const itemCount = cart.reduce((a, c) => a + c.qty, 0);
-
-     const shippingFee = useMemo(() => {
-        if (deliveryMethod !== 'Delivery' || !formData.address.region) return 0;
-        const r = formData.address.region;
-        const c = itemCount;
-        if (r === 'Metro Manila') return c === 1 ? 90 : c <= 3 ? 140 : 250;
-        if (r === 'Luzon') return c === 1 ? 100 : c <= 3 ? 170 : 320;
-        if (r === 'Visayas') return c === 1 ? 140 : c <= 3 ? 210 : 370;
-        if (r === 'Mindanao') return c === 1 ? 145 : c <= 3 ? 220 : 380;
-        return c === 1 ? 150 : c <= 3 ? 250 : 400; // Island
-     }, [deliveryMethod, formData.address.region, itemCount]);
-
-     const donationAmount = Math.ceil(subtotal * donationPercent);
-     const grandTotal = subtotal + shippingFee + donationAmount;
-
-     const handleInputChange = (field: keyof CustomerDetails | string, value: string) => {
-        if (field.includes('.')) {
-           const [parent, child] = field.split('.');
-           // @ts-ignore
-           setFormData({ ...formData, [parent]: { ...formData[parent], [child]: value } });
-        } else {
-           // @ts-ignore
-           setFormData({ ...formData, [field]: value });
+    <style>
+        :root {
+            --primary: #1b4d3e; /* Elegant Green */
+            --primary-dark: #143a2f;
+            --gold: #c5a028;
+            --bg-color: #f8f9fa; 
+            --text: #2c3e50;
+            --nav-height: 70px;
         }
-     };
 
-     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!proofFile) { Swal.fire('Error', 'Please upload proof of payment', 'error'); return; }
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text); 
+            overflow-x: hidden; 
+        }
         
-        setIsSubmitting(true);
-        const reader = new FileReader();
-        reader.readAsDataURL(proofFile);
-        reader.onload = async () => {
-           const base64 = reader.result as string;
-           const orderPayload: OrderData = {
-              action: 'placeOrder',
-              cust: {
-                 name: formData.name,
-                 phone: formData.phone,
-                 email: formData.email,
-                 addr: `${formData.address.street}, ${formData.address.brgy}, ${formData.address.city}, ${formData.address.prov}, ${formData.address.region}, ${formData.address.zip}`
-              },
-              pay: { ref: refNo, image: base64, mime: proofFile.type },
-              cart: cart,
-              total: `₱${grandTotal.toLocaleString()}`,
-              donation: { percent: `${donationPercent * 100}%`, amount: donationAmount, note: donationNote },
-              delivery: { method: deliveryMethod, region: formData.address.region || 'N/A', fee: shippingFee }
-           };
-           
-           const res = await api.placeOrder(orderPayload);
-           setIsSubmitting(false);
-           
-           if (res.status === 'success') {
-              clearCart();
-              Swal.fire({ 
-                 title: 'Order Successful!', 
-                 html: `Your Order ID: <b>${res.orderId}</b><br>Please save this ID for tracking.`, 
-                 icon: 'success', confirmButtonColor: '#1b4d3e' 
-              }).then(() => setView('home'));
-           } else {
-              Swal.fire('Error', res.error || 'Failed to place order', 'error');
-           }
-        };
-     };
+        h1, h2, h3, h4, h5, .navbar-brand { font-family: 'Playfair Display', serif; }
 
-     return (
-        <div className="container mx-auto px-4 py-8 max-w-3xl animate-fade-in">
-           <button onClick={onBack} className="text-gray-500 mb-4"><i className="fas fa-arrow-left"></i> Back to Cart</button>
-           <h2 className="font-serif text-3xl font-bold mb-6 text-center">Checkout</h2>
-           
-           <form onSubmit={handleSubmit} className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-gray-50">
-              
-              <div className="mb-8">
-                 <h3 className="text-sm font-bold uppercase text-gray-400 tracking-wider mb-4 border-b pb-2">1. Delivery & Contact</h3>
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="col-span-2">
-                       <label className="text-xs font-bold text-primary">Delivery Method</label>
-                       <select required className="w-full p-3 bg-gray-50 rounded-lg border border-gray-200" value={deliveryMethod} onChange={(e) => setDeliveryMethod(e.target.value)}>
-                          <option value="">Select Method</option>
-                          <option value="Pick-up">Pick-up (Free)</option>
-                          <option value="Delivery">Delivery (Courier)</option>
-                       </select>
-                    </div>
-                    <input required type="text" placeholder="Full Name" className="p-3 bg-gray-50 rounded-lg border border-gray-200" value={formData.name} onChange={e => handleInputChange('name', e.target.value)} />
-                    <input required type="tel" placeholder="Phone Number" className="p-3 bg-gray-50 rounded-lg border border-gray-200" value={formData.phone} onChange={e => handleInputChange('phone', e.target.value)} />
-                    <input required type="email" placeholder="Email Address" className="col-span-2 p-3 bg-gray-50 rounded-lg border border-gray-200" value={formData.email} onChange={e => handleInputChange('email', e.target.value)} />
-                    
-                    {/* Address Fields */}
-                    <div className="col-span-2 mt-2"><label className="text-xs font-bold text-gray-400">Address Details</label></div>
-                    <input required type="text" placeholder="House / Street / Subdivision" className="col-span-2 p-3 bg-gray-50 rounded-lg border border-gray-200" value={formData.address.street} onChange={e => handleInputChange('address.street', e.target.value)} />
-                    <input required type="text" placeholder="Barangay" className="p-3 bg-gray-50 rounded-lg border border-gray-200" value={formData.address.brgy} onChange={e => handleInputChange('address.brgy', e.target.value)} />
-                    <input required type="text" placeholder="City" className="p-3 bg-gray-50 rounded-lg border border-gray-200" value={formData.address.city} onChange={e => handleInputChange('address.city', e.target.value)} />
-                    <input required type="text" placeholder="Province" className="p-3 bg-gray-50 rounded-lg border border-gray-200" value={formData.address.prov} onChange={e => handleInputChange('address.prov', e.target.value)} />
-                    <select required className="p-3 bg-gray-50 rounded-lg border border-gray-200" value={formData.address.region} onChange={e => handleInputChange('address.region', e.target.value)}>
-                       <option value="">Select Region</option>
-                       {DELIVERY_REGIONS.map(r => <option key={r} value={r}>{r}</option>)}
-                    </select>
-                    <input required type="text" placeholder="Zip Code" className="p-3 bg-gray-50 rounded-lg border border-gray-200" value={formData.address.zip} onChange={e => handleInputChange('address.zip', e.target.value)} />
-                 </div>
-              </div>
+        /* Announcement Bar */
+        .announcement-bar { 
+            background: var(--primary); color: white; text-align: center; 
+            font-size: 0.75rem; padding: 8px 0; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; 
+            position: relative; z-index: 1040;
+        }
 
-              {/* Donation */}
-              <div className="mb-8 p-4 bg-green-50 rounded-2xl border border-green-100">
-                 <div className="bg-primary text-gold text-xs font-bold p-2 rounded mb-3 overflow-hidden whitespace-nowrap">
-                   <div className="animate-marquee">✨ DONATE TO ORPHANS • SADQA JARIYAH • HELP THOSE IN NEED • AL-JAZAA PH CHARITY ✨</div>
-                 </div>
-                 <p className="text-sm text-gray-600 mb-3 text-center">Would you like to add a donation percentage?</p>
-                 <div className="flex flex-wrap gap-2 justify-center mb-3">
-                    {[0, 0.05, 0.10, 0.20, 0.50].map(p => (
-                       <button key={p} type="button" onClick={() => setDonationPercent(p)} className={`px-4 py-2 rounded-full text-sm font-bold border transition-colors ${donationPercent === p ? 'bg-primary text-white border-primary' : 'bg-white text-primary border-primary hover:bg-green-100'}`}>
-                          {p === 0 ? 'None' : `${p * 100}%`}
-                       </button>
-                    ))}
-                 </div>
-                 {donationPercent > 0 && <textarea placeholder="Special Note / Intention (Optional)" className="w-full p-2 text-sm rounded border border-gray-200" value={donationNote} onChange={e => setDonationNote(e.target.value)} rows={2}></textarea>}
-              </div>
+        /* Navbar */
+        .navbar { 
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); 
+            box-shadow: 0 2px 15px rgba(0,0,0,0.04); height: var(--nav-height);
+            z-index: 1030;
+        }
+        .navbar-brand { font-weight: 700; font-size: 1.5rem; color: var(--primary) !important; }
+        
+        /* Modern Offcanvas (Sidebar) */
+        .offcanvas { border-radius: 0 20px 20px 0; border: none; }
+        .offcanvas-header { background: var(--primary); color: white; }
+        .offcanvas-title { font-family: 'Playfair Display'; letter-spacing: 1px; }
+        .btn-close-white { filter: invert(1) grayscale(100%) brightness(200%); }
+        
+        .sidebar-link {
+            display: block; padding: 12px 15px; color: var(--text); 
+            text-decoration: none; font-weight: 500; border-bottom: 1px solid #f0f0f0;
+            transition: 0.2s; display: flex; justify-content: space-between; align-items: center;
+        }
+        .sidebar-link:hover { background: #f8f9fa; color: var(--primary); padding-left: 20px; }
+        .sidebar-link i { opacity: 0.5; }
 
-              {/* Summary */}
-              <div className="mb-8 bg-gray-50 p-6 rounded-2xl">
-                 <h3 className="text-sm font-bold uppercase text-gray-400 tracking-wider mb-4">2. Payment Summary</h3>
-                 <div className="flex justify-between mb-2 text-sm"><span>Subtotal</span><span>₱{subtotal.toLocaleString()}</span></div>
-                 <div className="flex justify-between mb-2 text-sm"><span>Delivery Fee</span><span className="text-red-500">₱{shippingFee}</span></div>
-                 {donationPercent > 0 && <div className="flex justify-between mb-2 text-sm"><span>Donation</span><span className="text-green-600">₱{donationAmount}</span></div>}
-                 <hr className="my-3 border-gray-200" />
-                 <div className="flex justify-between text-xl font-bold text-primary"><span>Grand Total</span><span>₱{grandTotal.toLocaleString()}</span></div>
-                 
-                 <div className="mt-4 flex items-center bg-white p-3 rounded-xl border border-gray-200 shadow-sm">
-                    <div className="bg-blue-500 text-white p-2 rounded mr-3"><i className="fas fa-qrcode fa-lg"></i></div>
-                    <div>
-                       <div className="font-bold text-sm">GCash: 0921-429-5887</div>
-                       <div className="text-xs text-gray-500">Please send exact amount.</div>
-                    </div>
-                 </div>
-              </div>
+        /* Scrollable Policy Box */
+        .policy-box {
+            background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;
+            padding: 15px; margin-top: 20px;
+            max-height: 200px; overflow-y: auto; font-size: 0.85rem; color: #666;
+        }
+        .policy-box h6 { color: var(--primary); font-weight: 700; margin-top: 10px; }
+        .policy-box h6:first-child { margin-top: 0; }
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                 <input required type="text" placeholder="GCash Reference No." className="p-3 bg-gray-50 rounded-lg border border-gray-200" value={refNo} onChange={e => setRefNo(e.target.value)} />
-                 <div className="relative">
-                   <input required type="file" accept="image/*" onChange={e => setProofFile(e.target.files ? e.target.files[0] : null)} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                   <div className="p-3 bg-gray-50 rounded-lg border border-gray-200 text-gray-400 flex items-center justify-between">
-                      <span className="truncate text-sm">{proofFile ? proofFile.name : 'Upload Proof (Screenshot)'}</span>
-                      <i className="fas fa-upload"></i>
-                   </div>
-                 </div>
-              </div>
+        /* Cart Badge */
+        .cart-btn-wrap { position: relative; display: inline-flex; align-items: center; text-decoration: none; margin-right: 15px; cursor: pointer;}
+        .cart-badge { 
+            background: var(--gold); color: white; 
+            border-radius: 50%; width: 18px; height: 18px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 0.65rem; font-weight: bold;
+            position: absolute; top: -5px; right: -8px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
 
-              <button type="submit" disabled={isSubmitting} className="w-full bg-primary text-white py-4 rounded-full font-bold uppercase tracking-widest shadow-lg hover:bg-primary-light transition-all disabled:opacity-50">
-                 {isSubmitting ? 'Processing...' : 'Place Order'}
-              </button>
-           </form>
-           <style>{`@keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } } .animate-marquee { display: inline-block; white-space: nowrap; animation: marquee 15s linear infinite; }`}</style>
+        /* Category Sticky Bar */
+        .category-scroll-container { 
+            overflow-x: auto; white-space: nowrap; position: sticky; top: var(--nav-height); z-index: 900; 
+            background: rgba(248,249,250,0.95); backdrop-filter: blur(8px); 
+            padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.05); 
+            -ms-overflow-style: none; scrollbar-width: none; 
+        }
+        .category-scroll-container::-webkit-scrollbar { display: none; }
+        .cat-pill { 
+            display: inline-block; background: white; border: 1px solid #e0e0e0; color: #666; 
+            padding: 8px 20px; border-radius: 50px; margin-right: 10px; cursor: pointer; transition: 0.2s; 
+        }
+        .cat-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Product Card */
+        .product-card { border: none; background: white; transition: 0.3s; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); height: 100%; position: relative; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+        .card-img-wrapper { position: relative; width: 100%; padding-top: 133%; overflow: hidden; background: #f4f4f4; }
+        .mini-carousel { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .mini-carousel img { width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+        
+        .stock-label { position: absolute; top: 10px; left: 10px; padding: 4px 10px; font-size: 0.65rem; color: white; font-weight: 700; text-transform: uppercase; border-radius: 4px; z-index: 10; }
+        .in-stock { background: rgba(27, 77, 62, 0.9); }
+        .out-stock { background: rgba(150, 150, 150, 0.9); }
+        
+        .sale-badge { position: absolute; top: 10px; right: 10px; background: #d32f2f; color: white; padding: 4px 8px; font-size: 0.7rem; font-weight: 700; border-radius: 4px; z-index: 10; }
+        .original-price { text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 5px; }
+        .sale-price-text { color: #d32f2f; font-weight: 700; }
+
+        /* Quantity Selectors */
+        .qty-selector {
+            display: inline-flex; align-items: center; border: 1px solid #ddd; border-radius: 50px; overflow: hidden;
+        }
+        .qty-btn {
+            background: white; border: none; padding: 5px 15px; font-weight: bold; cursor: pointer; color: var(--primary); transition: 0.2s;
+        }
+        .qty-btn:hover { background: #f0f0f0; }
+        .qty-input {
+            width: 40px; border: none; text-align: center; font-weight: 600; outline: none; background: white;
+        }
+
+        /* UI Elements */
+        .btn-custom { background: var(--primary); color: white; border-radius: 50px; padding: 10px 30px; font-weight: 600; border: none; text-transform: uppercase; transition: 0.3s; }
+        .btn-custom:hover { background: var(--primary-dark); color: white; transform: translateY(-2px); shadow: 0 5px 15px rgba(27, 77, 62, 0.3); }
+        .btn-custom:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        
+        .size-btn { width: 40px; height: 40px; border: 1px solid #ddd; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
+        .size-btn:hover { border-color: var(--primary); }
+        .size-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Donation Bar */
+        .marquee-container { width: 100%; overflow: hidden; background: var(--primary); color: var(--gold); padding: 10px 0; border-radius: 8px; cursor: pointer; margin-bottom: 10px; }
+        .marquee-content { display: inline-block; white-space: nowrap; animation: marquee 15s linear infinite; font-weight: 700; letter-spacing: 2px; font-family: 'Playfair Display'; }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
+        .donate-pill { flex: 1; border: 1px solid var(--primary); color: var(--primary); background: transparent; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; }
+        .donate-pill:hover, .donate-pill.selected { background: var(--primary); color: white; }
+
+        footer { background: #1a1a1a; color: #888; padding: 60px 0 30px; margin-top: 80px; }
+        .footer-heading { color: white; font-family: 'Playfair Display'; margin-bottom: 20px; }
+        .footer-link { color: #888; text-decoration: none; display: block; margin-bottom: 10px; font-size: 0.9rem; transition: 0.3s;}
+        .footer-link:hover { color: var(--gold); padding-left: 5px; }
+
+        #detail-view { position: fixed; inset: 0; background: #fff; z-index: 2000; overflow-y: auto; display: none; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        #loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+    </style>
+</head>
+<body>
+
+<script>
+    // ********************************************
+    // YOUR WEB APP URL:
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzQ3ij0tm5k-cARhUqdRdV7yYmqfudy0LJnaK70DVAMyTcjO-vcc5WvwFQ36lRxobcF/exec"; 
+    // ********************************************
+</script>
+
+<div id="loader">
+    <div class="spinner-border text-secondary" style="width:3rem;height:3rem;"></div>
+    <h3 class="mt-3" style="color:var(--primary);font-family:'Playfair Display';">Al-Jazaa</h3>
+</div>
+
+<div class="announcement-bar">Shop & Earn Rewards • Secure GCash Payment</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <!-- Brand -->
+        <a class="navbar-brand" href="#" onclick="routeTo('home')">Al-Jazaa Ph.</a>
+        
+        <div class="d-flex align-items-center order-lg-3 ms-auto ms-lg-0">
+             <!-- Cart Icon -->
+             <div class="cart-btn-wrap" onclick="routeTo('cart')">
+                <i class="fas fa-shopping-bag fa-lg" style="color:#333;"></i>
+                <span id="cart-count" class="cart-badge">0</span>
+            </div>
+            <!-- Menu Toggler (Open Sidebar) -->
+            <button class="btn btn-link text-dark p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+                <i class="fas fa-bars fa-lg"></i>
+            </button>
         </div>
-     );
-  };
+    </div>
+</nav>
 
-  const renderTrack = () => {
-    const [trackId, setTrackId] = useState('');
-    const [result, setResult] = useState<any>(null);
-    const [tLoading, setTLoading] = useState(false);
+<!-- Modern Sidebar (Offcanvas) -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Menu</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+        
+        <!-- Standard Links -->
+        <a href="#" class="sidebar-link" onclick="routeTo('home'); closeSidebar();">Shop Home <i class="fas fa-chevron-right"></i></a>
+        <a href="#" class="sidebar-link" onclick="routeTo('track'); closeSidebar();">Track Order <i class="fas fa-chevron-right"></i></a>
+        
+        <hr class="my-3 opacity-25">
+        <p class="small text-uppercase text-muted fw-bold ms-2 mb-2">Categories</p>
+        
+        <!-- Dynamic Categories Area -->
+        <div id="sidebar-categories">
+            <!-- Categories will be loaded here via JS -->
+        </div>
 
-    const handleTrack = async () => {
-      if(!trackId) return;
-      setTLoading(true);
-      const res = await api.trackOrder(trackId);
-      setResult(res);
-      setTLoading(false);
-    };
+        <div class="mt-auto">
+            <!-- Scrollable Policies -->
+            <div class="policy-box">
+                <h6>About Al-Jazaa Ph.</h6>
+                <p>Al-Jazaa Ph. is committed to providing timeless modesty with modern elegance. We ensure high-quality fabrics and designs that suit your lifestyle.</p>
+                
+                <h6>Payment Policy</h6>
+                <p>We strictly accept GCash payments at the moment. Orders are processed only after payment verification via the reference number and screenshot upload.</p>
+                
+                <h6>Delivery Policy</h6>
+                <p>We deliver nationwide via courier. Shipping fees are calculated based on your location (Luzon, Visayas, Mindanao) and the number of items (weight). Allow 3-7 days for delivery.</p>
+            </div>
+        </div>
+    </div>
+</div>
 
-    return (
-      <div className="container mx-auto px-4 py-20 animate-fade-in max-w-md">
-         <div className="text-center mb-10">
-            <h2 className="font-serif text-3xl font-bold mb-2">Track Your Order</h2>
-            <p className="text-gray-500">Enter your Order ID sent after checkout.</p>
-         </div>
-         
-         <div className="flex shadow-lg rounded-full overflow-hidden mb-8 border border-gray-100">
-            <input type="text" value={trackId} onChange={e => setTrackId(e.target.value)} placeholder="Order ID (e.g. #1234)" className="flex-1 pl-6 py-3 outline-none" />
-            <button onClick={handleTrack} className="bg-primary text-white px-6 font-bold hover:bg-primary-light">Search</button>
-         </div>
+<!-- HOME PAGE -->
+<div id="page-home">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%201.png?raw=true" class="d-block w-100" alt="Slide 1">
+                <div class="carousel-caption">
+                    <button class="btn btn-light rounded-pill px-4 fw-bold shadow" onclick="scrollToProducts()">Shop Now</button>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%202.png?raw=true" class="d-block w-100" alt="Slide 2">
+            </div>
+            <div class="carousel-item">
+                <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%203.png?raw=true" class="d-block w-100" alt="Slide 3">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+    </div>
 
-         {tLoading && <div className="text-center"><i className="fas fa-spinner fa-spin text-primary fa-2x"></i></div>}
+    <div class="container my-5" id="shop-section">
+        <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="mb-0">Latest Collection</h2></div>
+        <div class="position-relative mb-4" style="max-width: 500px;">
+            <input type="text" id="searchBox" class="form-control rounded-pill ps-4 py-2 border-secondary" placeholder="Search products..." onkeyup="doSearch()">
+            <i class="fas fa-search position-absolute text-muted" style="right: 20px; top: 13px;"></i>
+        </div>
+        
+        <!-- Horizontal Category Scroll (Desktop/Quick Access) -->
+        <div id="category-list" class="category-scroll-container mb-4"></div>
+        
+        <!-- Product Grid -->
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-3 g-md-4" id="product-grid"></div>
+    </div>
+</div>
 
-         {result && (
-           <div className={`p-6 rounded-2xl shadow-md border ${result.status === 'found' ? 'bg-white border-green-100' : 'bg-red-50 border-red-100'}`}>
-              {result.status === 'found' ? (
-                 <>
-                   <div className="text-center mb-4">
-                      <div className="text-sm text-gray-400 uppercase tracking-widest">Status</div>
-                      <div className="text-2xl font-bold text-primary mt-1">{result.currStatus}</div>
-                   </div>
-                   <div className="flex justify-between text-sm border-t pt-4 text-gray-600">
-                      <span>Date: {result.date}</span>
-                      <span>Total: {result.total}</span>
-                   </div>
-                 </>
-              ) : (
-                <div className="text-center text-red-500 font-bold">Order not found. Please check ID.</div>
-              )}
-           </div>
-         )}
-      </div>
-    );
-  };
+<!-- DETAIL VIEW MODAL -->
+<div id="detail-view">
+    <div class="container py-5">
+        <button class="btn btn-light rounded-circle shadow-sm mb-4" style="width:40px;height:40px;" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="row gx-5">
+            <div class="col-md-5 mb-4">
+                <img id="dt-img" src="" class="img-fluid rounded-4 shadow-sm w-100" style="object-fit:cover;aspect-ratio:3/4;">
+            </div>
+            <div class="col-md-7">
+                <span class="badge bg-light text-dark mb-2 border" id="dt-cat"></span>
+                <h1 id="dt-name" class="display-6 fw-bold"></h1>
+                <div class="my-3">
+                    <span id="dt-old-price" class="original-price fs-4 d-none"></span>
+                    <span id="dt-price" class="text-success fw-bold fs-3"></span>
+                    <span id="dt-sale-badge" class="badge bg-danger ms-2 d-none">SALE</span>
+                </div>
+                <p id="dt-desc" class="text-muted mb-4"></p>
+                
+                <div class="mb-4">
+                    <label class="fw-bold mb-2 small">SIZE</label>
+                    <div id="size-area" class="d-flex gap-2"></div>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-6">
+                        <label class="fw-bold mb-2 small">HEIGHT</label>
+                        <input type="text" id="height-input" class="form-control" placeholder="e.g. 5'4">
+                    </div>
+                    <div class="col-6">
+                        <label class="fw-bold mb-2 small">QUANTITY</label>
+                        <div class="qty-selector w-100 justify-content-between">
+                            <button class="qty-btn" onclick="dtQty(-1)">-</button>
+                            <input type="number" id="dt-qty-val" class="qty-input" value="1" readonly>
+                            <button class="qty-btn" onclick="dtQty(1)">+</button>
+                        </div>
+                    </div>
+                </div>
 
-  return (
-    <Layout 
-      cartCount={cart.length} 
-      onNavigate={setView}
-      categories={categories}
-      onSelectCategory={setSelectedCategory}
-    >
-      {view === 'home' && renderHome()}
-      {view === 'detail' && renderDetail()}
-      {view === 'cart' && renderCart()}
-      {view === 'checkout' && <CheckoutView cart={cart} onBack={() => setView('cart')} clearCart={() => setCart([])} />}
-      {view === 'track' && renderTrack()}
-    </Layout>
-  );
-};
+                <button id="add-btn" class="btn btn-custom w-100 py-3 shadow-lg" onclick="addToCart()">ADD TO CART</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-export default App;
+<!-- CART PAGE -->
+<div id="page-cart" class="container my-5 d-none">
+    <h2 class="mb-4 text-center">Your Shopping Bag</h2>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0">
+                        <tbody id="cart-table"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center bg-white p-4 rounded-4 shadow-sm border">
+                <div>
+                    <small class="text-muted d-block">Total Amount</small>
+                    <div class="fs-4 fw-bold text-success" id="cart-total">₱0.00</div>
+                </div>
+                <button id="btn-checkout" class="btn btn-custom px-4" onclick="routeTo('checkout')">CHECKOUT</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CHECKOUT PAGE -->
+<div id="page-checkout" class="container my-5 d-none" style="max-width: 800px;">
+    <div class="card p-4 p-md-5 shadow-lg border-0 rounded-4">
+        <h3 class="text-center mb-2 font-playfair">Checkout</h3>
+        <p class="text-center text-muted small mb-4">Complete your details to place order</p>
+        
+        <form id="checkout-form" onsubmit="submitOrder(event)" oninput="validateCheckoutForm()">
+            <!-- Delivery & Address -->
+            <h6 class="text-uppercase fw-bold text-muted small mb-3">1. Delivery & Address</h6>
+            <div class="row g-3 mb-4">
+                <div class="col-12">
+                     <select class="form-select py-3" id="del-method" onchange="toggleDeliveryOptions()" required>
+                        <option value="" disabled selected>Select Delivery Method</option>
+                        <option value="Pick-up">Pick-up (Free)</option>
+                        <option value="Delivery">Delivery (Courier)</option>
+                    </select>
+                </div>
+                <div class="col-md-6"><input type="text" class="form-control" id="c-name" placeholder="Full Name" required></div>
+                <div class="col-md-6"><input type="number" class="form-control" id="c-phone" placeholder="Phone Number" required></div>
+                <div class="col-12"><input type="email" class="form-control" id="c-email" placeholder="Email Address" required></div>
+                
+                <div class="col-12 delivery-fields">
+                    <hr class="opacity-25 my-1">
+                    <label class="small fw-bold text-primary mt-2">Shipping Address</label>
+                </div>
+                <div class="col-md-8 delivery-fields"><input type="text" class="form-control" id="addr-street" placeholder="House / Street / Subdivision"></div>
+                <div class="col-md-4 delivery-fields"><input type="text" class="form-control" id="addr-brgy" placeholder="Barangay"></div>
+                <div class="col-md-6 delivery-fields"><input type="text" class="form-control" id="addr-city" placeholder="City"></div>
+                <div class="col-md-6 delivery-fields"><input type="text" class="form-control" id="addr-prov" placeholder="Province"></div>
+                <div class="col-md-8 delivery-fields">
+                     <select class="form-select" id="addr-region" onchange="calcShipping()">
+                        <option value="" disabled selected>Select Region (Calculates Fee)</option>
+                        <option value="Metro Manila">Metro Manila</option>
+                        <option value="Luzon">Luzon</option>
+                        <option value="Visayas">Visayas</option>
+                        <option value="Mindanao">Mindanao</option>
+                        <option value="Island">Island / Remote Areas</option>
+                    </select>
+                </div>
+                 <div class="col-md-4 delivery-fields"><input type="text" class="form-control" id="addr-zip" placeholder="Zip Code"></div>
+            </div>
+
+            <!-- Donation -->
+            <div class="mb-4">
+                <div class="marquee-container shadow-sm" onclick="toggleDonationDetails()">
+                    <div class="marquee-content">✨ DONATE TO ORPHANS • SADQA JARIYAH • HELP THOSE IN NEED • AL-JAZAA PH CHARITY ✨</div>
+                </div>
+                <div id="donation-details-box" style="display:none;">
+                    <p class="small text-muted mb-2">Select a percentage of your total to donate.</p>
+                    <div class="d-flex gap-2 flex-wrap mb-3">
+                        <button type="button" class="donate-pill" onclick="selectDonation(0.05, this)">5%</button>
+                        <button type="button" class="donate-pill" onclick="selectDonation(0.10, this)">10%</button>
+                        <button type="button" class="donate-pill" onclick="selectDonation(0.20, this)">20%</button>
+                        <button type="button" class="donate-pill" onclick="selectDonation(0.50, this)">50%</button>
+                        <button type="button" class="donate-pill" onclick="selectDonation(0, this)">None</button>
+                    </div>
+                    <textarea id="donation-note" class="form-control d-none" rows="2" placeholder="Special Note / Intention (Optional)"></textarea>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <hr class="opacity-25">
+            <h6 class="text-uppercase fw-bold text-muted small mb-3">2. Payment Summary</h6>
+            <div class="bg-white p-3 border rounded mb-3">
+                <div class="d-flex justify-content-between mb-1"><span>Subtotal:</span><span id="sum-subtotal">₱0</span></div>
+                <div class="d-flex justify-content-between mb-1"><span>Delivery Fee:</span><span id="sum-shipping" class="text-danger">₱0</span></div>
+                <div class="d-flex justify-content-between mb-1 d-none" id="sum-donate-row"><span>Donation:</span><span id="sum-donation" class="text-success">₱0</span></div>
+                <hr>
+                <div class="d-flex justify-content-between fw-bold fs-5"><span>Grand Total:</span><span id="pay-total" class="text-primary">₱0</span></div>
+            </div>
+            
+            <div class="bg-light p-3 rounded-3 border mb-3 d-flex align-items-center">
+                <div class="bg-white p-2 rounded shadow-sm me-3"><i class="fas fa-qrcode fa-2x"></i></div>
+                <div><div class="fw-bold">GCash: 0921-429-5887</div><div class="small text-muted">Scan or Send exact amount.</div></div>
+            </div>
+            
+            <div class="row g-3">
+                <div class="col-md-6"><input type="text" class="form-control" id="c-ref" placeholder="GCash Reference No." required></div>
+                <div class="col-md-6"><input type="file" class="form-control" id="c-proof" accept="image/*" required></div>
+            </div>
+            <div class="mt-4"><button id="btn-place-order" type="submit" class="btn btn-custom w-100 py-3" disabled>FILL DETAILS</button></div>
+        </form>
+    </div>
+</div>
+
+<!-- TRACKING PAGE -->
+<div id="page-track" class="container my-5 d-none text-center" style="max-width:500px; min-height:50vh;">
+    <h3 class="mb-3">Track Order</h3>
+    <div class="input-group mb-4 shadow-sm rounded-pill overflow-hidden">
+        <input type="text" id="track-id" class="form-control border-0 ps-4" placeholder="Enter Order ID">
+        <button class="btn btn-custom px-4" onclick="trackOrder()">Search</button>
+    </div>
+    <div id="track-result" class="card p-4 shadow-sm border-0 rounded-4 d-none text-start bg-white">
+        <div class="fw-bold text-success fs-4 text-center mb-3" id="t-status"></div>
+        <hr>
+        <div class="d-flex justify-content-between"><span>Date:</span> <span id="t-date"></span></div>
+        <div class="d-flex justify-content-between mt-2"><span>Total:</span> <span id="t-total"></span></div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-4">
+                <h3 class="footer-heading">Al-Jazaa Ph.</h3>
+                <p class="small text-muted">Providing timeless modesty with modern elegance.</p>
+            </div>
+            <div class="col-md-4">
+                <h5 class="text-white mb-3" style="font-family:'Outfit'">Links</h5>
+                <a href="#" class="footer-link" onclick="routeTo('home')">Shop Collection</a>
+                <a href="#" class="footer-link" onclick="routeTo('track')">Track Order</a>
+            </div>
+            <div class="col-md-4">
+                <h5 class="text-white mb-3" style="font-family:'Outfit'">Contact</h5>
+                <p class="footer-link mb-1">aljazaa.ph@gmail.com</p>
+                <p class="footer-link">0921-429-5887</p>
+            </div>
+        </div>
+        <hr class="border-secondary mt-5">
+        <p class="text-center small text-muted mb-0">&copy; 2024 Al-Jazaa Ph. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v11'))||[], curProduct={}, selectedSize=null;
+    let cartTotalAmount=0, currentDonationPercent=0, currentShippingFee=0;
+    
+    // Helper to get sidebar instance
+    const getSidebar = () => bootstrap.Offcanvas.getInstance(document.getElementById('sidebarMenu'));
+    const closeSidebar = () => { const s = getSidebar(); if(s) s.hide(); };
+
+    document.addEventListener("DOMContentLoaded", () => {
+        fetchProducts(); updateCartCount();
+        window.history.replaceState({ page: 'home' }, '', '');
+        window.onpopstate = (e) => { if(e.state) renderPage(e.state.page); };
+    });
+
+    function routeTo(pageId) { window.history.pushState({ page: pageId }, '', ''); renderPage(pageId); }
+    function renderPage(pageId) {
+        ['page-home', 'page-cart', 'page-checkout', 'page-track'].forEach(id => document.getElementById(id).classList.add('d-none'));
+        document.getElementById('detail-view').style.display = 'none'; 
+        document.getElementById('heroCarousel').classList.add('d-none'); 
+        window.scrollTo(0,0);
+        
+        if(pageId === 'home') { 
+            document.getElementById('page-home').classList.remove('d-none'); 
+            document.getElementById('heroCarousel').classList.remove('d-none'); 
+        }
+        else { document.getElementById('page-' + pageId).classList.remove('d-none'); }
+        
+        if(pageId === 'cart') renderCart();
+        if(pageId === 'checkout') { 
+            if(cart.length === 0) { Swal.fire('Cart Empty','Please add items first','warning'); routeTo('home'); return; } 
+            initCheckout(); 
+        }
+    }
+
+    // --- PRODUCTS & CATEGORIES ---
+    function fetchProducts() {
+        fetch(WEB_APP_URL + "?action=getProducts").then(r => r.json()).then(data => {
+            allProducts = data; 
+            document.getElementById('loader').style.display = 'none';
+            renderCats(); renderProds(allProducts);
+        });
+    }
+
+    function renderCats() {
+        const cats = ['All', ...new Set(allProducts.map(p => p.category))];
+        
+        // 1. Horizontal Scroll Bar
+        document.getElementById('category-list').innerHTML = cats.map(c => 
+            `<span class="cat-pill ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">${c}</span>`
+        ).join('');
+
+        // 2. Sidebar Menu List
+        document.getElementById('sidebar-categories').innerHTML = cats.map(c => 
+            `<a href="#" class="sidebar-link" onclick="filterCat('${c}', null, true)">${c} <i class="fas fa-chevron-right"></i></a>`
+        ).join('');
+    }
+
+    function filterCat(c, el, fromSidebar = false) {
+        // Active state for pills
+        if(el) {
+            document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active'));
+            el.classList.add('active');
+        } else {
+             // If from sidebar, highlight the pill manually
+             document.querySelectorAll('.cat-pill').forEach(btn => {
+                 btn.classList.toggle('active', btn.innerText === c);
+             });
+        }
+        
+        renderProds(c === 'All' ? allProducts : allProducts.filter(p => p.category === c));
+        if(fromSidebar) {
+            closeSidebar();
+            routeTo('home');
+            document.getElementById('shop-section').scrollIntoView({behavior:'smooth'});
+        }
+    }
+
+    function renderProds(list) {
+        document.getElementById('product-grid').innerHTML = list.map(p => {
+            let imgs = (p.images && p.images.length > 0) ? p.images : [p.image];
+            let itemsHtml = imgs.map((url, idx) => `<div class="carousel-item ${idx===0?'active':''}"><img src="${url.trim()}" class="d-block w-100" loading="lazy"></div>`).join('');
+            let controlsHtml = imgs.length>1 ? `<button class="carousel-control-prev" type="button" data-bs-target="#c-${p.id}" data-bs-slide="prev" onclick="event.stopPropagation()"><span class="carousel-control-prev-icon"></span></button><button class="carousel-control-next" type="button" data-bs-target="#c-${p.id}" data-bs-slide="next" onclick="event.stopPropagation()"><span class="carousel-control-next-icon"></span></button>` : '';
+            
+            let saleBadge = (p.salePercent > 0) ? `<span class="sale-badge">${p.salePercent}% OFF</span>` : '';
+            let priceDisplay = (p.salePercent > 0) 
+                ? `<span class="original-price">₱${p.originalPrice}</span> <span class="sale-price-text">₱${p.price}</span>` 
+                : `<div class="card-price fw-bold text-dark">₱${p.price}</div>`;
+
+            return `<div class="col"><div class="card product-card">
+                <span class="stock-label ${p.inStock?'in-stock':'out-stock'}">${p.inStock?'In Stock':'Out of Stock'}</span>
+                ${saleBadge}
+                <div class="card-img-wrapper" onclick="openDetail('${p.id}')" style="cursor:pointer">
+                     <div id="c-${p.id}" class="carousel slide mini-carousel" data-bs-interval="false"><div class="carousel-inner">${itemsHtml}</div>${controlsHtml}</div>
+                </div>
+                <div class="card-body" onclick="openDetail('${p.id}')" style="cursor:pointer">
+                    <h6 class="card-title text-dark mb-1 text-truncate">${p.name}</h6>
+                    ${priceDisplay}
+                </div>
+            </div></div>`;
+        }).join('');
+    }
+
+    // --- DETAIL VIEW & CART LOGIC ---
+    function openDetail(id) {
+        window.history.pushState({ page: 'detail' }, '', '');
+        curProduct = allProducts.find(p => p.id == id); selectedSize = null;
+        document.querySelectorAll('.size-btn').forEach(el => el.classList.remove('selected'));
+        document.getElementById('height-input').value = "";
+        document.getElementById('dt-qty-val').value = 1; // Reset Qty
+        
+        document.getElementById('dt-img').src = curProduct.image;
+        document.getElementById('dt-cat').innerText = curProduct.category;
+        document.getElementById('dt-name').innerText = curProduct.name;
+        document.getElementById('dt-desc').innerText = curProduct.desc;
+        
+        if(curProduct.salePercent > 0) {
+            document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice;
+            document.getElementById('dt-old-price').classList.remove('d-none');
+            document.getElementById('dt-sale-badge').innerText = curProduct.salePercent + "% OFF";
+            document.getElementById('dt-sale-badge').classList.remove('d-none');
+            document.getElementById('dt-price').innerText = "₱" + curProduct.price;
+            document.getElementById('dt-price').classList.add('text-danger');
+        } else {
+            document.getElementById('dt-old-price').classList.add('d-none');
+            document.getElementById('dt-sale-badge').classList.add('d-none');
+            document.getElementById('dt-price').innerText = "₱" + curProduct.price;
+            document.getElementById('dt-price').classList.remove('text-danger');
+        }
+        document.getElementById('size-area').innerHTML = ["S","M","L","XL"].map(s => `<div class="size-btn" onclick="pickSize('${s}', this)">${s}</div>`).join('');
+        const btn = document.getElementById('add-btn'); 
+        btn.disabled = !curProduct.inStock; 
+        btn.innerText = curProduct.inStock ? "ADD TO CART" : "OUT OF STOCK";
+        document.getElementById('detail-view').style.display = 'block';
+    }
+
+    function pickSize(v,e) { document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected')); e.classList.add('selected'); selectedSize = v; }
+    
+    function dtQty(change) {
+        let el = document.getElementById('dt-qty-val');
+        let val = parseInt(el.value) + change;
+        if(val < 1) val = 1;
+        el.value = val;
+    }
+
+    function addToCart() {
+        if(!selectedSize) { Swal.fire('Size Required', 'Please select a size', 'warning'); return; }
+        if(!document.getElementById('height-input').value) { Swal.fire('Height Required', 'Please enter height', 'warning'); return; }
+        
+        let qty = parseInt(document.getElementById('dt-qty-val').value);
+        
+        cart.push({...curProduct, size: selectedSize, height: document.getElementById('height-input').value, qty: qty});
+        localStorage.setItem('alj_cart_v11', JSON.stringify(cart)); 
+        updateCartCount();
+        Swal.fire({icon: 'success', title: 'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1000}); 
+        window.history.back();
+    }
+    
+    function updateCartCount() { document.getElementById('cart-count').innerText = cart.length; }
+
+    function renderCart() {
+        let total = 0; const tb = document.getElementById('cart-table');
+        if(cart.length === 0) { 
+            tb.innerHTML = '<tr><td class="text-center py-5">Shopping bag is empty</td></tr>'; 
+            document.getElementById('btn-checkout').disabled = true; 
+        } else {
+            document.getElementById('btn-checkout').disabled = false;
+            tb.innerHTML = cart.map((i,x) => { 
+                let itemTotal = i.price * i.qty;
+                total += itemTotal; 
+                return `
+                <tr style="border-bottom:1px solid #f0f0f0;">
+                    <td class="ps-3" style="width:70px;"><img src="${i.image}" width="60" class="rounded-3 shadow-sm"></td>
+                    <td>
+                        <div class="fw-bold">${i.name}</div>
+                        <div class="small text-muted mb-1">${i.size} | ${i.height}</div>
+                        <div class="text-primary fw-bold">₱${i.price}</div>
+                    </td>
+                    <td style="width:120px;">
+                        <div class="qty-selector">
+                            <button class="qty-btn small" onclick="updateCartQty(${x}, -1)">-</button>
+                            <input type="text" class="qty-input small" value="${i.qty}" readonly style="width:30px;">
+                            <button class="qty-btn small" onclick="updateCartQty(${x}, 1)">+</button>
+                        </div>
+                    </td>
+                    <td class="text-end pe-4">
+                        <i class="fas fa-trash-alt text-danger" style="cursor:pointer; opacity:0.6;" onclick="delItem(${x})"></i>
+                    </td>
+                </tr>`; 
+            }).join('');
+        }
+        document.getElementById('cart-total').innerText = "₱" + total.toLocaleString();
+    }
+
+    function updateCartQty(index, change) {
+        cart[index].qty += change;
+        if(cart[index].qty < 1) {
+            Swal.fire({
+                title: 'Remove item?', text: "Quantity is zero.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Remove'
+            }).then((result) => {
+                if (result.isConfirmed) delItem(index);
+                else { cart[index].qty = 1; renderCart(); } // Reset to 1 if cancelled
+            });
+        } else {
+            localStorage.setItem('alj_cart_v11', JSON.stringify(cart));
+            renderCart();
+        }
+    }
+
+    function delItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v11', JSON.stringify(cart)); updateCartCount(); renderCart(); }
+
+    // --- CHECKOUT ---
+    function initCheckout() {
+        // Calculate Total based on Item * Qty
+        cartTotalAmount = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+        
+        currentDonationPercent = 0; currentShippingFee = 0;
+        document.getElementById('del-method').value = "";
+        
+        // Clear fields
+        ['addr-street','addr-brgy','addr-city','addr-prov','addr-region','addr-zip'].forEach(id=>document.getElementById(id).value="");
+        document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = 'none');
+        
+        document.getElementById('donation-details-box').style.display = 'none'; 
+        document.querySelectorAll('.donate-pill').forEach(b => b.classList.remove('selected'));
+        updateCheckoutCalculations(); validateCheckoutForm();
+    }
+
+    function toggleDeliveryOptions() { 
+        const m = document.getElementById('del-method').value;
+        const isDel = m === 'Delivery';
+        document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = isDel ? 'block' : 'none');
+        document.querySelectorAll('.delivery-fields input, .delivery-fields select').forEach(el => el.required = isDel);
+        
+        calcShipping(); 
+        validateCheckoutForm(); 
+    }
+
+    function calcShipping() {
+        const method = document.getElementById('del-method').value;
+        const region = document.getElementById('addr-region').value; 
+        
+        if (method !== 'Delivery' || !region) { 
+            currentShippingFee = 0; 
+        } else {
+            // Count total ITEMS (qty), not just array length
+            const itemCount = cart.reduce((sum, item) => sum + item.qty, 0); 
+            let fee = 0;
+            
+            // Logic: Heavier/More items = Higher fee
+            if (region === 'Metro Manila') fee = itemCount===1?90 : itemCount<=3?140 : 250;
+            else if (region === 'Luzon') fee = itemCount===1?100 : itemCount<=3?170 : 320;
+            else if (region === 'Visayas') fee = itemCount===1?140 : itemCount<=3?210 : 370;
+            else if (region === 'Mindanao') fee = itemCount===1?145 : itemCount<=3?220 : 380;
+            else if (region === 'Island') fee = itemCount===1?150 : itemCount<=3?250 : 400;
+            
+            currentShippingFee = fee;
+        }
+        updateCheckoutCalculations();
+    }
+
+    function toggleDonationDetails() { const b=document.getElementById('donation-details-box'); b.style.display=(b.style.display==='none'||b.style.display==='')?'block':'none'; }
+    function selectDonation(p, b) { currentDonationPercent=p; document.querySelectorAll('.donate-pill').forEach(btn=>btn.classList.remove('selected')); b.classList.add('selected'); document.getElementById('donation-note').classList.toggle('d-none', p===0); updateCheckoutCalculations(); }
+
+    function updateCheckoutCalculations() {
+        const d = Math.ceil(cartTotalAmount * currentDonationPercent);
+        const g = cartTotalAmount + currentShippingFee + d;
+        document.getElementById('sum-subtotal').innerText = "₱" + cartTotalAmount.toLocaleString();
+        document.getElementById('sum-shipping').innerText = "₱" + currentShippingFee;
+        const dr = document.getElementById('sum-donate-row');
+        if (currentDonationPercent > 0) { dr.classList.remove('d-none'); document.getElementById('sum-donation').innerText = "₱" + d; } else dr.classList.add('d-none');
+        document.getElementById('pay-total').innerText = "₱" + g.toLocaleString();
+    }
+
+    function validateCheckoutForm() { const f=document.getElementById('checkout-form'); const b=document.getElementById('btn-place-order'); if(f.checkValidity()) { b.disabled=false; b.innerText="PLACE ORDER"; } else { b.disabled=true; b.innerText="FILL DETAILS"; } }
+
+    function submitOrder(e) {
+        e.preventDefault();
+        const f = document.getElementById('c-proof').files[0]; if(!f) return;
+        Swal.fire({ title: 'Processing...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        const r = new FileReader();
+        r.onload = function(evt) {
+            const d = Math.ceil(cartTotalAmount * currentDonationPercent);
+            const g = cartTotalAmount + currentShippingFee + d;
+            
+            let addr = "Pick-up";
+            if(document.getElementById('del-method').value === 'Delivery'){
+                 addr = `${document.getElementById('addr-street').value}, ${document.getElementById('addr-brgy').value}, ${document.getElementById('addr-city').value}, ${document.getElementById('addr-prov').value}, ${document.getElementById('addr-region').value}, ${document.getElementById('addr-zip').value}`;
+            }
+
+            const p = {
+                action: 'placeOrder',
+                cust: { name:document.getElementById('c-name').value, phone:document.getElementById('c-phone').value, email:document.getElementById('c-email').value, addr:addr },
+                pay: { ref:document.getElementById('c-ref').value, image:evt.target.result, mime:f.type },
+                cart: cart, 
+                total: "₱" + g.toLocaleString(),
+                donation: { percent: (currentDonationPercent * 100) + "%", amount: d, note: document.getElementById('donation-note').value },
+                delivery: { method: document.getElementById('del-method').value, region: document.getElementById('addr-region').value || "N/A", fee: currentShippingFee }
+            };
+            fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(p) }).then(res => res.json()).then(d => {
+                if(d.status === 'success') { 
+                    cart = []; localStorage.setItem('alj_cart_v11', JSON.stringify(cart)); 
+                    Swal.fire({icon: 'success', title: 'Order Placed!', html: `Tracking ID: <b>${d.orderId}</b><br>Save this ID to track your order.`, confirmButtonColor: '#1b4d3e'}).then(() => routeTo('home')); 
+                }
+                else Swal.fire('Error', d.error, 'error');
+            });
+        };
+        r.readAsDataURL(f);
+    }
+    
+    function doSearch() { const q = document.getElementById('searchBox').value.toLowerCase(); renderProds(allProducts.filter(p => p.name.toLowerCase().includes(q))); }
+    function scrollToProducts() { document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); }
+    
+    function trackOrder() {
+        const id = document.getElementById('track-id').value.trim(); if(!id) return;
+        document.getElementById('loader').style.display = 'flex';
+        fetch(WEB_APP_URL + `?action=trackOrder&orderId=${id}`).then(r => r.json()).then(d => {
+            document.getElementById('loader').style.display = 'none'; 
+            document.getElementById('track-result').classList.remove('d-none');
+            document.getElementById('t-status').innerText = d.status === 'found' ? d.currStatus : "Order Not Found";
+            document.getElementById('t-date').innerText = d.status === 'found' ? d.date : "-";
+            document.getElementById('t-total').innerText = d.status === 'found' ? d.total : "-";
+        });
+    }
+</script>
+</body>
+</html>
