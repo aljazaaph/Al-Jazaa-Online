@@ -16,9 +16,10 @@
     
     <style>
         :root {
-            --primary: #1b4d3e; /* Elegant Green */
+            --primary: #1b4d3e; 
             --primary-dark: #143a2f;
             --gold: #c5a028;
+            --gold-light: #e6c860;
             --bg-color: #f8f9fa; 
             --text: #2c3e50;
             --nav-height: 70px;
@@ -42,7 +43,7 @@
 
         /* Navbar */
         .navbar { 
-            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); 
+            background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); 
             box-shadow: 0 2px 15px rgba(0,0,0,0.04); height: var(--nav-height);
             z-index: 1030;
         }
@@ -55,21 +56,32 @@
         .btn-close-white { filter: invert(1) grayscale(100%) brightness(200%); }
         
         .sidebar-link {
-            display: block; padding: 12px 15px; color: var(--text); 
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 15px; color: var(--text); 
             text-decoration: none; font-weight: 500; border-bottom: 1px solid #f0f0f0;
-            transition: 0.2s; display: flex; justify-content: space-between; align-items: center;
+            transition: 0.2s;
         }
         .sidebar-link:hover { background: #f8f9fa; color: var(--primary); padding-left: 20px; }
-        .sidebar-link i { opacity: 0.5; }
 
-        /* Scrollable Policy Box */
         .policy-box {
             background: #fdfdfd; border: 1px solid #eee; border-radius: 8px;
             padding: 15px; margin-top: 20px;
             max-height: 200px; overflow-y: auto; font-size: 0.85rem; color: #666;
         }
         .policy-box h6 { color: var(--primary); font-weight: 700; margin-top: 10px; }
-        .policy-box h6:first-child { margin-top: 0; }
+
+        /* Hero Button (Gold & Green) */
+        .btn-hero {
+            background-color: var(--primary); color: var(--gold);
+            border: 2px solid var(--gold);
+            padding: 12px 40px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+            border-radius: 50px; transition: all 0.3s ease;
+            font-family: 'Playfair Display', serif;
+        }
+        .btn-hero:hover {
+            background-color: var(--gold); color: var(--primary);
+            box-shadow: 0 0 20px rgba(197, 160, 40, 0.5); transform: translateY(-2px);
+        }
 
         /* Cart Badge */
         .cart-btn-wrap { position: relative; display: inline-flex; align-items: center; text-decoration: none; margin-right: 15px; cursor: pointer;}
@@ -82,7 +94,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
-        /* Category Sticky Bar */
+        /* Category Scroll */
         .category-scroll-container { 
             overflow-x: auto; white-space: nowrap; position: sticky; top: var(--nav-height); z-index: 900; 
             background: rgba(248,249,250,0.95); backdrop-filter: blur(8px); 
@@ -111,34 +123,37 @@
         .original-price { text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 5px; }
         .sale-price-text { color: #d32f2f; font-weight: 700; }
 
-        /* Quantity Selectors */
-        .qty-selector {
-            display: inline-flex; align-items: center; border: 1px solid #ddd; border-radius: 50px; overflow: hidden;
-        }
-        .qty-btn {
-            background: white; border: none; padding: 5px 15px; font-weight: bold; cursor: pointer; color: var(--primary); transition: 0.2s;
-        }
+        /* Detail View Controls */
+        .qty-selector { display: inline-flex; align-items: center; border: 1px solid #ddd; border-radius: 50px; overflow: hidden; height: 40px; }
+        .qty-btn { background: white; border: none; padding: 0 15px; font-weight: bold; cursor: pointer; color: var(--primary); height: 100%; }
         .qty-btn:hover { background: #f0f0f0; }
-        .qty-input {
-            width: 40px; border: none; text-align: center; font-weight: 600; outline: none; background: white;
-        }
+        .qty-input { width: 40px; border: none; text-align: center; font-weight: 600; outline: none; background: white; }
 
-        /* UI Elements */
-        .btn-custom { background: var(--primary); color: white; border-radius: 50px; padding: 10px 30px; font-weight: 600; border: none; text-transform: uppercase; transition: 0.3s; }
+        .btn-custom { background: var(--primary); color: white; border-radius: 50px; padding: 12px 30px; font-weight: 600; border: none; text-transform: uppercase; transition: 0.3s; }
         .btn-custom:hover { background: var(--primary-dark); color: white; transform: translateY(-2px); shadow: 0 5px 15px rgba(27, 77, 62, 0.3); }
         .btn-custom:disabled { background: #ccc; cursor: not-allowed; transform: none; }
         
-        .size-btn { width: 40px; height: 40px; border: 1px solid #ddd; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-        .size-btn:hover { border-color: var(--primary); }
-        .size-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+        .option-btn { min-width: 40px; height: 40px; padding: 0 15px; border: 1px solid #ddd; background: white; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; margin-right: 8px; margin-bottom: 8px; font-size: 0.9rem; }
+        .option-btn:hover { border-color: var(--primary); }
+        .option-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Donation Bar */
-        .marquee-container { width: 100%; overflow: hidden; background: var(--primary); color: var(--gold); padding: 10px 0; border-radius: 8px; cursor: pointer; margin-bottom: 10px; }
+        /* Related Products */
+        .related-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; -ms-overflow-style: none; scrollbar-width: none; }
+        .related-scroll::-webkit-scrollbar { display: none; }
+        .related-card { min-width: 140px; width: 140px; border: none; cursor: pointer; }
+        .related-card img { border-radius: 8px; width: 100%; aspect-ratio: 3/4; object-fit: cover; margin-bottom: 8px; }
+
+        /* Donation & Checkout */
+        .marquee-container { width: 100%; overflow: hidden; background: var(--primary); color: var(--gold); padding: 10px 0; border-radius: 8px; margin-bottom: 10px; }
         .marquee-content { display: inline-block; white-space: nowrap; animation: marquee 15s linear infinite; font-weight: 700; letter-spacing: 2px; font-family: 'Playfair Display'; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
 
         .donate-pill { flex: 1; border: 1px solid var(--primary); color: var(--primary); background: transparent; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; }
         .donate-pill:hover, .donate-pill.selected { background: var(--primary); color: white; }
+
+        /* Upload File Tooltip Styling */
+        .file-upload-wrapper { position: relative; }
+        .upload-helper { font-size: 0.75rem; color: #d32f2f; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
 
         footer { background: #1a1a1a; color: #888; padding: 60px 0 30px; margin-top: 80px; }
         .footer-heading { color: white; font-family: 'Playfair Display'; margin-bottom: 20px; }
@@ -170,16 +185,13 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <!-- Brand -->
         <a class="navbar-brand" href="#" onclick="routeTo('home')">Al-Jazaa Ph.</a>
         
         <div class="d-flex align-items-center order-lg-3 ms-auto ms-lg-0">
-             <!-- Cart Icon -->
              <div class="cart-btn-wrap" onclick="routeTo('cart')">
                 <i class="fas fa-shopping-bag fa-lg" style="color:#333;"></i>
                 <span id="cart-count" class="cart-badge">0</span>
             </div>
-            <!-- Menu Toggler (Open Sidebar) -->
             <button class="btn btn-link text-dark p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
                 <i class="fas fa-bars fa-lg"></i>
             </button>
@@ -187,55 +199,41 @@
     </div>
 </nav>
 
-<!-- Modern Sidebar (Offcanvas) -->
+<!-- Modern Sidebar -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">Menu</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body d-flex flex-column">
-        
-        <!-- Standard Links -->
         <a href="#" class="sidebar-link" onclick="routeTo('home'); closeSidebar();">Shop Home <i class="fas fa-chevron-right"></i></a>
         <a href="#" class="sidebar-link" onclick="routeTo('track'); closeSidebar();">Track Order <i class="fas fa-chevron-right"></i></a>
         
         <hr class="my-3 opacity-25">
         <p class="small text-uppercase text-muted fw-bold ms-2 mb-2">Categories</p>
-        
-        <!-- Dynamic Categories Area -->
-        <div id="sidebar-categories">
-            <!-- Categories will be loaded here via JS -->
-        </div>
+        <div id="sidebar-categories"></div>
 
         <div class="mt-auto">
-            <!-- Scrollable Policies -->
             <div class="policy-box">
                 <h6>About Al-Jazaa Ph.</h6>
-                <p>Al-Jazaa Ph. is committed to providing timeless modesty with modern elegance. We ensure high-quality fabrics and designs that suit your lifestyle.</p>
-                
+                <p>Al-Jazaa Ph. is committed to providing timeless modesty with modern elegance.</p>
                 <h6>Payment Policy</h6>
-                <p>We strictly accept GCash payments at the moment. Orders are processed only after payment verification via the reference number and screenshot upload.</p>
-                
+                <p>We strictly accept GCash payments. Verification required via screenshot.</p>
                 <h6>Delivery Policy</h6>
-                <p>We deliver nationwide via courier. Shipping fees are calculated based on your location (Luzon, Visayas, Mindanao) and the number of items (weight). Allow 3-7 days for delivery.</p>
+                <p>Nationwide delivery via courier. Shipping fees vary by region and weight. 3-7 days.</p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- HOME PAGE -->
+<!-- HOME -->
 <div id="page-home">
     <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active"></button>
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2"></button>
-        </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%201.png?raw=true" class="d-block w-100" alt="Slide 1">
                 <div class="carousel-caption">
-                    <button class="btn btn-light rounded-pill px-4 fw-bold shadow" onclick="scrollToProducts()">Shop Now</button>
+                    <button class="btn-hero shadow-lg" onclick="scrollToProducts()">Shop Now</button>
                 </div>
             </div>
             <div class="carousel-item">
@@ -255,16 +253,12 @@
             <input type="text" id="searchBox" class="form-control rounded-pill ps-4 py-2 border-secondary" placeholder="Search products..." onkeyup="doSearch()">
             <i class="fas fa-search position-absolute text-muted" style="right: 20px; top: 13px;"></i>
         </div>
-        
-        <!-- Horizontal Category Scroll (Desktop/Quick Access) -->
         <div id="category-list" class="category-scroll-container mb-4"></div>
-        
-        <!-- Product Grid -->
         <div class="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-3 g-md-4" id="product-grid"></div>
     </div>
 </div>
 
-<!-- DETAIL VIEW MODAL -->
+<!-- DETAIL VIEW -->
 <div id="detail-view">
     <div class="container py-5">
         <button class="btn btn-light rounded-circle shadow-sm mb-4" style="width:40px;height:40px;" onclick="window.history.back()">
@@ -284,18 +278,24 @@
                 </div>
                 <p id="dt-desc" class="text-muted mb-4"></p>
                 
-                <div class="mb-4">
-                    <label class="fw-bold mb-2 small">SIZE</label>
-                    <div id="size-area" class="d-flex gap-2"></div>
+                <!-- Options -->
+                <div class="mb-3">
+                    <label class="fw-bold mb-2 small text-uppercase">Size</label>
+                    <div id="size-area" class="d-flex flex-wrap"></div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="fw-bold mb-2 small text-uppercase">Color</label>
+                    <div id="color-area" class="d-flex flex-wrap"></div>
                 </div>
                 
                 <div class="row mb-4">
                     <div class="col-6">
-                        <label class="fw-bold mb-2 small">HEIGHT</label>
+                        <label class="fw-bold mb-2 small text-uppercase">Height</label>
                         <input type="text" id="height-input" class="form-control" placeholder="e.g. 5'4">
                     </div>
                     <div class="col-6">
-                        <label class="fw-bold mb-2 small">QUANTITY</label>
+                        <label class="fw-bold mb-2 small text-uppercase">Quantity</label>
                         <div class="qty-selector w-100 justify-content-between">
                             <button class="qty-btn" onclick="dtQty(-1)">-</button>
                             <input type="number" id="dt-qty-val" class="qty-input" value="1" readonly>
@@ -304,25 +304,27 @@
                     </div>
                 </div>
 
-                <button id="add-btn" class="btn btn-custom w-100 py-3 shadow-lg" onclick="addToCart()">ADD TO CART</button>
+                <button id="add-btn" class="btn btn-custom w-100 py-3 shadow-lg mb-5" onclick="addToCart()">ADD TO CART</button>
+                
+                <!-- Related Items -->
+                <hr>
+                <h5 class="font-playfair mb-3">You might also like</h5>
+                <div id="related-products" class="related-scroll"></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- CART PAGE -->
+<!-- CART -->
 <div id="page-cart" class="container my-5 d-none">
     <h2 class="mb-4 text-center">Your Shopping Bag</h2>
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
                 <div class="table-responsive">
-                    <table class="table align-middle mb-0">
-                        <tbody id="cart-table"></tbody>
-                    </table>
+                    <table class="table align-middle mb-0"><tbody id="cart-table"></tbody></table>
                 </div>
             </div>
-            
             <div class="d-flex justify-content-between align-items-center bg-white p-4 rounded-4 shadow-sm border">
                 <div>
                     <small class="text-muted d-block">Total Amount</small>
@@ -334,14 +336,29 @@
     </div>
 </div>
 
-<!-- CHECKOUT PAGE -->
+<!-- CHECKOUT -->
 <div id="page-checkout" class="container my-5 d-none" style="max-width: 800px;">
     <div class="card p-4 p-md-5 shadow-lg border-0 rounded-4">
         <h3 class="text-center mb-2 font-playfair">Checkout</h3>
         <p class="text-center text-muted small mb-4">Complete your details to place order</p>
         
         <form id="checkout-form" onsubmit="submitOrder(event)" oninput="validateCheckoutForm()">
-            <!-- Delivery & Address -->
+            <!-- Donation Always Visible -->
+            <div class="mb-4 bg-light p-3 rounded border">
+                <div class="marquee-container shadow-sm mb-3">
+                    <div class="marquee-content">✨ DONATE TO ORPHANS • SADQA JARIYAH • HELP THOSE IN NEED • AL-JAZAA PH CHARITY ✨</div>
+                </div>
+                <p class="small text-muted mb-2 text-center fw-bold">Select donation amount (Added to Total)</p>
+                <div class="d-flex gap-2 flex-wrap justify-content-center mb-3">
+                    <button type="button" class="donate-pill" onclick="selectDonation(0.05, this)">5%</button>
+                    <button type="button" class="donate-pill" onclick="selectDonation(0.10, this)">10%</button>
+                    <button type="button" class="donate-pill" onclick="selectDonation(0.20, this)">20%</button>
+                    <button type="button" class="donate-pill" onclick="selectDonation(0.50, this)">50%</button>
+                    <button type="button" class="donate-pill" onclick="selectDonation(0, this)">None</button>
+                </div>
+                <textarea id="donation-note" class="form-control d-none" rows="2" placeholder="Special Note / Intention (Optional)"></textarea>
+            </div>
+
             <h6 class="text-uppercase fw-bold text-muted small mb-3">1. Delivery & Address</h6>
             <div class="row g-3 mb-4">
                 <div class="col-12">
@@ -355,7 +372,7 @@
                 <div class="col-md-6"><input type="number" class="form-control" id="c-phone" placeholder="Phone Number" required></div>
                 <div class="col-12"><input type="email" class="form-control" id="c-email" placeholder="Email Address" required></div>
                 
-                <div class="col-12 delivery-fields">
+                <div class="col-12 delivery-fields" style="display:none;">
                     <hr class="opacity-25 my-1">
                     <label class="small fw-bold text-primary mt-2">Shipping Address</label>
                 </div>
@@ -376,25 +393,6 @@
                  <div class="col-md-4 delivery-fields"><input type="text" class="form-control" id="addr-zip" placeholder="Zip Code"></div>
             </div>
 
-            <!-- Donation -->
-            <div class="mb-4">
-                <div class="marquee-container shadow-sm" onclick="toggleDonationDetails()">
-                    <div class="marquee-content">✨ DONATE TO ORPHANS • SADQA JARIYAH • HELP THOSE IN NEED • AL-JAZAA PH CHARITY ✨</div>
-                </div>
-                <div id="donation-details-box" style="display:none;">
-                    <p class="small text-muted mb-2">Select a percentage of your total to donate.</p>
-                    <div class="d-flex gap-2 flex-wrap mb-3">
-                        <button type="button" class="donate-pill" onclick="selectDonation(0.05, this)">5%</button>
-                        <button type="button" class="donate-pill" onclick="selectDonation(0.10, this)">10%</button>
-                        <button type="button" class="donate-pill" onclick="selectDonation(0.20, this)">20%</button>
-                        <button type="button" class="donate-pill" onclick="selectDonation(0.50, this)">50%</button>
-                        <button type="button" class="donate-pill" onclick="selectDonation(0, this)">None</button>
-                    </div>
-                    <textarea id="donation-note" class="form-control d-none" rows="2" placeholder="Special Note / Intention (Optional)"></textarea>
-                </div>
-            </div>
-
-            <!-- Summary -->
             <hr class="opacity-25">
             <h6 class="text-uppercase fw-bold text-muted small mb-3">2. Payment Summary</h6>
             <div class="bg-white p-3 border rounded mb-3">
@@ -412,14 +410,17 @@
             
             <div class="row g-3">
                 <div class="col-md-6"><input type="text" class="form-control" id="c-ref" placeholder="GCash Reference No." required></div>
-                <div class="col-md-6"><input type="file" class="form-control" id="c-proof" accept="image/*" required></div>
+                <div class="col-md-6 file-upload-wrapper">
+                    <input type="file" class="form-control" id="c-proof" accept="image/*" required>
+                    <div class="upload-helper"><i class="fas fa-info-circle"></i> Please upload screenshot of payment</div>
+                </div>
             </div>
             <div class="mt-4"><button id="btn-place-order" type="submit" class="btn btn-custom w-100 py-3" disabled>FILL DETAILS</button></div>
         </form>
     </div>
 </div>
 
-<!-- TRACKING PAGE -->
+<!-- TRACKING -->
 <div id="page-track" class="container my-5 d-none text-center" style="max-width:500px; min-height:50vh;">
     <h3 class="mb-3">Track Order</h3>
     <div class="input-group mb-4 shadow-sm rounded-pill overflow-hidden">
@@ -459,10 +460,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v11'))||[], curProduct={}, selectedSize=null;
+    let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v12'))||[], curProduct={}, selectedSize=null, selectedColor=null;
     let cartTotalAmount=0, currentDonationPercent=0, currentShippingFee=0;
     
-    // Helper to get sidebar instance
     const getSidebar = () => bootstrap.Offcanvas.getInstance(document.getElementById('sidebarMenu'));
     const closeSidebar = () => { const s = getSidebar(); if(s) s.hide(); };
 
@@ -487,12 +487,12 @@
         
         if(pageId === 'cart') renderCart();
         if(pageId === 'checkout') { 
-            if(cart.length === 0) { Swal.fire('Cart Empty','Please add items first','warning'); routeTo('home'); return; } 
+            if(cart.length === 0) { Swal.fire({icon:'warning', title:'Empty Bag', text:'Please add items first'}); routeTo('home'); return; } 
             initCheckout(); 
         }
     }
 
-    // --- PRODUCTS & CATEGORIES ---
+    // --- PRODUCTS ---
     function fetchProducts() {
         fetch(WEB_APP_URL + "?action=getProducts").then(r => r.json()).then(data => {
             allProducts = data; 
@@ -503,54 +503,35 @@
 
     function renderCats() {
         const cats = ['All', ...new Set(allProducts.map(p => p.category))];
-        
-        // 1. Horizontal Scroll Bar
         document.getElementById('category-list').innerHTML = cats.map(c => 
             `<span class="cat-pill ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">${c}</span>`
         ).join('');
-
-        // 2. Sidebar Menu List
         document.getElementById('sidebar-categories').innerHTML = cats.map(c => 
             `<a href="#" class="sidebar-link" onclick="filterCat('${c}', null, true)">${c} <i class="fas fa-chevron-right"></i></a>`
         ).join('');
     }
 
     function filterCat(c, el, fromSidebar = false) {
-        // Active state for pills
-        if(el) {
-            document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active'));
-            el.classList.add('active');
-        } else {
-             // If from sidebar, highlight the pill manually
-             document.querySelectorAll('.cat-pill').forEach(btn => {
-                 btn.classList.toggle('active', btn.innerText === c);
-             });
-        }
-        
+        if(el) { document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active')); el.classList.add('active'); }
         renderProds(c === 'All' ? allProducts : allProducts.filter(p => p.category === c));
-        if(fromSidebar) {
-            closeSidebar();
-            routeTo('home');
-            document.getElementById('shop-section').scrollIntoView({behavior:'smooth'});
-        }
+        if(fromSidebar) { closeSidebar(); routeTo('home'); document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); }
     }
 
     function renderProds(list) {
         document.getElementById('product-grid').innerHTML = list.map(p => {
             let imgs = (p.images && p.images.length > 0) ? p.images : [p.image];
             let itemsHtml = imgs.map((url, idx) => `<div class="carousel-item ${idx===0?'active':''}"><img src="${url.trim()}" class="d-block w-100" loading="lazy"></div>`).join('');
-            let controlsHtml = imgs.length>1 ? `<button class="carousel-control-prev" type="button" data-bs-target="#c-${p.id}" data-bs-slide="prev" onclick="event.stopPropagation()"><span class="carousel-control-prev-icon"></span></button><button class="carousel-control-next" type="button" data-bs-target="#c-${p.id}" data-bs-slide="next" onclick="event.stopPropagation()"><span class="carousel-control-next-icon"></span></button>` : '';
             
             let saleBadge = (p.salePercent > 0) ? `<span class="sale-badge">${p.salePercent}% OFF</span>` : '';
             let priceDisplay = (p.salePercent > 0) 
                 ? `<span class="original-price">₱${p.originalPrice}</span> <span class="sale-price-text">₱${p.price}</span>` 
-                : `<div class="card-price fw-bold text-dark">₱${p.price}</div>`;
+                : `<div class="fw-bold text-dark">₱${p.price}</div>`;
 
             return `<div class="col"><div class="card product-card">
                 <span class="stock-label ${p.inStock?'in-stock':'out-stock'}">${p.inStock?'In Stock':'Out of Stock'}</span>
                 ${saleBadge}
                 <div class="card-img-wrapper" onclick="openDetail('${p.id}')" style="cursor:pointer">
-                     <div id="c-${p.id}" class="carousel slide mini-carousel" data-bs-interval="false"><div class="carousel-inner">${itemsHtml}</div>${controlsHtml}</div>
+                     <div class="carousel slide mini-carousel" data-bs-interval="false"><div class="carousel-inner">${itemsHtml}</div></div>
                 </div>
                 <div class="card-body" onclick="openDetail('${p.id}')" style="cursor:pointer">
                     <h6 class="card-title text-dark mb-1 text-truncate">${p.name}</h6>
@@ -560,19 +541,20 @@
         }).join('');
     }
 
-    // --- DETAIL VIEW & CART LOGIC ---
+    // --- DETAIL VIEW ---
     function openDetail(id) {
         window.history.pushState({ page: 'detail' }, '', '');
-        curProduct = allProducts.find(p => p.id == id); selectedSize = null;
-        document.querySelectorAll('.size-btn').forEach(el => el.classList.remove('selected'));
+        curProduct = allProducts.find(p => p.id == id); 
+        selectedSize = null; selectedColor = null;
         document.getElementById('height-input').value = "";
-        document.getElementById('dt-qty-val').value = 1; // Reset Qty
+        document.getElementById('dt-qty-val').value = 1;
         
         document.getElementById('dt-img').src = curProduct.image;
         document.getElementById('dt-cat').innerText = curProduct.category;
         document.getElementById('dt-name').innerText = curProduct.name;
         document.getElementById('dt-desc').innerText = curProduct.desc;
         
+        // Price Logic
         if(curProduct.salePercent > 0) {
             document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice;
             document.getElementById('dt-old-price').classList.remove('d-none');
@@ -586,14 +568,35 @@
             document.getElementById('dt-price').innerText = "₱" + curProduct.price;
             document.getElementById('dt-price').classList.remove('text-danger');
         }
-        document.getElementById('size-area').innerHTML = ["S","M","L","XL"].map(s => `<div class="size-btn" onclick="pickSize('${s}', this)">${s}</div>`).join('');
+
+        // Render Options
+        document.getElementById('size-area').innerHTML = ["S","M","L","XL"].map(s => `<div class="option-btn size-opt" onclick="pickOption('size','${s}', this)">${s}</div>`).join('');
+        
+        // Parse Colors
+        let colorList = curProduct.colors ? curProduct.colors.split(',') : ["Default"];
+        document.getElementById('color-area').innerHTML = colorList.map(c => `<div class="option-btn color-opt" onclick="pickOption('color','${c.trim()}', this)">${c.trim()}</div>`).join('');
+
         const btn = document.getElementById('add-btn'); 
         btn.disabled = !curProduct.inStock; 
         btn.innerText = curProduct.inStock ? "ADD TO CART" : "OUT OF STOCK";
+
+        renderRelated(curProduct.category, curProduct.id);
         document.getElementById('detail-view').style.display = 'block';
     }
 
-    function pickSize(v,e) { document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected')); e.classList.add('selected'); selectedSize = v; }
+    function renderRelated(cat, currentId) {
+        let related = allProducts.filter(p => p.category === cat && p.id !== currentId).sort(() => 0.5 - Math.random()).slice(0,5);
+        document.getElementById('related-products').innerHTML = related.map(p => 
+            `<div class="related-card" onclick="openDetail('${p.id}')"><img src="${p.image}"><div class="small fw-bold text-truncate">${p.name}</div><div class="small text-muted">₱${p.price}</div></div>`
+        ).join('');
+    }
+
+    function pickOption(type, val, el) {
+        let grp = type === 'size' ? '.size-opt' : '.color-opt';
+        document.querySelectorAll(grp).forEach(b => b.classList.remove('selected')); 
+        el.classList.add('selected'); 
+        if(type==='size') selectedSize = val; else selectedColor = val;
+    }
     
     function dtQty(change) {
         let el = document.getElementById('dt-qty-val');
@@ -602,21 +605,33 @@
         el.value = val;
     }
 
+    // --- ACCURATE VALIDATION & ADD TO CART ---
     function addToCart() {
-        if(!selectedSize) { Swal.fire('Size Required', 'Please select a size', 'warning'); return; }
-        if(!document.getElementById('height-input').value) { Swal.fire('Height Required', 'Please enter height', 'warning'); return; }
+        // Strict Validation
+        if(!selectedSize) { 
+            Swal.fire({ icon: 'error', title: 'Size Required', text: 'Please select a Size option before adding to bag.' });
+            return; 
+        }
+        if(!selectedColor) { 
+            Swal.fire({ icon: 'error', title: 'Color Required', text: 'Please select a Color option before adding to bag.' });
+            return; 
+        }
+        if(!document.getElementById('height-input').value) { 
+            Swal.fire({ icon: 'error', title: 'Height Required', text: 'Please enter your Height for proper fitting.' });
+            return; 
+        }
         
         let qty = parseInt(document.getElementById('dt-qty-val').value);
-        
-        cart.push({...curProduct, size: selectedSize, height: document.getElementById('height-input').value, qty: qty});
-        localStorage.setItem('alj_cart_v11', JSON.stringify(cart)); 
+        cart.push({...curProduct, size: selectedSize, color: selectedColor, height: document.getElementById('height-input').value, qty: qty});
+        localStorage.setItem('alj_cart_v12', JSON.stringify(cart)); 
         updateCartCount();
-        Swal.fire({icon: 'success', title: 'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1000}); 
+        Swal.fire({icon: 'success', title: 'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1500}); 
         window.history.back();
     }
     
     function updateCartCount() { document.getElementById('cart-count').innerText = cart.length; }
 
+    // --- CART RENDER ---
     function renderCart() {
         let total = 0; const tb = document.getElementById('cart-table');
         if(cart.length === 0) { 
@@ -625,14 +640,14 @@
         } else {
             document.getElementById('btn-checkout').disabled = false;
             tb.innerHTML = cart.map((i,x) => { 
-                let itemTotal = i.price * i.qty;
-                total += itemTotal; 
+                total += (i.price * i.qty); 
                 return `
                 <tr style="border-bottom:1px solid #f0f0f0;">
                     <td class="ps-3" style="width:70px;"><img src="${i.image}" width="60" class="rounded-3 shadow-sm"></td>
                     <td>
                         <div class="fw-bold">${i.name}</div>
-                        <div class="small text-muted mb-1">${i.size} | ${i.height}</div>
+                        <div class="small text-muted mb-1">Size: ${i.size} | Color: ${i.color}</div>
+                        <div class="small text-muted mb-1">Height: ${i.height}</div>
                         <div class="text-primary fw-bold">₱${i.price}</div>
                     </td>
                     <td style="width:120px;">
@@ -654,33 +669,24 @@
     function updateCartQty(index, change) {
         cart[index].qty += change;
         if(cart[index].qty < 1) {
-            Swal.fire({
-                title: 'Remove item?', text: "Quantity is zero.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'Remove'
-            }).then((result) => {
-                if (result.isConfirmed) delItem(index);
-                else { cart[index].qty = 1; renderCart(); } // Reset to 1 if cancelled
-            });
+            Swal.fire({ title: 'Remove item?', text: "Remove from bag?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33' })
+            .then((result) => { if (result.isConfirmed) delItem(index); else { cart[index].qty = 1; renderCart(); } });
         } else {
-            localStorage.setItem('alj_cart_v11', JSON.stringify(cart));
+            localStorage.setItem('alj_cart_v12', JSON.stringify(cart));
             renderCart();
         }
     }
 
-    function delItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v11', JSON.stringify(cart)); updateCartCount(); renderCart(); }
+    function delItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v12', JSON.stringify(cart)); updateCartCount(); renderCart(); }
 
     // --- CHECKOUT ---
     function initCheckout() {
-        // Calculate Total based on Item * Qty
         cartTotalAmount = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
-        
         currentDonationPercent = 0; currentShippingFee = 0;
         document.getElementById('del-method').value = "";
         
-        // Clear fields
         ['addr-street','addr-brgy','addr-city','addr-prov','addr-region','addr-zip'].forEach(id=>document.getElementById(id).value="");
         document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = 'none');
-        
-        document.getElementById('donation-details-box').style.display = 'none'; 
         document.querySelectorAll('.donate-pill').forEach(b => b.classList.remove('selected'));
         updateCheckoutCalculations(); validateCheckoutForm();
     }
@@ -690,35 +696,27 @@
         const isDel = m === 'Delivery';
         document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = isDel ? 'block' : 'none');
         document.querySelectorAll('.delivery-fields input, .delivery-fields select').forEach(el => el.required = isDel);
-        
-        calcShipping(); 
-        validateCheckoutForm(); 
+        calcShipping(); validateCheckoutForm(); 
     }
 
     function calcShipping() {
         const method = document.getElementById('del-method').value;
         const region = document.getElementById('addr-region').value; 
         
-        if (method !== 'Delivery' || !region) { 
-            currentShippingFee = 0; 
-        } else {
-            // Count total ITEMS (qty), not just array length
+        if (method !== 'Delivery' || !region) { currentShippingFee = 0; } 
+        else {
             const itemCount = cart.reduce((sum, item) => sum + item.qty, 0); 
             let fee = 0;
-            
-            // Logic: Heavier/More items = Higher fee
             if (region === 'Metro Manila') fee = itemCount===1?90 : itemCount<=3?140 : 250;
             else if (region === 'Luzon') fee = itemCount===1?100 : itemCount<=3?170 : 320;
             else if (region === 'Visayas') fee = itemCount===1?140 : itemCount<=3?210 : 370;
             else if (region === 'Mindanao') fee = itemCount===1?145 : itemCount<=3?220 : 380;
             else if (region === 'Island') fee = itemCount===1?150 : itemCount<=3?250 : 400;
-            
             currentShippingFee = fee;
         }
         updateCheckoutCalculations();
     }
 
-    function toggleDonationDetails() { const b=document.getElementById('donation-details-box'); b.style.display=(b.style.display==='none'||b.style.display==='')?'block':'none'; }
     function selectDonation(p, b) { currentDonationPercent=p; document.querySelectorAll('.donate-pill').forEach(btn=>btn.classList.remove('selected')); b.classList.add('selected'); document.getElementById('donation-note').classList.toggle('d-none', p===0); updateCheckoutCalculations(); }
 
     function updateCheckoutCalculations() {
@@ -758,7 +756,7 @@
             };
             fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(p) }).then(res => res.json()).then(d => {
                 if(d.status === 'success') { 
-                    cart = []; localStorage.setItem('alj_cart_v11', JSON.stringify(cart)); 
+                    cart = []; localStorage.setItem('alj_cart_v12', JSON.stringify(cart)); 
                     Swal.fire({icon: 'success', title: 'Order Placed!', html: `Tracking ID: <b>${d.orderId}</b><br>Save this ID to track your order.`, confirmButtonColor: '#1b4d3e'}).then(() => routeTo('home')); 
                 }
                 else Swal.fire('Error', d.error, 'error');
