@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Jazaa Ph. | Online Shop</title>
+    <title>Al-Jazaa Ph | Online Shop</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -19,7 +19,8 @@
             --primary: #1b4d3e; 
             --primary-dark: #143a2f;
             --gold: #c5a028;
-            --bg-color: #f8f9fa; 
+            /* UPDATED: Modern Light Grey Background */
+            --bg-color: #eff2f5; 
             --text: #2c3e50;
             --nav-height: 70px;
         }
@@ -67,7 +68,7 @@
         .cart-badge { background: var(--gold); color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: bold; position: absolute; top: -5px; right: -8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
         /* Category Scroll with Images */
-        .category-scroll-container { overflow-x: auto; white-space: nowrap; position: sticky; top: var(--nav-height); z-index: 900; background: rgba(248,249,250,0.95); backdrop-filter: blur(8px); padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.05); -ms-overflow-style: none; scrollbar-width: none; }
+        .category-scroll-container { overflow-x: auto; white-space: nowrap; position: sticky; top: var(--nav-height); z-index: 900; background: rgba(239, 242, 245, 0.95); backdrop-filter: blur(8px); padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.05); -ms-overflow-style: none; scrollbar-width: none; }
         .category-scroll-container::-webkit-scrollbar { display: none; }
         
         .cat-item-wrapper { display: inline-flex; flex-direction: column; align-items: center; margin-right: 20px; cursor: pointer; transition: 0.2s; }
@@ -75,29 +76,27 @@
         .cat-item-wrapper.active .cat-circle-img { border-color: var(--primary); transform: scale(1.05); box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.2); }
         .cat-item-wrapper.active .cat-title { color: var(--primary); font-weight: 700; }
 
-        /* UPDATED: Category Images fit inside box */
         .cat-circle-img { 
             width: 60px; height: 60px; 
             border-radius: 50%; 
-            object-fit: contain; /* Changed from cover to contain */
-            background-color: white; /* White bg to fill empty space */
+            object-fit: contain; 
+            background-color: white; 
             border: 2px solid #ddd; margin-bottom: 8px; transition: 0.3s; 
         }
         .cat-title { font-size: 0.8rem; color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* Product Card & Gallery */
+        /* Product Card */
         .product-card { border: none; background: white; transition: 0.3s; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); height: 100%; position: relative; }
         .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
         
         .card-img-wrapper { position: relative; width: 100%; padding-top: 133%; overflow: hidden; background: #f8f9fa; }
         
-        /* UPDATED: Product Images fit inside box */
         .mini-carousel { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
         .mini-carousel img { 
             width: 100%; height: 100%; 
-            object-fit: contain; /* Changed from cover to contain */
+            object-fit: contain; 
             object-position: center; 
-            background-color: #fff; /* Clean background */
+            background-color: #fff; 
         }
         
         .stock-label { position: absolute; top: 10px; left: 10px; padding: 4px 10px; font-size: 0.65rem; color: white; font-weight: 700; text-transform: uppercase; border-radius: 4px; z-index: 10; }
@@ -107,18 +106,17 @@
         .original-price { text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 5px; }
         .sale-price-text { color: #d32f2f; font-weight: 700; }
         
+        /* Detail View */
         .dt-img-container { position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); background: #f8f9fa; }
-        
-        /* UPDATED: Detail Image fits inside box */
         .dt-main-img { 
             width: 100%; 
-            object-fit: contain; /* Changed from cover to contain */
+            object-fit: contain; 
             aspect-ratio: 3/4; 
             transition: 0.3s; 
             background-color: #fff;
         }
         
-        /* Popular Badge Overlay */
+        /* Popular Badge */
         .popular-badge-overlay { 
             position: absolute; top: 15px; left: 15px; 
             background: rgba(255, 255, 255, 0.95); 
@@ -151,25 +149,14 @@
         .option-btn:hover { border-color: var(--primary); }
         .option-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Modern Description Toggle */
+        /* Description Toggle */
         .desc-container { position: relative; margin-bottom: 20px; }
         .desc-content { color: #666; font-size: 0.95rem; line-height: 1.6; overflow: hidden; transition: max-height 0.4s ease; }
-        
-        /* Collapsed State */
-        .desc-collapsed { max-height: 75px; } /* Shows approx 3 lines */
+        .desc-collapsed { max-height: 75px; } 
         .desc-collapsed + .desc-overlay { opacity: 1; pointer-events: none; }
-        
-        /* Expanded State */
         .desc-expanded { max-height: 1000px; } 
         .desc-expanded + .desc-overlay { opacity: 0; pointer-events: none; }
-
-        /* Fade Overlay */
-        .desc-overlay { 
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 50px; 
-            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1) 90%); 
-            transition: opacity 0.3s; 
-        }
-
+        .desc-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 50px; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1) 90%); transition: opacity 0.3s; }
         .toggle-desc-btn { color: var(--primary); font-weight: 600; font-size: 0.9rem; cursor: pointer; display: inline-block; margin-top: 5px; text-decoration: underline; user-select: none; }
         .toggle-desc-btn:hover { color: var(--gold); }
 
@@ -196,6 +183,19 @@
         .rating-summary-bar { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; flex-grow: 1; margin: 0 10px; }
         .rating-fill { height: 100%; background: var(--gold); }
         .review-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+
+        /* NEW: Back to Top */
+        .back-to-top {
+            position: fixed; bottom: 30px; right: 30px;
+            width: 50px; height: 50px;
+            background: var(--primary); color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer; z-index: 2050;
+            opacity: 0; visibility: hidden; transition: all 0.3s ease;
+        }
+        .back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+        .back-to-top:hover { background: var(--gold); transform: translateY(-5px); }
 
         footer { background: #143a2f; color: #888; padding: 60px 0 30px; margin-top: 80px; }
         .footer-heading { color: white; font-family: 'Playfair Display'; margin-bottom: 20px; }
@@ -430,6 +430,9 @@
     </div>
 </footer>
 
+<!-- BACK TO TOP BUTTON -->
+<div id="back-to-top" onclick="scrollToTop()"><i class="fas fa-arrow-up"></i></div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v14'))||[], curProduct={}, selectedSize=null, selectedColor=null;
@@ -567,6 +570,10 @@
         }
 
         renderRelated(curProduct.category, curProduct.id); document.getElementById('detail-view').style.display = 'block';
+        
+        // NEW: Scroll Detail View to top
+        document.getElementById('detail-view').scrollTop = 0;
+        
         checkInputs();
     }
 
@@ -709,6 +716,31 @@
         const p = { action: 'submitReview', name: rName, email: rEmail, phone: rPhone, feedback: rFeedback, rating: rRating };
         fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(p) }).then(r=>r.json()).then(d => { if(d.status === 'success') { Swal.fire('Thank You!', 'Your feedback has been submitted.', 'success'); document.getElementById('r-name').value = ""; document.getElementById('r-email').value = ""; document.getElementById('r-phone').value = ""; document.getElementById('r-feedback').value = ""; document.querySelectorAll('input[name="rating"]').forEach(r => r.checked = false); fetchReviews(); } else { Swal.fire('Error', d.error, 'error'); } });
     }
+
+    // --- BACK TO TOP LOGIC ---
+    // Scroll to top function
+    function scrollToTop() {
+        if(document.getElementById('detail-view').style.display === 'block') {
+            document.getElementById('detail-view').scrollTo({top: 0, behavior: 'smooth'});
+        } else {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    }
+
+    // Show/Hide button on scroll
+    function toggleBackToTop(scrollY) {
+        const btn = document.getElementById('back-to-top');
+        if (scrollY > 300) {
+            btn.classList.add('visible');
+        } else {
+            btn.classList.remove('visible');
+        }
+    }
+
+    // Listeners for both window and modal scroll
+    window.addEventListener('scroll', () => toggleBackToTop(window.scrollY));
+    document.getElementById('detail-view').addEventListener('scroll', (e) => toggleBackToTop(e.target.scrollTop));
+
 </script>
 </body>
 </html>
