@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Jazaa Ph. | Online Shop</title>
+    <title>Al-Jazaa Ph | Online Shop</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -66,7 +66,7 @@
         .cart-btn-wrap { position: relative; display: inline-flex; align-items: center; text-decoration: none; margin-right: 15px; cursor: pointer;}
         .cart-badge { background: var(--gold); color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: bold; position: absolute; top: -5px; right: -8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
-        /* UPDATED: Category Scroll with Images */
+        /* Category Scroll with Images */
         .category-scroll-container { overflow-x: auto; white-space: nowrap; position: sticky; top: var(--nav-height); z-index: 900; background: rgba(248,249,250,0.95); backdrop-filter: blur(8px); padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.05); -ms-overflow-style: none; scrollbar-width: none; }
         .category-scroll-container::-webkit-scrollbar { display: none; }
         
@@ -91,11 +91,10 @@
         .original-price { text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 5px; }
         .sale-price-text { color: #d32f2f; font-weight: 700; }
         
-        /* UPDATED: Detail Image & Badge */
         .dt-img-container { position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .dt-main-img { width: 100%; object-fit: cover; aspect-ratio: 3/4; transition: 0.3s; }
         
-        /* NEW: Popular Badge Overlay */
+        /* Popular Badge Overlay */
         .popular-badge-overlay { 
             position: absolute; top: 15px; left: 15px; 
             background: rgba(255, 255, 255, 0.95); 
@@ -128,14 +127,27 @@
         .option-btn:hover { border-color: var(--primary); }
         .option-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* NEW: Description See More */
+        /* --- UPDATED: Modern Description Toggle --- */
         .desc-container { position: relative; margin-bottom: 20px; }
-        .desc-text { color: #666; font-size: 0.95rem; line-height: 1.6; }
-        .desc-truncated { max-height: 60px; overflow: hidden; }
-        .desc-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent 40%, rgba(255,255,255,1) 95%); pointer-events: none; transition: 0.3s; }
-        .see-more-btn { color: var(--primary); font-weight: 600; font-size: 0.9rem; cursor: pointer; display: inline-block; margin-top: 5px; text-decoration: underline; }
-        .desc-open .desc-truncated { max-height: none; }
-        .desc-open .desc-overlay { opacity: 0; pointer-events: none; }
+        .desc-content { color: #666; font-size: 0.95rem; line-height: 1.6; overflow: hidden; transition: max-height 0.4s ease; }
+        
+        /* Collapsed State */
+        .desc-collapsed { max-height: 75px; } /* Shows approx 3 lines */
+        .desc-collapsed + .desc-overlay { opacity: 1; pointer-events: none; }
+        
+        /* Expanded State */
+        .desc-expanded { max-height: 1000px; } /* Large enough number to fit content */
+        .desc-expanded + .desc-overlay { opacity: 0; pointer-events: none; }
+
+        /* Fade Overlay */
+        .desc-overlay { 
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 50px; 
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1) 90%); 
+            transition: opacity 0.3s; 
+        }
+
+        .toggle-desc-btn { color: var(--primary); font-weight: 600; font-size: 0.9rem; cursor: pointer; display: inline-block; margin-top: 5px; text-decoration: underline; user-select: none; }
+        .toggle-desc-btn:hover { color: var(--gold); }
 
         /* Utils & Donation */
         .related-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; -ms-overflow-style: none; scrollbar-width: none; }
@@ -279,11 +291,11 @@
                 <h1 id="dt-name" class="display-6 fw-bold"></h1>
                 <div class="my-3"><span id="dt-old-price" class="original-price fs-4 d-none"></span><span id="dt-price" class="text-success fw-bold fs-3"></span><span id="dt-sale-badge" class="badge bg-danger ms-2 d-none">SALE</span></div>
                 
-                <!-- Description with See More -->
-                <div class="desc-container" id="desc-box">
-                    <div class="desc-text desc-truncated" id="dt-desc"></div>
+                <!-- Updated Description Box with Fade & Toggle -->
+                <div class="desc-container">
+                    <div class="desc-content desc-collapsed" id="dt-desc"></div>
                     <div class="desc-overlay" id="desc-fade"></div>
-                    <div class="see-more-btn" onclick="toggleDesc(this)">See more</div>
+                    <div class="toggle-desc-btn" id="desc-btn" onclick="toggleDesc()">See more</div>
                 </div>
 
                 <!-- Options -->
@@ -398,12 +410,12 @@
     // Placeholder images for categories (Replace these URLs with your actual images)
     const catImages = {
         'All': 'https://cdn-icons-png.flaticon.com/512/3502/3502601.png', 
-        'Abaya': 'https://cdn-icons-png.flaticon.com/512/9431/9431181.png',
-        'Niqab': 'https://cdn-icons-png.flaticon.com/512/2821/2821867.png',
-        'Khimar': 'https://cdn-icons-png.flaticon.com/512/6105/6105658.png',
-        'Handsock': 'https://cdn-icons-png.flaticon.com/512/863/863684.png',
-        'Hat': 'https://cdn-icons-png.flaticon.com/512/2965/2965250.png',
-        'Default': 'https://cdn-icons-png.flaticon.com/512/4430/4430945.png'
+        'Abaya': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat3.png?raw=true',
+        'Niqab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat1.png?raw=true',
+        'Khimar': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat4.png?raw=true',
+        'Jilbab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat2.png?raw=true',
+        'Set': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat5.png?raw=true',
+        'Default': 'https://github.com/ianianguro-art/Menu-POS/blob/main/big-sale-woolpack-1.jpg?raw=true'
     };
 
     const getSidebar = () => bootstrap.Offcanvas.getInstance(document.getElementById('sidebarMenu'));
@@ -431,18 +443,17 @@
     // --- PRODUCTS & MAIN LOGIC ---
     function fetchProducts() { fetch(WEB_APP_URL + "?action=getProducts").then(r => r.json()).then(data => { allProducts = data; document.getElementById('loader').style.display = 'none'; renderCats(); renderProds(allProducts); }); }
     
-    // UPDATED: Render Categories with Circular Images
+    // Render Categories with Circular Images
     function renderCats() { 
         const cats = ['All', ...new Set(allProducts.map(p => p.category))]; 
         document.getElementById('category-list').innerHTML = cats.map(c => {
-            let imgUrl = catImages[c] || catImages['Default']; // Use default if no image mapping
+            let imgUrl = catImages[c] || catImages['Default'];
             return `
             <div class="cat-item-wrapper ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">
                 <img src="${imgUrl}" class="cat-circle-img">
                 <span class="cat-title">${c}</span>
             </div>`; 
         }).join(''); 
-        
         document.getElementById('sidebar-categories').innerHTML = cats.map(c => `<a href="#" class="sidebar-link" onclick="filterCat('${c}', null, true)">${c} <i class="fas fa-chevron-right"></i></a>`).join(''); 
     }
 
@@ -457,57 +468,66 @@
     
     function renderProds(list) { document.getElementById('product-grid').innerHTML = list.map(p => { let imgs = (p.images && p.images.length > 0) ? p.images : [p.image]; let itemsHtml = imgs.map((url, idx) => `<div class="carousel-item ${idx===0?'active':''}"><img src="${url.trim()}" class="d-block w-100" loading="lazy"></div>`).join(''); let saleBadge = (p.salePercent > 0) ? `<span class="sale-badge">${p.salePercent}% OFF</span>` : ''; let priceDisplay = (p.salePercent > 0) ? `<span class="original-price">₱${p.originalPrice}</span> <span class="sale-price-text">₱${p.price}</span>` : `<div class="fw-bold text-dark">₱${p.price}</div>`; return `<div class="col"><div class="card product-card"><span class="stock-label ${p.inStock?'in-stock':'out-stock'}">${p.inStock?'In Stock':'Out of Stock'}</span>${saleBadge}<div class="card-img-wrapper" onclick="openDetail('${p.id}')" style="cursor:pointer"><div class="carousel slide mini-carousel" data-bs-interval="false"><div class="carousel-inner">${itemsHtml}</div></div></div><div class="card-body" onclick="openDetail('${p.id}')" style="cursor:pointer"><h6 class="card-title text-dark mb-1 text-truncate">${p.name}</h6>${priceDisplay}</div></div></div>`; }).join(''); }
 
-    // --- UPDATED: DETAIL VIEW ---
+    // --- DETAIL VIEW ---
     function openDetail(id) {
         window.history.pushState({ page: 'detail' }, '', ''); curProduct = allProducts.find(p => p.id == id); selectedSize = null; selectedColor = null;
         document.getElementById('height-input').value = ""; document.getElementById('dt-qty-val').value = 1;
         
-        // 1. Reset Add Button state
+        // Reset Add Button
         const btn = document.getElementById('add-btn'); 
-        btn.disabled = true; // Disabled initially
+        btn.disabled = true; 
         btn.innerText = curProduct.inStock ? "ADD TO CART" : "OUT OF STOCK";
         if(!curProduct.inStock) btn.disabled = true;
 
-        // 2. Images & Gallery
+        // Images
         let imgList = (curProduct.images && curProduct.images.length > 0) ? curProduct.images : [curProduct.image];
         document.getElementById('dt-img').src = imgList[0];
         document.getElementById('dt-gallery').innerHTML = imgList.map((src, i) => `<img src="${src}" class="thumb-img ${i===0?'active':''}" onclick="swapImage('${src}', this)">`).join('');
 
-        // 3. Info & Price
+        // Info
         document.getElementById('dt-cat').innerText = curProduct.category; document.getElementById('dt-name').innerText = curProduct.name; 
         
-        // 4. Description Toggle Logic
-        const descBox = document.getElementById('desc-box');
-        const descText = document.getElementById('dt-desc');
+        // --- UPDATED: Description Toggle Logic ---
+        const descContent = document.getElementById('dt-desc');
+        const descBtn = document.getElementById('desc-btn');
         const descFade = document.getElementById('desc-fade');
-        const seeBtn = descBox.querySelector('.see-more-btn');
         
-        descText.innerText = curProduct.desc;
-        descBox.classList.remove('desc-open'); // Reset collapse
-        descFade.style.display = 'block';
-        seeBtn.style.display = 'inline-block';
-        if(curProduct.desc.length < 100) { descFade.style.display='none'; seeBtn.style.display='none'; } // No toggle if short
+        descContent.innerText = curProduct.desc;
+        // Always reset to collapsed state when opening new product
+        descContent.classList.remove('desc-expanded');
+        descContent.classList.add('desc-collapsed');
+        descBtn.innerText = "See more";
+        
+        // If text is short, hide button and fade
+        if(curProduct.desc.length < 150) { 
+            descBtn.style.display='none'; 
+            descFade.style.display='none';
+            descContent.classList.remove('desc-collapsed'); // Show full if short
+        } else {
+            descBtn.style.display='inline-block';
+            descFade.style.display='block';
+        }
 
         if(curProduct.salePercent > 0) { document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice; document.getElementById('dt-old-price').classList.remove('d-none'); document.getElementById('dt-sale-badge').innerText = curProduct.salePercent + "% OFF"; document.getElementById('dt-sale-badge').classList.remove('d-none'); document.getElementById('dt-price').innerText = "₱" + curProduct.price; document.getElementById('dt-price').classList.add('text-danger'); } else { document.getElementById('dt-old-price').classList.add('d-none'); document.getElementById('dt-sale-badge').classList.add('d-none'); document.getElementById('dt-price').innerText = "₱" + curProduct.price; document.getElementById('dt-price').classList.remove('text-danger'); }
         
-        // 5. NIQAB Logic: Hide Size if Niqab
+        // NIQAB Logic
         const isNiqab = (curProduct.category.toLowerCase() === 'niqab');
         if(isNiqab) {
             document.getElementById('size-row').style.display = 'none';
-            selectedSize = "One Size"; // Auto select size
+            selectedSize = "One Size"; 
         } else {
             document.getElementById('size-row').style.display = 'block';
             document.getElementById('size-area').innerHTML = ["S","M","L","XL"].map(s => `<div class="option-btn size-opt" onclick="pickOption('size','${s}', this)">${s}</div>`).join('');
         }
 
-        // 6. Colors
+        // Colors
         let colorList = curProduct.colors ? curProduct.colors.split(',') : ["Default"]; 
         document.getElementById('color-area').innerHTML = colorList.map(c => `<div class="option-btn color-opt" onclick="pickOption('color','${c.trim()}', this)">${c.trim()}</div>`).join('');
         
-        // 7. Popular Badge Logic (Randomly show for upselling)
+        // Popular Badge Logic
         const badge = document.getElementById('dt-pop-badge');
         const badgeTexts = ["Best Seller", "Customer Favorite", "Trending Now", "Highly Rated"];
-        const showBadge = Math.random() < 0.6; // 60% chance to show
+        const showBadge = Math.random() < 0.6;
         if(showBadge && curProduct.inStock) {
             badge.classList.remove('d-none');
             document.getElementById('pop-text').innerText = badgeTexts[Math.floor(Math.random() * badgeTexts.length)];
@@ -516,16 +536,28 @@
         }
 
         renderRelated(curProduct.category, curProduct.id); document.getElementById('detail-view').style.display = 'block';
-        checkInputs(); // Initial check
+        checkInputs();
     }
 
     function swapImage(src, el) { document.getElementById('dt-img').src = src; document.querySelectorAll('.thumb-img').forEach(img => img.classList.remove('active')); el.classList.add('active'); }
     function renderRelated(cat, currentId) { let related = allProducts.filter(p => p.category === cat && p.id !== currentId).sort(() => 0.5 - Math.random()).slice(0,5); document.getElementById('related-products').innerHTML = related.map(p => `<div class="related-card" onclick="openDetail('${p.id}')"><img src="${p.image}"><div class="small fw-bold text-truncate">${p.name}</div><div class="small text-muted">₱${p.price}</div></div>`).join(''); }
     
-    // Description Toggle
-    function toggleDesc(btn) {
-        document.getElementById('desc-box').classList.add('desc-open');
-        btn.style.display = 'none';
+    // --- UPDATED: Toggle Description Function ---
+    function toggleDesc() {
+        const content = document.getElementById('dt-desc');
+        const btn = document.getElementById('desc-btn');
+        
+        if (content.classList.contains('desc-collapsed')) {
+            // Expand
+            content.classList.remove('desc-collapsed');
+            content.classList.add('desc-expanded');
+            btn.innerText = "See less";
+        } else {
+            // Collapse
+            content.classList.remove('desc-expanded');
+            content.classList.add('desc-collapsed');
+            btn.innerText = "See more";
+        }
     }
 
     function pickOption(type, val, el) { 
@@ -533,16 +565,12 @@
         document.querySelectorAll(grp).forEach(b => b.classList.remove('selected')); 
         el.classList.add('selected'); 
         if(type==='size') selectedSize = val; else selectedColor = val; 
-        checkInputs(); // Check validation on click
+        checkInputs(); 
     }
 
-    // Check Inputs to Enable Button
     function checkInputs() {
         const heightVal = document.getElementById('height-input').value.trim();
         const btn = document.getElementById('add-btn');
-        
-        // Logic: Enabled ONLY if Size, Color, and Height are present
-        // (If Niqab, size is pre-set to "One Size", so logic holds)
         if (curProduct.inStock && selectedSize && selectedColor && heightVal !== "") {
             btn.disabled = false;
         } else {
@@ -553,7 +581,6 @@
     function dtQty(change) { let el = document.getElementById('dt-qty-val'); let val = parseInt(el.value) + change; if(val < 1) val = 1; el.value = val; }
     
     function addToCart() {
-        // Double check validation (though button is disabled otherwise)
         if(!selectedSize) { Swal.fire({icon: 'error', title: 'Missing Size', text: 'Please select a SIZE.', confirmButtonColor: '#1b4d3e'}); return; }
         if(!selectedColor) { Swal.fire({icon: 'error', title: 'Missing Color', text: 'Please select a COLOR.', confirmButtonColor: '#1b4d3e'}); return; }
         const heightVal = document.getElementById('height-input').value.trim();
