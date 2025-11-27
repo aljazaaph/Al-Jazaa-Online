@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Jazaa Ph | Online Shop</title>
+    <title>Al-Jazaa Ph. | Online Shop</title>
     
-    <!-- NEW: Favicon (Your Logo) -->
+    <!-- Favicon (Your Logo) -->
     <link rel="icon" type="image/png" href="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true">
 
     <!-- Bootstrap 5 CSS -->
@@ -37,7 +37,7 @@
         
         h1, h2, h3, h4, h5, .navbar-brand { font-family: 'Playfair Display', serif; }
 
-        /* UPDATED: Moving Announcement Bar */
+        /* Moving Announcement Bar */
         .announcement-bar { 
             background: var(--primary); 
             color: white; 
@@ -70,7 +70,7 @@
             top: 35px; /* Pushed down by banner */
         }
         
-        /* UPDATED: Navbar Logo Styling */
+        /* Navbar Logo Styling */
         .navbar-brand { 
             font-weight: 700; 
             font-size: 1.5rem; 
@@ -219,6 +219,29 @@
         .rating-fill { height: 100%; background: var(--gold); }
         .review-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
 
+        /* NEW: Admin Reply Box Style */
+        .admin-reply-box {
+            background-color: #f1f8f6; /* Very light green */
+            border-left: 3px solid var(--primary);
+            padding: 10px 15px;
+            margin-top: 12px;
+            border-radius: 0 8px 8px 8px;
+            font-size: 0.85rem;
+            color: #444;
+            display: flex;
+            flex-direction: column;
+        }
+        .admin-badge {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
         /* Back to Top */
         .back-to-top {
             position: fixed; bottom: 30px; right: 30px;
@@ -256,7 +279,7 @@
     <h3 class="mt-3" style="color:var(--primary);font-family:'Playfair Display';">Al-Jazaa</h3>
 </div>
 
-<!-- UPDATED: Moving Banner (Fixed on Top) -->
+<!-- Moving Banner (Fixed on Top) -->
 <div class="announcement-bar">
     <div class="announcement-content">
         &nbsp;&nbsp;&nbsp;&nbsp;Shop & Earn Rewards • Secure GCash Payment • Nationwide Delivery • 5% of Profit Goes to Charity&nbsp;&nbsp;&nbsp;&nbsp;
@@ -267,7 +290,7 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <!-- UPDATED: Brand with Logo -->
+        <!-- Brand with Logo -->
         <a class="navbar-brand" href="#" onclick="routeTo('home')">
             <img src="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true" alt="Logo" class="nav-logo-img">
             Al-Jazaa Ph.
@@ -426,7 +449,7 @@
             
             <div class="bg-white p-3 border rounded mb-3"><div class="d-flex justify-content-between mb-1"><span>Subtotal:</span><span id="sum-subtotal">₱0</span></div><div class="d-flex justify-content-between mb-1"><span>Delivery Fee:</span><span id="sum-shipping" class="text-danger">₱0</span></div><div class="d-flex justify-content-between mb-1 d-none" id="sum-donate-row"><span>Donation:</span><span id="sum-donation" class="text-success">₱0</span></div><hr><div class="d-flex justify-content-between fw-bold fs-5"><span>Grand Total:</span><span id="pay-total" class="text-primary">₱0</span></div></div>
             
-            <!-- UPDATED: GCash Section with Logo & Collapse -->
+            <!-- GCash Section with Logo & Collapse -->
             <div class="bg-light p-3 rounded-3 border mb-3">
                 <div class="d-flex align-items-center">
                     <div class="bg-white p-2 rounded shadow-sm me-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
@@ -445,7 +468,7 @@
                 <div class="collapse mt-3" id="gcashQR">
                     <div class="card card-body text-center border-0 shadow-sm">
                         <small class="text-muted mb-2">Scan with GCash App</small>
-                        <!-- PLACEHOLDER FOR YOUR QR CODE. Replace the src below with your actual QR code image link if you have one. -->
+                        <!-- QR Code Image -->
                         <img src="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/QR%20GCASH.png?raw=true" alt="My QR Code" style="max-width: 200px; margin: 0 auto;">
                     </div>
                 </div>
@@ -455,7 +478,7 @@
                 <div class="col-md-6"><input type="text" class="form-control" id="c-ref" placeholder="GCash Reference No." required></div>
                 <div class="col-md-6 file-upload-wrapper">
                     <input type="file" class="form-control" id="c-proof" accept="image/*" required>
-                    <!-- UPDATED: Upload Confirmation Message -->
+                    <!-- Upload Confirmation Message -->
                     <div id="upload-success-msg" class="d-none text-success small fw-bold mt-1">
                         <i class="fas fa-check-circle me-1"></i> Image attached successfully!
                     </div>
@@ -542,7 +565,7 @@
         window.history.replaceState({ page: 'home' }, '', '');
         window.onpopstate = (e) => { if(e.state) renderPage(e.state.page); };
         
-        // UPDATED: File Upload Listener for Success Message
+        // File Upload Listener for Success Message
         const fileInput = document.getElementById('c-proof');
         if(fileInput) {
             fileInput.addEventListener('change', function() {
@@ -664,7 +687,7 @@
 
         renderRelated(curProduct.category, curProduct.id); document.getElementById('detail-view').style.display = 'block';
         
-        // NEW: Scroll Detail View to top
+        // Scroll Detail View to top
         document.getElementById('detail-view').scrollTop = 0;
         
         checkInputs();
@@ -799,7 +822,28 @@
         document.getElementById('avg-rating-display').innerText = avg;
         document.getElementById('avg-stars').innerHTML = getStarsHtml(Math.round(avg));
         document.getElementById('rating-bars').innerHTML = [5,4,3,2,1].map(num => { let pct = reviews.length ? (counts[num] / reviews.length * 100) : 0; return `<div class="d-flex align-items-center mb-2"><span class="small fw-bold me-2" style="width:10px;">${num}</span><i class="fas fa-star text-warning small me-2"></i><div class="rating-summary-bar"><div class="rating-fill" style="width:${pct}%"></div></div><span class="small text-muted" style="width:30px;text-align:right;">${counts[num]}</span></div>`; }).join('');
-        document.getElementById('reviews-list').innerHTML = reviews.map(r => `<div class="review-card"><div class="review-header"><div><div class="fw-bold">${r.name}</div><div class="text-warning small">${getStarsHtml(r.rating)}</div></div><small class="text-muted">${r.date}</small></div><p class="text-secondary small mb-0">${r.feedback}</p></div>`).join('');
+        
+        // UPDATED: Render List with Admin Reply Logic
+        document.getElementById('reviews-list').innerHTML = reviews.map(r => `
+            <div class="review-card">
+                <div class="review-header">
+                    <div>
+                        <div class="fw-bold">${r.name}</div>
+                        <div class="text-warning small">${getStarsHtml(r.rating)}</div>
+                    </div>
+                    <small class="text-muted">${r.date}</small>
+                </div>
+                <p class="text-secondary small mb-0">${r.feedback}</p>
+                
+                <!-- CHECK FOR REPLY -->
+                ${r.reply ? `
+                <div class="admin-reply-box">
+                    <span class="admin-badge"><i class="fas fa-user-shield"></i> Al-Jazaa Admin</span>
+                    <span>${r.reply}</span>
+                </div>` : ''}
+
+            </div>
+        `).join('');
     }
 
     function getStarsHtml(rating) { let h = ''; for(let i=0; i<5; i++) h += `<i class="${i < rating ? 'fas' : 'far'} fa-star"></i>`; return h; }
