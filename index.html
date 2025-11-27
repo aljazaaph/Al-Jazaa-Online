@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Jazaa Ph. | Online Shop</title>
+    <title>Al-Jazaa Ph | Online Shop</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -127,7 +127,7 @@
         .option-btn:hover { border-color: var(--primary); }
         .option-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* --- UPDATED: Modern Description Toggle --- */
+        /* Modern Description Toggle */
         .desc-container { position: relative; margin-bottom: 20px; }
         .desc-content { color: #666; font-size: 0.95rem; line-height: 1.6; overflow: hidden; transition: max-height 0.4s ease; }
         
@@ -136,7 +136,7 @@
         .desc-collapsed + .desc-overlay { opacity: 1; pointer-events: none; }
         
         /* Expanded State */
-        .desc-expanded { max-height: 1000px; } /* Large enough number to fit content */
+        .desc-expanded { max-height: 1000px; } 
         .desc-expanded + .desc-overlay { opacity: 0; pointer-events: none; }
 
         /* Fade Overlay */
@@ -190,32 +190,236 @@
     // YOUR WEB APP URL:
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzQ3ij0tm5k-cARhUqdRdV7yYmqfudy0LJnaK70DVAMyTcjO-vcc5WvwFQ36lRxobcF/exec"; 
     // ********************************************
+</script>
 
+<div id="loader">
+    <div class="spinner-border text-secondary" style="width:3rem;height:3rem;"></div>
+    <h3 class="mt-3" style="color:var(--primary);font-family:'Playfair Display';">Al-Jazaa</h3>
+</div>
+
+<div class="announcement-bar">Shop & Earn Rewards • Secure GCash Payment</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="#" onclick="routeTo('home')">Al-Jazaa Ph.</a>
+        <div class="d-flex align-items-center order-lg-3 ms-auto ms-lg-0">
+             <div class="cart-btn-wrap" onclick="routeTo('cart')">
+                <i class="fas fa-shopping-bag fa-lg" style="color:#333;"></i>
+                <span id="cart-count" class="cart-badge">0</span>
+            </div>
+            <button class="btn btn-link text-dark p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+                <i class="fas fa-bars fa-lg"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Sidebar -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Menu</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+        <a href="#" class="sidebar-link" onclick="routeTo('home'); closeSidebar();">Shop Home <i class="fas fa-chevron-right"></i></a>
+        <a href="#" class="sidebar-link" onclick="routeTo('track'); closeSidebar();">Track Order <i class="fas fa-chevron-right"></i></a>
+        <a href="#" class="sidebar-link" onclick="routeTo('reviews'); closeSidebar();">Customer Care & Feedback <i class="fas fa-chevron-right"></i></a>
+        
+        <hr class="my-3 opacity-25">
+        <p class="small text-uppercase text-muted fw-bold ms-2 mb-2">Categories</p>
+        <div id="sidebar-categories"></div>
+        <div class="mt-auto">
+            <div class="policy-box">
+                <h6>About Al-Jazaa Ph.</h6><p>Al-Jazaa Ph. is committed to providing timeless modesty with modern elegance.</p>
+                <h6>Payment Policy</h6><p>We strictly accept GCash payments. Verification required via screenshot.</p>
+                <h6>Delivery Policy</h6><p>Nationwide delivery via courier. Shipping fees vary by region and weight. 3-7 days.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- HOME -->
+<div id="page-home">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%201.png?raw=true" class="d-block w-100" alt="Slide 1">
+                <div class="carousel-caption"><button class="btn-hero shadow-lg" onclick="scrollToProducts()">Shop Now</button></div>
+            </div>
+            <div class="carousel-item"><img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%202.png?raw=true" class="d-block w-100" alt="Slide 2"></div>
+            <div class="carousel-item"><img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%203.png?raw=true" class="d-block w-100" alt="Slide 3"></div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+    </div>
+
+    <div class="container my-5" id="shop-section">
+        <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="mb-0">Latest Collection</h2></div>
+        <div class="position-relative mb-4" style="max-width: 500px;">
+            <input type="text" id="searchBox" class="form-control rounded-pill ps-4 py-2 border-secondary" placeholder="Search products..." onkeyup="doSearch()">
+            <i class="fas fa-search position-absolute text-muted" style="right: 20px; top: 13px;"></i>
+        </div>
+        
+        <!-- Category Circles -->
+        <div id="category-list" class="category-scroll-container mb-4"></div>
+        
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-3 g-md-4" id="product-grid"></div>
+    </div>
+</div>
+
+<!-- DETAIL VIEW -->
+<div id="detail-view">
+    <div class="container py-5">
+        <button class="btn btn-light rounded-circle shadow-sm mb-4" style="width:40px;height:40px;" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="row gx-5">
+            <div class="col-md-5 mb-4">
+                <div class="dt-img-container">
+                    <!-- Popular/Upsell Badge Container -->
+                    <div id="dt-pop-badge" class="popular-badge-overlay d-none">
+                        <span class="popular-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
+                        <span class="popular-text" id="pop-text">Best Seller</span>
+                    </div>
+                    <img id="dt-img" src="" class="dt-main-img">
+                </div>
+                <div id="dt-gallery" class="gallery-container"></div>
+            </div>
+            <div class="col-md-7">
+                <span class="badge bg-light text-dark mb-2 border" id="dt-cat"></span>
+                <h1 id="dt-name" class="display-6 fw-bold"></h1>
+                <div class="my-3"><span id="dt-old-price" class="original-price fs-4 d-none"></span><span id="dt-price" class="text-success fw-bold fs-3"></span><span id="dt-sale-badge" class="badge bg-danger ms-2 d-none">SALE</span></div>
+                
+                <!-- Modern Description Box with Fade & Toggle -->
+                <div class="desc-container">
+                    <div class="desc-content desc-collapsed" id="dt-desc"></div>
+                    <div class="desc-overlay" id="desc-fade"></div>
+                    <div class="toggle-desc-btn" id="desc-btn" onclick="toggleDesc()">See more</div>
+                </div>
+
+                <!-- Options -->
+                <div id="size-row" class="mb-3">
+                    <label class="fw-bold mb-2 small text-uppercase">Size <span class="text-danger">*</span></label>
+                    <div id="size-area" class="d-flex flex-wrap"></div>
+                </div>
+                <div class="mb-3"><label class="fw-bold mb-2 small text-uppercase">Color <span class="text-danger">*</span></label><div id="color-area" class="d-flex flex-wrap"></div></div>
+                
+                <div class="row mb-4">
+                    <div class="col-6"><label class="fw-bold mb-2 small text-uppercase">Height <span class="text-danger">*</span></label><input type="text" id="height-input" class="form-control" placeholder="e.g. 5'4" oninput="checkInputs()"></div>
+                    <div class="col-6"><label class="fw-bold mb-2 small text-uppercase">Quantity</label><div class="qty-selector w-100 justify-content-between"><button class="qty-btn" onclick="dtQty(-1)">-</button><input type="number" id="dt-qty-val" class="qty-input" value="1" readonly><button class="qty-btn" onclick="dtQty(1)">+</button></div></div>
+                </div>
+                
+                <!-- Button Disabled by Default -->
+                <button id="add-btn" class="btn btn-custom w-100 py-3 shadow-lg mb-5" onclick="addToCart()" disabled>ADD TO CART</button>
+                
+                <hr><h5 class="font-playfair mb-3">You might also like</h5><div id="related-products" class="related-scroll"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CART -->
+<div id="page-cart" class="container my-5 d-none">
+    <h2 class="mb-4 text-center">Your Shopping Bag</h2>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden"><div class="table-responsive"><table class="table align-middle mb-0"><tbody id="cart-table"></tbody></table></div></div>
+            <div class="d-flex justify-content-between align-items-center bg-white p-4 rounded-4 shadow-sm border"><div><small class="text-muted d-block">Total Amount</small><div class="fs-4 fw-bold text-success" id="cart-total">₱0.00</div></div><button id="btn-checkout" class="btn btn-custom px-4" onclick="routeTo('checkout')">CHECKOUT</button></div>
+        </div>
+    </div>
+</div>
+
+<!-- CHECKOUT -->
+<div id="page-checkout" class="container my-5 d-none" style="max-width: 800px;">
+    <div class="card p-4 p-md-5 shadow-lg border-0 rounded-4">
+        <h3 class="text-center mb-2 font-playfair">Checkout</h3>
+        <p class="text-center text-muted small mb-4">Complete your details to place order</p>
+        <form id="checkout-form" onsubmit="submitOrder(event)" oninput="validateCheckoutForm()">
+            <div class="mb-4 bg-light p-3 rounded border">
+                <div class="marquee-container shadow-sm mb-3"><div class="marquee-content">✨ DONATE TO ORPHANS • SADQA JARIYAH • HELP THOSE IN NEED • AL-JAZAA PH CHARITY ✨</div></div>
+                <p class="small text-muted mb-2 text-center fw-bold">Be part among those who care for Orphans. Select Sadaqah amount (Added to Total)</p>
+                <div class="d-flex gap-2 flex-wrap justify-content-center mb-3"><button type="button" class="donate-pill" onclick="selectDonation(0.05, this)">5%</button><button type="button" class="donate-pill" onclick="selectDonation(0.10, this)">10%</button><button type="button" class="donate-pill" onclick="selectDonation(0.20, this)">20%</button><button type="button" class="donate-pill" onclick="selectDonation(0.50, this)">50%</button><button type="button" class="donate-pill" onclick="selectDonation(0, this)">None</button></div>
+                <textarea id="donation-note" class="form-control d-none" rows="2" placeholder="Special Note / Intention (Optional)"></textarea>
+            </div>
+            <h6 class="text-uppercase fw-bold text-muted small mb-3">1. Delivery & Address</h6>
+            <div class="row g-3 mb-4">
+                <div class="col-12"><select class="form-select py-3" id="del-method" onchange="toggleDeliveryOptions()" required><option value="" disabled selected>Select Delivery Method</option><option value="Pick-up">Pick-up (Free)</option><option value="Delivery">Delivery (Courier)</option></select></div>
+                <div class="col-md-6"><input type="text" class="form-control" id="c-name" placeholder="Full Name" required></div><div class="col-md-6"><input type="number" class="form-control" id="c-phone" placeholder="Phone Number" required></div><div class="col-12"><input type="email" class="form-control" id="c-email" placeholder="Email Address" required></div>
+                <div class="col-12 delivery-fields" style="display:none;"><hr class="opacity-25 my-1"><label class="small fw-bold text-primary mt-2">Shipping Address</label></div>
+                <div class="col-md-8 delivery-fields"><input type="text" class="form-control" id="addr-street" placeholder="House / Street / Subdivision"></div><div class="col-md-4 delivery-fields"><input type="text" class="form-control" id="addr-brgy" placeholder="Barangay"></div><div class="col-md-6 delivery-fields"><input type="text" class="form-control" id="addr-city" placeholder="City"></div><div class="col-md-6 delivery-fields"><input type="text" class="form-control" id="addr-prov" placeholder="Province"></div>
+                <div class="col-md-8 delivery-fields"><select class="form-select" id="addr-region" onchange="calcShipping()"><option value="" disabled selected>Select Region</option><option value="Metro Manila">Metro Manila</option><option value="Luzon">Luzon</option><option value="Visayas">Visayas</option><option value="Mindanao">Mindanao</option><option value="Island">Island / Remote Areas</option></select></div><div class="col-md-4 delivery-fields"><input type="text" class="form-control" id="addr-zip" placeholder="Zip Code"></div>
+            </div>
+            <hr class="opacity-25"><h6 class="text-uppercase fw-bold text-muted small mb-3">2. Payment Summary</h6>
+            <div class="bg-white p-3 border rounded mb-3"><div class="d-flex justify-content-between mb-1"><span>Subtotal:</span><span id="sum-subtotal">₱0</span></div><div class="d-flex justify-content-between mb-1"><span>Delivery Fee:</span><span id="sum-shipping" class="text-danger">₱0</span></div><div class="d-flex justify-content-between mb-1 d-none" id="sum-donate-row"><span>Donation:</span><span id="sum-donation" class="text-success">₱0</span></div><hr><div class="d-flex justify-content-between fw-bold fs-5"><span>Grand Total:</span><span id="pay-total" class="text-primary">₱0</span></div></div>
+            <div class="bg-light p-3 rounded-3 border mb-3 d-flex align-items-center"><div class="bg-white p-2 rounded shadow-sm me-3"><i class="fas fa-qrcode fa-2x"></i></div><div><div class="fw-bold">GCash: 0921-429-5887</div><div class="small text-muted">Scan or Send exact amount.</div></div></div>
+            <div class="row g-3"><div class="col-md-6"><input type="text" class="form-control" id="c-ref" placeholder="GCash Reference No." required></div><div class="col-md-6 file-upload-wrapper"><input type="file" class="form-control" id="c-proof" accept="image/*" required><div class="upload-helper"><i class="fas fa-info-circle"></i> Please upload screenshot of payment</div></div></div>
+            <div class="mt-4"><button id="btn-place-order" type="submit" class="btn btn-custom w-100 py-3" disabled>FILL DETAILS</button></div>
+        </form>
+    </div>
+</div>
+
+<!-- TRACKING -->
+<div id="page-track" class="container my-5 d-none text-center" style="max-width:500px; min-height:50vh;">
+    <h3 class="mb-3">Track Order</h3>
+    <div class="input-group mb-4 shadow-sm rounded-pill overflow-hidden"><input type="text" id="track-id" class="form-control border-0 ps-4" placeholder="Enter Order ID"><button class="btn btn-custom px-4" onclick="trackOrder()">Search</button></div>
+    <div id="track-result" class="card p-4 shadow-sm border-0 rounded-4 d-none text-start bg-white"><div class="fw-bold text-success fs-4 text-center mb-3" id="t-status"></div><hr><div class="d-flex justify-content-between"><span>Date:</span> <span id="t-date"></span></div><div class="d-flex justify-content-between mt-2"><span>Total:</span> <span id="t-total"></span></div></div>
+</div>
+
+<!-- REVIEWS -->
+<div id="page-reviews" class="container my-5 d-none">
+    <div class="row g-5">
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-lg rounded-4 p-4 sticky-top" style="top: 100px;">
+                <h3 class="font-playfair text-center mb-3">Customer Care</h3>
+                <p class="text-center text-muted small mb-4">We value your feedback. Let us know how we did!</p>
+                <form onsubmit="submitReview(event)">
+                    <div class="mb-3"><label class="small fw-bold">Name <span class="text-danger">*</span></label><input type="text" class="form-control" id="r-name" required></div>
+                    <div class="mb-3"><label class="small fw-bold">Email <span class="text-danger">*</span></label><input type="email" class="form-control" id="r-email" required></div>
+                    <div class="mb-3"><label class="small fw-bold">Mobile Number <span class="text-danger">*</span></label><input type="number" class="form-control" id="r-phone" required></div>
+                    <div class="mb-3"><label class="small fw-bold mb-1">Rate Us <span class="text-danger">*</span></label><div class="rating-stars"><input type="radio" name="rating" id="star5" value="5" required><label for="star5"><i class="fas fa-star"></i></label><input type="radio" name="rating" id="star4" value="4"><label for="star4"><i class="fas fa-star"></i></label><input type="radio" name="rating" id="star3" value="3"><label for="star3"><i class="fas fa-star"></i></label><input type="radio" name="rating" id="star2" value="2"><label for="star2"><i class="fas fa-star"></i></label><input type="radio" name="rating" id="star1" value="1"><label for="star1"><i class="fas fa-star"></i></label></div></div>
+                    <div class="mb-4"><label class="small fw-bold">Suggestion / Feedback <span class="text-danger">*</span></label><textarea class="form-control" id="r-feedback" rows="4" required></textarea></div>
+                    <button type="submit" class="btn btn-custom w-100">Submit Feedback</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <h3 class="font-playfair mb-4">What our customers say</h3>
+            <div class="bg-white p-4 rounded-4 shadow-sm mb-4"><div class="d-flex align-items-center mb-3"><h1 class="mb-0 me-3 fw-bold text-primary" id="avg-rating-display">0.0</h1><div><div class="text-warning" id="avg-stars"></div><small class="text-muted" id="total-reviews">0 Reviews</small></div></div><div id="rating-bars"></div></div>
+            <div id="reviews-list"></div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-4"><h3 class="footer-heading">Al-Jazaa Ph.</h3><p class="small text-muted">Providing timeless modesty with modern elegance.</p></div>
+            <div class="col-md-4"><h5 class="text-white mb-3" style="font-family:'Outfit'">Links</h5><a href="#" class="footer-link" onclick="routeTo('home')">Shop Collection</a><a href="#" class="footer-link" onclick="routeTo('track')">Track Order</a><a href="#" class="footer-link" onclick="routeTo('reviews')">Customer Care</a></div>
+            <div class="col-md-4"><h5 class="text-white mb-3" style="font-family:'Outfit'">Contact</h5><p class="footer-link mb-1">aljazaa.ph@gmail.com</p><p class="footer-link">0921-429-5887</p></div>
+        </div>
+        <hr class="border-secondary mt-5"><p class="text-center small text-muted mb-0">&copy; 2024 Al-Jazaa Ph. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
     let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v14'))||[], curProduct={}, selectedSize=null, selectedColor=null;
     let cartTotalAmount=0, currentDonationPercent=0, currentShippingFee=0;
     
-    // --- FIXED CATEGORY IMAGES ---
+    // --- CATEGORY IMAGES MAPPING ---
     const catImages = {
         'All': 'https://cdn-icons-png.flaticon.com/512/3502/3502601.png', 
-        
-        // Your Custom Images
         'Jilbab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat2.png?raw=true',
         'Khimar': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat4.png?raw=true',
-        
-        // Added both spellings to be safe
         'Abayah': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat3.png?raw=true',
         'Abaya': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat3.png?raw=true', 
-        
         'Set': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat5.png?raw=true',
         'Skirt': 'https://github.com/ianianguro-art/Menu-POS/blob/main/WhatsApp%20Image%202025-11-06%20at%2015.51.23_5f635ea1.jpg?raw=true',
         'Niqab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat1.png?raw=true',
         'Sale': 'https://github.com/ianianguro-art/Menu-POS/blob/main/big-sale-woolpack-1.jpg?raw=true',
-
-        // Keep these just in case you have these products
         'Handsock': 'https://cdn-icons-png.flaticon.com/512/863/863684.png',
         'Hat': 'https://cdn-icons-png.flaticon.com/512/2965/2965250.png',
-
-        // IMPORTANT: The Default Image (Fallback if name doesn't match)
         'Default': 'https://cdn-icons-png.flaticon.com/512/4430/4430945.png'
     };
 
@@ -248,9 +452,7 @@
     function renderCats() { 
         const cats = ['All', ...new Set(allProducts.map(p => p.category))]; 
         document.getElementById('category-list').innerHTML = cats.map(c => {
-            // Check if exact match exists, otherwise use Default
             let imgUrl = catImages[c] ? catImages[c] : catImages['Default'];
-            
             return `
             <div class="cat-item-wrapper ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">
                 <img src="${imgUrl}" class="cat-circle-img" onerror="this.src='${catImages['Default']}'">
@@ -290,22 +492,20 @@
         // Info
         document.getElementById('dt-cat').innerText = curProduct.category; document.getElementById('dt-name').innerText = curProduct.name; 
         
-        // --- UPDATED: Description Toggle Logic ---
+        // Description Toggle Logic
         const descContent = document.getElementById('dt-desc');
         const descBtn = document.getElementById('desc-btn');
         const descFade = document.getElementById('desc-fade');
         
         descContent.innerText = curProduct.desc;
-        // Always reset to collapsed state when opening new product
         descContent.classList.remove('desc-expanded');
         descContent.classList.add('desc-collapsed');
         descBtn.innerText = "See more";
         
-        // If text is short, hide button and fade
         if(curProduct.desc.length < 150) { 
             descBtn.style.display='none'; 
             descFade.style.display='none';
-            descContent.classList.remove('desc-collapsed'); // Show full if short
+            descContent.classList.remove('desc-collapsed'); 
         } else {
             descBtn.style.display='inline-block';
             descFade.style.display='block';
@@ -313,7 +513,7 @@
 
         if(curProduct.salePercent > 0) { document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice; document.getElementById('dt-old-price').classList.remove('d-none'); document.getElementById('dt-sale-badge').innerText = curProduct.salePercent + "% OFF"; document.getElementById('dt-sale-badge').classList.remove('d-none'); document.getElementById('dt-price').innerText = "₱" + curProduct.price; document.getElementById('dt-price').classList.add('text-danger'); } else { document.getElementById('dt-old-price').classList.add('d-none'); document.getElementById('dt-sale-badge').classList.add('d-none'); document.getElementById('dt-price').innerText = "₱" + curProduct.price; document.getElementById('dt-price').classList.remove('text-danger'); }
         
-        // NIQAB Logic (Case Insensitive Check)
+        // NIQAB Logic (Case Insensitive)
         const isNiqab = (curProduct.category.toLowerCase() === 'niqab');
         if(isNiqab) {
             document.getElementById('size-row').style.display = 'none';
