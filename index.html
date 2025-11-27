@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Jazaa Ph | Online Shop</title>
+    <title>Al-Jazaa Ph. | Online Shop</title>
     
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -66,11 +66,17 @@
         .cart-btn-wrap { position: relative; display: inline-flex; align-items: center; text-decoration: none; margin-right: 15px; cursor: pointer;}
         .cart-badge { background: var(--gold); color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: bold; position: absolute; top: -5px; right: -8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
-        /* Category Scroll */
+        /* UPDATED: Category Scroll with Images */
         .category-scroll-container { overflow-x: auto; white-space: nowrap; position: sticky; top: var(--nav-height); z-index: 900; background: rgba(248,249,250,0.95); backdrop-filter: blur(8px); padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.05); -ms-overflow-style: none; scrollbar-width: none; }
         .category-scroll-container::-webkit-scrollbar { display: none; }
-        .cat-pill { display: inline-block; background: white; border: 1px solid #e0e0e0; color: #666; padding: 8px 20px; border-radius: 50px; margin-right: 10px; cursor: pointer; transition: 0.2s; }
-        .cat-pill.active { background: var(--primary); color: white; border-color: var(--primary); }
+        
+        .cat-item-wrapper { display: inline-flex; flex-direction: column; align-items: center; margin-right: 20px; cursor: pointer; transition: 0.2s; }
+        .cat-item-wrapper:hover .cat-circle-img { transform: scale(1.1); border-color: var(--primary); }
+        .cat-item-wrapper.active .cat-circle-img { border-color: var(--primary); transform: scale(1.05); box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.2); }
+        .cat-item-wrapper.active .cat-title { color: var(--primary); font-weight: 700; }
+
+        .cat-circle-img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #ddd; margin-bottom: 8px; transition: 0.3s; background: white; }
+        .cat-title { font-size: 0.8rem; color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
 
         /* Product Card & Gallery */
         .product-card { border: none; background: white; transition: 0.3s; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); height: 100%; position: relative; }
@@ -85,7 +91,23 @@
         .original-price { text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 5px; }
         .sale-price-text { color: #d32f2f; font-weight: 700; }
         
-        .dt-main-img { width: 100%; border-radius: 12px; object-fit: cover; aspect-ratio: 3/4; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: 0.3s; }
+        /* UPDATED: Detail Image & Badge */
+        .dt-img-container { position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .dt-main-img { width: 100%; object-fit: cover; aspect-ratio: 3/4; transition: 0.3s; }
+        
+        /* NEW: Popular Badge Overlay */
+        .popular-badge-overlay { 
+            position: absolute; top: 15px; left: 15px; 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 8px 12px; border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 20; display: flex; align-items: center; gap: 8px;
+            animation: fadeInDown 0.5s ease;
+        }
+        .popular-stars { color: var(--gold); font-size: 0.8rem; }
+        .popular-text { font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
+        @keyframes fadeInDown { from {opacity:0; transform:translateY(-10px);} to {opacity:1; transform:translateY(0);} }
+
         .gallery-container { display: flex; gap: 10px; overflow-x: auto; margin-top: 15px; padding-bottom: 5px; scrollbar-width: none; -ms-overflow-style: none; }
         .gallery-container::-webkit-scrollbar { display: none; }
         .thumb-img { width: 70px; height: 70px; border-radius: 8px; object-fit: cover; cursor: pointer; border: 2px solid transparent; opacity: 0.6; transition: 0.2s; flex-shrink: 0; }
@@ -97,12 +119,23 @@
         .qty-btn { background: white; border: none; padding: 0 15px; font-weight: bold; cursor: pointer; color: var(--primary); height: 100%; }
         .qty-btn:hover { background: #f0f0f0; }
         .qty-input { width: 40px; border: none; text-align: center; font-weight: 600; outline: none; background: white; }
+        
         .btn-custom { background: var(--primary); color: white; border-radius: 50px; padding: 12px 30px; font-weight: 600; border: none; text-transform: uppercase; transition: 0.3s; }
         .btn-custom:hover { background: var(--primary-dark); color: white; transform: translateY(-2px); shadow: 0 5px 15px rgba(27, 77, 62, 0.3); }
-        .btn-custom:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+        .btn-custom:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; opacity: 0.7; }
+        
         .option-btn { min-width: 40px; height: 40px; padding: 0 15px; border: 1px solid #ddd; background: white; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; margin-right: 8px; margin-bottom: 8px; font-size: 0.9rem; }
         .option-btn:hover { border-color: var(--primary); }
         .option-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* NEW: Description See More */
+        .desc-container { position: relative; margin-bottom: 20px; }
+        .desc-text { color: #666; font-size: 0.95rem; line-height: 1.6; }
+        .desc-truncated { max-height: 60px; overflow: hidden; }
+        .desc-overlay { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent 40%, rgba(255,255,255,1) 95%); pointer-events: none; transition: 0.3s; }
+        .see-more-btn { color: var(--primary); font-weight: 600; font-size: 0.9rem; cursor: pointer; display: inline-block; margin-top: 5px; text-decoration: underline; }
+        .desc-open .desc-truncated { max-height: none; }
+        .desc-open .desc-overlay { opacity: 0; pointer-events: none; }
 
         /* Utils & Donation */
         .related-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; -ms-overflow-style: none; scrollbar-width: none; }
@@ -117,13 +150,12 @@
         .file-upload-wrapper { position: relative; }
         .upload-helper { font-size: 0.75rem; color: #d32f2f; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
 
-        /* --- NEW: REVIEWS STYLING --- */
+        /* Reviews */
         .rating-stars { display: flex; flex-direction: row-reverse; justify-content: start; gap: 5px; }
         .rating-stars input { display: none; }
         .rating-stars label { cursor: pointer; color: #ddd; font-size: 1.5rem; transition: 0.2s; }
         .rating-stars input:checked ~ label { color: var(--gold); }
         .rating-stars label:hover, .rating-stars label:hover ~ label { color: var(--gold); }
-        
         .review-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 15px; }
         .rating-summary-bar { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; flex-grow: 1; margin: 0 10px; }
         .rating-fill { height: 100%; background: var(--gold); }
@@ -180,7 +212,6 @@
     <div class="offcanvas-body d-flex flex-column">
         <a href="#" class="sidebar-link" onclick="routeTo('home'); closeSidebar();">Shop Home <i class="fas fa-chevron-right"></i></a>
         <a href="#" class="sidebar-link" onclick="routeTo('track'); closeSidebar();">Track Order <i class="fas fa-chevron-right"></i></a>
-        <!-- NEW LINK -->
         <a href="#" class="sidebar-link" onclick="routeTo('reviews'); closeSidebar();">Customer Care & Feedback <i class="fas fa-chevron-right"></i></a>
         
         <hr class="my-3 opacity-25">
@@ -217,7 +248,10 @@
             <input type="text" id="searchBox" class="form-control rounded-pill ps-4 py-2 border-secondary" placeholder="Search products..." onkeyup="doSearch()">
             <i class="fas fa-search position-absolute text-muted" style="right: 20px; top: 13px;"></i>
         </div>
+        
+        <!-- Category Circles -->
         <div id="category-list" class="category-scroll-container mb-4"></div>
+        
         <div class="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-3 g-md-4" id="product-grid"></div>
     </div>
 </div>
@@ -230,21 +264,43 @@
         </button>
         <div class="row gx-5">
             <div class="col-md-5 mb-4">
-                <img id="dt-img" src="" class="dt-main-img">
+                <div class="dt-img-container">
+                    <!-- Popular/Upsell Badge Container -->
+                    <div id="dt-pop-badge" class="popular-badge-overlay d-none">
+                        <span class="popular-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
+                        <span class="popular-text" id="pop-text">Best Seller</span>
+                    </div>
+                    <img id="dt-img" src="" class="dt-main-img">
+                </div>
                 <div id="dt-gallery" class="gallery-container"></div>
             </div>
             <div class="col-md-7">
                 <span class="badge bg-light text-dark mb-2 border" id="dt-cat"></span>
                 <h1 id="dt-name" class="display-6 fw-bold"></h1>
                 <div class="my-3"><span id="dt-old-price" class="original-price fs-4 d-none"></span><span id="dt-price" class="text-success fw-bold fs-3"></span><span id="dt-sale-badge" class="badge bg-danger ms-2 d-none">SALE</span></div>
-                <p id="dt-desc" class="text-muted mb-4"></p>
-                <div class="mb-3"><label class="fw-bold mb-2 small text-uppercase">Size <span class="text-danger">*</span></label><div id="size-area" class="d-flex flex-wrap"></div></div>
+                
+                <!-- Description with See More -->
+                <div class="desc-container" id="desc-box">
+                    <div class="desc-text desc-truncated" id="dt-desc"></div>
+                    <div class="desc-overlay" id="desc-fade"></div>
+                    <div class="see-more-btn" onclick="toggleDesc(this)">See more</div>
+                </div>
+
+                <!-- Options -->
+                <div id="size-row" class="mb-3">
+                    <label class="fw-bold mb-2 small text-uppercase">Size <span class="text-danger">*</span></label>
+                    <div id="size-area" class="d-flex flex-wrap"></div>
+                </div>
                 <div class="mb-3"><label class="fw-bold mb-2 small text-uppercase">Color <span class="text-danger">*</span></label><div id="color-area" class="d-flex flex-wrap"></div></div>
+                
                 <div class="row mb-4">
-                    <div class="col-6"><label class="fw-bold mb-2 small text-uppercase">Height <span class="text-danger">*</span></label><input type="text" id="height-input" class="form-control" placeholder="e.g. 5'4"></div>
+                    <div class="col-6"><label class="fw-bold mb-2 small text-uppercase">Height <span class="text-danger">*</span></label><input type="text" id="height-input" class="form-control" placeholder="e.g. 5'4" oninput="checkInputs()"></div>
                     <div class="col-6"><label class="fw-bold mb-2 small text-uppercase">Quantity</label><div class="qty-selector w-100 justify-content-between"><button class="qty-btn" onclick="dtQty(-1)">-</button><input type="number" id="dt-qty-val" class="qty-input" value="1" readonly><button class="qty-btn" onclick="dtQty(1)">+</button></div></div>
                 </div>
-                <button id="add-btn" class="btn btn-custom w-100 py-3 shadow-lg mb-5" onclick="addToCart()">ADD TO CART</button>
+                
+                <!-- Button Disabled by Default -->
+                <button id="add-btn" class="btn btn-custom w-100 py-3 shadow-lg mb-5" onclick="addToCart()" disabled>ADD TO CART</button>
+                
                 <hr><h5 class="font-playfair mb-3">You might also like</h5><div id="related-products" class="related-scroll"></div>
             </div>
         </div>
@@ -298,10 +354,9 @@
     <div id="track-result" class="card p-4 shadow-sm border-0 rounded-4 d-none text-start bg-white"><div class="fw-bold text-success fs-4 text-center mb-3" id="t-status"></div><hr><div class="d-flex justify-content-between"><span>Date:</span> <span id="t-date"></span></div><div class="d-flex justify-content-between mt-2"><span>Total:</span> <span id="t-total"></span></div></div>
 </div>
 
-<!-- NEW: CUSTOMER CARE & FEEDBACK PAGE -->
+<!-- REVIEWS -->
 <div id="page-reviews" class="container my-5 d-none">
     <div class="row g-5">
-        <!-- Form Section -->
         <div class="col-lg-5">
             <div class="card border-0 shadow-lg rounded-4 p-4 sticky-top" style="top: 100px;">
                 <h3 class="font-playfair text-center mb-3">Customer Care</h3>
@@ -310,35 +365,15 @@
                     <div class="mb-3"><label class="small fw-bold">Name <span class="text-danger">*</span></label><input type="text" class="form-control" id="r-name" required></div>
                     <div class="mb-3"><label class="small fw-bold">Email <span class="text-danger">*</span></label><input type="email" class="form-control" id="r-email" required></div>
                     <div class="mb-3"><label class="small fw-bold">Mobile Number <span class="text-danger">*</span></label><input type="number" class="form-control" id="r-phone" required></div>
-                    
-                    <div class="mb-3">
-                        <label class="small fw-bold mb-1">Rate Us <span class="text-danger">*</span></label>
-                        <div class="rating-stars">
-                            <input type="radio" name="rating" id="star5" value="5" required><label for="star5"><i class="fas fa-star"></i></label>
-                            <input type="radio" name="rating" id="star4" value="4"><label for="star4"><i class="fas fa-star"></i></label>
-                            <input type="radio" name="rating" id="star3" value="3"><label for="star3"><i class="fas fa-star"></i></label>
-                            <input type="radio" name="rating" id="star2" value="2"><label for="star2"><i class="fas fa-star"></i></label>
-                            <input type="radio" name="rating" id="star1" value="1"><label for="star1"><i class="fas fa-star"></i></label>
-                        </div>
-                    </div>
-
+                    <div class="mb-3"><label class="small fw-bold mb-1">Rate Us <span class="text-danger">*</span></label><div class="rating-stars"><input type="radio" name="rating" id="star5" value="5" required><label for="star5"><i class="fas fa-star"></i></label><input type="radio" name="rating" id="star4" value="4"><label for="star4"><i class="fas fa-star"></i></label><input type="radio" name="rating" id="star3" value="3"><label for="star3"><i class="fas fa-star"></i></label><input type="radio" name="rating" id="star2" value="2"><label for="star2"><i class="fas fa-star"></i></label><input type="radio" name="rating" id="star1" value="1"><label for="star1"><i class="fas fa-star"></i></label></div></div>
                     <div class="mb-4"><label class="small fw-bold">Suggestion / Feedback <span class="text-danger">*</span></label><textarea class="form-control" id="r-feedback" rows="4" required></textarea></div>
                     <button type="submit" class="btn btn-custom w-100">Submit Feedback</button>
                 </form>
             </div>
         </div>
-
-        <!-- Display Reviews Section -->
         <div class="col-lg-7">
             <h3 class="font-playfair mb-4">What our customers say</h3>
-            
-            <!-- Rating Graph -->
-            <div class="bg-white p-4 rounded-4 shadow-sm mb-4">
-                <div class="d-flex align-items-center mb-3"><h1 class="mb-0 me-3 fw-bold text-primary" id="avg-rating-display">0.0</h1><div><div class="text-warning" id="avg-stars"></div><small class="text-muted" id="total-reviews">0 Reviews</small></div></div>
-                <div id="rating-bars"></div>
-            </div>
-
-            <!-- List -->
+            <div class="bg-white p-4 rounded-4 shadow-sm mb-4"><div class="d-flex align-items-center mb-3"><h1 class="mb-0 me-3 fw-bold text-primary" id="avg-rating-display">0.0</h1><div><div class="text-warning" id="avg-stars"></div><small class="text-muted" id="total-reviews">0 Reviews</small></div></div><div id="rating-bars"></div></div>
             <div id="reviews-list"></div>
         </div>
     </div>
@@ -360,6 +395,17 @@
     let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v14'))||[], curProduct={}, selectedSize=null, selectedColor=null;
     let cartTotalAmount=0, currentDonationPercent=0, currentShippingFee=0;
     
+    // Placeholder images for categories (Replace these URLs with your actual images)
+    const catImages = {
+        'All': 'https://cdn-icons-png.flaticon.com/512/3502/3502601.png', 
+        'Abaya': 'https://cdn-icons-png.flaticon.com/512/9431/9431181.png',
+        'Niqab': 'https://cdn-icons-png.flaticon.com/512/2821/2821867.png',
+        'Khimar': 'https://cdn-icons-png.flaticon.com/512/6105/6105658.png',
+        'Handsock': 'https://cdn-icons-png.flaticon.com/512/863/863684.png',
+        'Hat': 'https://cdn-icons-png.flaticon.com/512/2965/2965250.png',
+        'Default': 'https://cdn-icons-png.flaticon.com/512/4430/4430945.png'
+    };
+
     const getSidebar = () => bootstrap.Offcanvas.getInstance(document.getElementById('sidebarMenu'));
     const closeSidebar = () => { const s = getSidebar(); if(s) s.hide(); };
 
@@ -384,35 +430,138 @@
 
     // --- PRODUCTS & MAIN LOGIC ---
     function fetchProducts() { fetch(WEB_APP_URL + "?action=getProducts").then(r => r.json()).then(data => { allProducts = data; document.getElementById('loader').style.display = 'none'; renderCats(); renderProds(allProducts); }); }
-    function renderCats() { const cats = ['All', ...new Set(allProducts.map(p => p.category))]; document.getElementById('category-list').innerHTML = cats.map(c => `<span class="cat-pill ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">${c}</span>`).join(''); document.getElementById('sidebar-categories').innerHTML = cats.map(c => `<a href="#" class="sidebar-link" onclick="filterCat('${c}', null, true)">${c} <i class="fas fa-chevron-right"></i></a>`).join(''); }
-    function filterCat(c, el, fromSidebar = false) { if(el) { document.querySelectorAll('.cat-pill').forEach(btn => btn.classList.remove('active')); el.classList.add('active'); } renderProds(c === 'All' ? allProducts : allProducts.filter(p => p.category === c)); if(fromSidebar) { closeSidebar(); routeTo('home'); document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); } }
+    
+    // UPDATED: Render Categories with Circular Images
+    function renderCats() { 
+        const cats = ['All', ...new Set(allProducts.map(p => p.category))]; 
+        document.getElementById('category-list').innerHTML = cats.map(c => {
+            let imgUrl = catImages[c] || catImages['Default']; // Use default if no image mapping
+            return `
+            <div class="cat-item-wrapper ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">
+                <img src="${imgUrl}" class="cat-circle-img">
+                <span class="cat-title">${c}</span>
+            </div>`; 
+        }).join(''); 
+        
+        document.getElementById('sidebar-categories').innerHTML = cats.map(c => `<a href="#" class="sidebar-link" onclick="filterCat('${c}', null, true)">${c} <i class="fas fa-chevron-right"></i></a>`).join(''); 
+    }
+
+    function filterCat(c, el, fromSidebar = false) { 
+        if(el) { 
+            document.querySelectorAll('.cat-item-wrapper').forEach(btn => btn.classList.remove('active')); 
+            el.classList.add('active'); 
+        } 
+        renderProds(c === 'All' ? allProducts : allProducts.filter(p => p.category === c)); 
+        if(fromSidebar) { closeSidebar(); routeTo('home'); document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); } 
+    }
+    
     function renderProds(list) { document.getElementById('product-grid').innerHTML = list.map(p => { let imgs = (p.images && p.images.length > 0) ? p.images : [p.image]; let itemsHtml = imgs.map((url, idx) => `<div class="carousel-item ${idx===0?'active':''}"><img src="${url.trim()}" class="d-block w-100" loading="lazy"></div>`).join(''); let saleBadge = (p.salePercent > 0) ? `<span class="sale-badge">${p.salePercent}% OFF</span>` : ''; let priceDisplay = (p.salePercent > 0) ? `<span class="original-price">₱${p.originalPrice}</span> <span class="sale-price-text">₱${p.price}</span>` : `<div class="fw-bold text-dark">₱${p.price}</div>`; return `<div class="col"><div class="card product-card"><span class="stock-label ${p.inStock?'in-stock':'out-stock'}">${p.inStock?'In Stock':'Out of Stock'}</span>${saleBadge}<div class="card-img-wrapper" onclick="openDetail('${p.id}')" style="cursor:pointer"><div class="carousel slide mini-carousel" data-bs-interval="false"><div class="carousel-inner">${itemsHtml}</div></div></div><div class="card-body" onclick="openDetail('${p.id}')" style="cursor:pointer"><h6 class="card-title text-dark mb-1 text-truncate">${p.name}</h6>${priceDisplay}</div></div></div>`; }).join(''); }
 
-    // --- DETAIL VIEW ---
+    // --- UPDATED: DETAIL VIEW ---
     function openDetail(id) {
         window.history.pushState({ page: 'detail' }, '', ''); curProduct = allProducts.find(p => p.id == id); selectedSize = null; selectedColor = null;
         document.getElementById('height-input').value = ""; document.getElementById('dt-qty-val').value = 1;
+        
+        // 1. Reset Add Button state
+        const btn = document.getElementById('add-btn'); 
+        btn.disabled = true; // Disabled initially
+        btn.innerText = curProduct.inStock ? "ADD TO CART" : "OUT OF STOCK";
+        if(!curProduct.inStock) btn.disabled = true;
+
+        // 2. Images & Gallery
         let imgList = (curProduct.images && curProduct.images.length > 0) ? curProduct.images : [curProduct.image];
         document.getElementById('dt-img').src = imgList[0];
         document.getElementById('dt-gallery').innerHTML = imgList.map((src, i) => `<img src="${src}" class="thumb-img ${i===0?'active':''}" onclick="swapImage('${src}', this)">`).join('');
-        document.getElementById('dt-cat').innerText = curProduct.category; document.getElementById('dt-name').innerText = curProduct.name; document.getElementById('dt-desc').innerText = curProduct.desc;
+
+        // 3. Info & Price
+        document.getElementById('dt-cat').innerText = curProduct.category; document.getElementById('dt-name').innerText = curProduct.name; 
+        
+        // 4. Description Toggle Logic
+        const descBox = document.getElementById('desc-box');
+        const descText = document.getElementById('dt-desc');
+        const descFade = document.getElementById('desc-fade');
+        const seeBtn = descBox.querySelector('.see-more-btn');
+        
+        descText.innerText = curProduct.desc;
+        descBox.classList.remove('desc-open'); // Reset collapse
+        descFade.style.display = 'block';
+        seeBtn.style.display = 'inline-block';
+        if(curProduct.desc.length < 100) { descFade.style.display='none'; seeBtn.style.display='none'; } // No toggle if short
+
         if(curProduct.salePercent > 0) { document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice; document.getElementById('dt-old-price').classList.remove('d-none'); document.getElementById('dt-sale-badge').innerText = curProduct.salePercent + "% OFF"; document.getElementById('dt-sale-badge').classList.remove('d-none'); document.getElementById('dt-price').innerText = "₱" + curProduct.price; document.getElementById('dt-price').classList.add('text-danger'); } else { document.getElementById('dt-old-price').classList.add('d-none'); document.getElementById('dt-sale-badge').classList.add('d-none'); document.getElementById('dt-price').innerText = "₱" + curProduct.price; document.getElementById('dt-price').classList.remove('text-danger'); }
-        document.getElementById('size-area').innerHTML = ["S","M","L","XL"].map(s => `<div class="option-btn size-opt" onclick="pickOption('size','${s}', this)">${s}</div>`).join('');
-        let colorList = curProduct.colors ? curProduct.colors.split(',') : ["Default"]; document.getElementById('color-area').innerHTML = colorList.map(c => `<div class="option-btn color-opt" onclick="pickOption('color','${c.trim()}', this)">${c.trim()}</div>`).join('');
-        const btn = document.getElementById('add-btn'); btn.disabled = !curProduct.inStock; btn.innerText = curProduct.inStock ? "ADD TO CART" : "OUT OF STOCK";
+        
+        // 5. NIQAB Logic: Hide Size if Niqab
+        const isNiqab = (curProduct.category.toLowerCase() === 'niqab');
+        if(isNiqab) {
+            document.getElementById('size-row').style.display = 'none';
+            selectedSize = "One Size"; // Auto select size
+        } else {
+            document.getElementById('size-row').style.display = 'block';
+            document.getElementById('size-area').innerHTML = ["S","M","L","XL"].map(s => `<div class="option-btn size-opt" onclick="pickOption('size','${s}', this)">${s}</div>`).join('');
+        }
+
+        // 6. Colors
+        let colorList = curProduct.colors ? curProduct.colors.split(',') : ["Default"]; 
+        document.getElementById('color-area').innerHTML = colorList.map(c => `<div class="option-btn color-opt" onclick="pickOption('color','${c.trim()}', this)">${c.trim()}</div>`).join('');
+        
+        // 7. Popular Badge Logic (Randomly show for upselling)
+        const badge = document.getElementById('dt-pop-badge');
+        const badgeTexts = ["Best Seller", "Customer Favorite", "Trending Now", "Highly Rated"];
+        const showBadge = Math.random() < 0.6; // 60% chance to show
+        if(showBadge && curProduct.inStock) {
+            badge.classList.remove('d-none');
+            document.getElementById('pop-text').innerText = badgeTexts[Math.floor(Math.random() * badgeTexts.length)];
+        } else {
+            badge.classList.add('d-none');
+        }
+
         renderRelated(curProduct.category, curProduct.id); document.getElementById('detail-view').style.display = 'block';
+        checkInputs(); // Initial check
     }
+
     function swapImage(src, el) { document.getElementById('dt-img').src = src; document.querySelectorAll('.thumb-img').forEach(img => img.classList.remove('active')); el.classList.add('active'); }
     function renderRelated(cat, currentId) { let related = allProducts.filter(p => p.category === cat && p.id !== currentId).sort(() => 0.5 - Math.random()).slice(0,5); document.getElementById('related-products').innerHTML = related.map(p => `<div class="related-card" onclick="openDetail('${p.id}')"><img src="${p.image}"><div class="small fw-bold text-truncate">${p.name}</div><div class="small text-muted">₱${p.price}</div></div>`).join(''); }
-    function pickOption(type, val, el) { let grp = type === 'size' ? '.size-opt' : '.color-opt'; document.querySelectorAll(grp).forEach(b => b.classList.remove('selected')); el.classList.add('selected'); if(type==='size') selectedSize = val; else selectedColor = val; }
+    
+    // Description Toggle
+    function toggleDesc(btn) {
+        document.getElementById('desc-box').classList.add('desc-open');
+        btn.style.display = 'none';
+    }
+
+    function pickOption(type, val, el) { 
+        let grp = type === 'size' ? '.size-opt' : '.color-opt'; 
+        document.querySelectorAll(grp).forEach(b => b.classList.remove('selected')); 
+        el.classList.add('selected'); 
+        if(type==='size') selectedSize = val; else selectedColor = val; 
+        checkInputs(); // Check validation on click
+    }
+
+    // Check Inputs to Enable Button
+    function checkInputs() {
+        const heightVal = document.getElementById('height-input').value.trim();
+        const btn = document.getElementById('add-btn');
+        
+        // Logic: Enabled ONLY if Size, Color, and Height are present
+        // (If Niqab, size is pre-set to "One Size", so logic holds)
+        if (curProduct.inStock && selectedSize && selectedColor && heightVal !== "") {
+            btn.disabled = false;
+        } else {
+            btn.disabled = true;
+        }
+    }
+
     function dtQty(change) { let el = document.getElementById('dt-qty-val'); let val = parseInt(el.value) + change; if(val < 1) val = 1; el.value = val; }
+    
     function addToCart() {
+        // Double check validation (though button is disabled otherwise)
         if(!selectedSize) { Swal.fire({icon: 'error', title: 'Missing Size', text: 'Please select a SIZE.', confirmButtonColor: '#1b4d3e'}); return; }
         if(!selectedColor) { Swal.fire({icon: 'error', title: 'Missing Color', text: 'Please select a COLOR.', confirmButtonColor: '#1b4d3e'}); return; }
         const heightVal = document.getElementById('height-input').value.trim();
         if(!heightVal) { Swal.fire({icon: 'error', title: 'Missing Height', text: 'Please enter your HEIGHT.', confirmButtonColor: '#1b4d3e'}); return; }
+        
         let qty = parseInt(document.getElementById('dt-qty-val').value); cart.push({...curProduct, size: selectedSize, color: selectedColor, height: heightVal, qty: qty}); localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); updateCartCount(); Swal.fire({icon: 'success', title: 'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1500}); window.history.back();
     }
+    
     function updateCartCount() { document.getElementById('cart-count').innerText = cart.length; }
     function renderCart() { let total = 0; const tb = document.getElementById('cart-table'); if(cart.length === 0) { tb.innerHTML = '<tr><td class="text-center py-5">Shopping bag is empty</td></tr>'; document.getElementById('btn-checkout').disabled = true; } else { document.getElementById('btn-checkout').disabled = false; tb.innerHTML = cart.map((i,x) => { total += (i.price * i.qty); return `<tr style="border-bottom:1px solid #f0f0f0;"><td class="ps-3" style="width:70px;"><img src="${i.image}" width="60" class="rounded-3 shadow-sm"></td><td><div class="fw-bold">${i.name}</div><div class="small text-muted mb-1">Size: ${i.size} | Color: ${i.color}</div><div class="small text-muted mb-1">Height: ${i.height}</div><div class="text-primary fw-bold">₱${i.price}</div></td><td style="width:120px;"><div class="qty-selector"><button class="qty-btn small" onclick="updateCartQty(${x}, -1)">-</button><input type="text" class="qty-input small" value="${i.qty}" readonly style="width:30px;"><button class="qty-btn small" onclick="updateCartQty(${x}, 1)">+</button></div></td><td class="text-end pe-4"><i class="fas fa-trash-alt text-danger" style="cursor:pointer; opacity:0.6;" onclick="delItem(${x})"></i></td></tr>`; }).join(''); } document.getElementById('cart-total').innerText = "₱" + total.toLocaleString(); }
     function updateCartQty(index, change) { cart[index].qty += change; if(cart[index].qty < 1) { Swal.fire({ title: 'Remove item?', text: "Remove from bag?", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33' }).then((result) => { if (result.isConfirmed) delItem(index); else { cart[index].qty = 1; renderCart(); } }); } else { localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); renderCart(); } }
@@ -442,7 +591,7 @@
         fetch(WEB_APP_URL + `?action=trackOrder&orderId=${id}`).then(r => r.json()).then(d => { document.getElementById('loader').style.display = 'none'; document.getElementById('track-result').classList.remove('d-none'); document.getElementById('t-status').innerText = d.status === 'found' ? d.currStatus : "Order Not Found"; document.getElementById('t-date').innerText = d.status === 'found' ? d.date : "-"; document.getElementById('t-total').innerText = d.status === 'found' ? d.total : "-"; });
     }
 
-    // --- NEW: REVIEWS LOGIC ---
+    // --- REVIEWS LOGIC ---
     function fetchReviews() {
         document.getElementById('loader').style.display = 'flex';
         fetch(WEB_APP_URL + "?action=getReviews").then(r=>r.json()).then(data => {
@@ -453,77 +602,25 @@
 
     function renderReviewList(reviews) {
         document.getElementById('total-reviews').innerText = reviews.length + " Reviews";
-        
-        // Calculate Stats
         let total = 0, counts = {5:0, 4:0, 3:0, 2:0, 1:0};
-        reviews.forEach(r => { 
-            let rt = parseInt(r.rating); 
-            total += rt; 
-            if(counts[rt] !== undefined) counts[rt]++; 
-        });
-        
+        reviews.forEach(r => { let rt = parseInt(r.rating); total += rt; if(counts[rt] !== undefined) counts[rt]++; });
         let avg = reviews.length ? (total / reviews.length).toFixed(1) : "0.0";
         document.getElementById('avg-rating-display').innerText = avg;
         document.getElementById('avg-stars').innerHTML = getStarsHtml(Math.round(avg));
-        
-        // Render Bars
-        document.getElementById('rating-bars').innerHTML = [5,4,3,2,1].map(num => {
-            let pct = reviews.length ? (counts[num] / reviews.length * 100) : 0;
-            return `<div class="d-flex align-items-center mb-2"><span class="small fw-bold me-2" style="width:10px;">${num}</span><i class="fas fa-star text-warning small me-2"></i><div class="rating-summary-bar"><div class="rating-fill" style="width:${pct}%"></div></div><span class="small text-muted" style="width:30px;text-align:right;">${counts[num]}</span></div>`;
-        }).join('');
-
-        // Render List
-        document.getElementById('reviews-list').innerHTML = reviews.map(r => `
-            <div class="review-card">
-                <div class="review-header">
-                    <div>
-                        <div class="fw-bold">${r.name}</div>
-                        <div class="text-warning small">${getStarsHtml(r.rating)}</div>
-                    </div>
-                    <small class="text-muted">${r.date}</small>
-                </div>
-                <p class="text-secondary small mb-0">${r.feedback}</p>
-            </div>
-        `).join('');
+        document.getElementById('rating-bars').innerHTML = [5,4,3,2,1].map(num => { let pct = reviews.length ? (counts[num] / reviews.length * 100) : 0; return `<div class="d-flex align-items-center mb-2"><span class="small fw-bold me-2" style="width:10px;">${num}</span><i class="fas fa-star text-warning small me-2"></i><div class="rating-summary-bar"><div class="rating-fill" style="width:${pct}%"></div></div><span class="small text-muted" style="width:30px;text-align:right;">${counts[num]}</span></div>`; }).join('');
+        document.getElementById('reviews-list').innerHTML = reviews.map(r => `<div class="review-card"><div class="review-header"><div><div class="fw-bold">${r.name}</div><div class="text-warning small">${getStarsHtml(r.rating)}</div></div><small class="text-muted">${r.date}</small></div><p class="text-secondary small mb-0">${r.feedback}</p></div>`).join('');
     }
 
-    function getStarsHtml(rating) {
-        let h = '';
-        for(let i=0; i<5; i++) h += `<i class="${i < rating ? 'fas' : 'far'} fa-star"></i>`;
-        return h;
-    }
+    function getStarsHtml(rating) { let h = ''; for(let i=0; i<5; i++) h += `<i class="${i < rating ? 'fas' : 'far'} fa-star"></i>`; return h; }
 
     function submitReview(e) {
         e.preventDefault();
-        const rName = document.getElementById('r-name').value;
-        const rEmail = document.getElementById('r-email').value;
-        const rPhone = document.getElementById('r-phone').value;
-        const rFeedback = document.getElementById('r-feedback').value;
-        
-        let rRating = 0;
-        document.querySelectorAll('input[name="rating"]').forEach(r => { if(r.checked) rRating = r.value; });
+        const rName = document.getElementById('r-name').value; const rEmail = document.getElementById('r-email').value; const rPhone = document.getElementById('r-phone').value; const rFeedback = document.getElementById('r-feedback').value;
+        let rRating = 0; document.querySelectorAll('input[name="rating"]').forEach(r => { if(r.checked) rRating = r.value; });
         if(rRating === 0) { Swal.fire('Error','Please select a star rating','warning'); return; }
-
         Swal.fire({ title: 'Submitting...', didOpen: () => Swal.showLoading() });
-
-        const p = {
-            action: 'submitReview',
-            name: rName, email: rEmail, phone: rPhone, feedback: rFeedback, rating: rRating
-        };
-
-        fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(p) }).then(r=>r.json()).then(d => {
-            if(d.status === 'success') {
-                Swal.fire('Thank You!', 'Your feedback has been submitted.', 'success');
-                document.getElementById('r-name').value = "";
-                document.getElementById('r-email').value = "";
-                document.getElementById('r-phone').value = "";
-                document.getElementById('r-feedback').value = "";
-                document.querySelectorAll('input[name="rating"]').forEach(r => r.checked = false);
-                fetchReviews(); // Refresh list
-            } else {
-                Swal.fire('Error', d.error, 'error');
-            }
-        });
+        const p = { action: 'submitReview', name: rName, email: rEmail, phone: rPhone, feedback: rFeedback, rating: rRating };
+        fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(p) }).then(r=>r.json()).then(d => { if(d.status === 'success') { Swal.fire('Thank You!', 'Your feedback has been submitted.', 'success'); document.getElementById('r-name').value = ""; document.getElementById('r-email').value = ""; document.getElementById('r-phone').value = ""; document.getElementById('r-feedback').value = ""; document.querySelectorAll('input[name="rating"]').forEach(r => r.checked = false); fetchReviews(); } else { Swal.fire('Error', d.error, 'error'); } });
     }
 </script>
 </body>
