@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Jazaa Ph | Online Shop</title>
+    <title>Al-Jazaa Ph. | Online Shop</title>
     
+    <!-- NEW: Favicon (Your Logo) -->
+    <link rel="icon" type="image/png" href="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true">
+
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -19,7 +22,6 @@
             --primary: #1b4d3e; 
             --primary-dark: #143a2f;
             --gold: #c5a028;
-            /* UPDATED: Modern Light Grey Background */
             --bg-color: #eff2f5; 
             --text: #2c3e50;
             --nav-height: 70px;
@@ -30,15 +32,34 @@
             background-color: var(--bg-color); 
             color: var(--text); 
             overflow-x: hidden; 
+            padding-top: 35px; /* Added padding to account for fixed top banner */
         }
         
         h1, h2, h3, h4, h5, .navbar-brand { font-family: 'Playfair Display', serif; }
 
-        /* Announcement Bar */
+        /* UPDATED: Moving Announcement Bar */
         .announcement-bar { 
-            background: var(--primary); color: white; text-align: center; 
-            font-size: 0.75rem; padding: 8px 0; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; 
-            position: relative; z-index: 1040;
+            background: var(--primary); 
+            color: white; 
+            height: 35px;
+            overflow: hidden;
+            position: fixed; /* Fixed to top */
+            top: 0; 
+            left: 0;
+            width: 100%;
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+        }
+
+        .announcement-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 20s linear infinite;
+            font-size: 0.8rem; 
+            font-weight: 500; 
+            letter-spacing: 1px; 
+            text-transform: uppercase;
         }
 
         /* Navbar */
@@ -46,8 +67,22 @@
             background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); 
             box-shadow: 0 2px 15px rgba(0,0,0,0.04); height: var(--nav-height);
             z-index: 1030;
+            top: 35px; /* Pushed down by banner */
         }
-        .navbar-brand { font-weight: 700; font-size: 1.5rem; color: var(--primary) !important; }
+        
+        /* UPDATED: Navbar Logo Styling */
+        .navbar-brand { 
+            font-weight: 700; 
+            font-size: 1.5rem; 
+            color: var(--primary) !important; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-logo-img {
+            height: 40px; /* Adjust logo size */
+            width: auto;
+        }
         
         /* Sidebar */
         .offcanvas { border-radius: 0 20px 20px 0; border: none; }
@@ -68,7 +103,7 @@
         .cart-badge { background: var(--gold); color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: bold; position: absolute; top: -5px; right: -8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 
         /* Category Scroll with Images */
-        .category-scroll-container { overflow-x: auto; white-space: nowrap; position: sticky; top: var(--nav-height); z-index: 900; background: rgba(239, 242, 245, 0.95); backdrop-filter: blur(8px); padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.05); -ms-overflow-style: none; scrollbar-width: none; }
+        .category-scroll-container { overflow-x: auto; white-space: nowrap; position: sticky; top: calc(var(--nav-height) + 35px); z-index: 900; background: rgba(239, 242, 245, 0.95); backdrop-filter: blur(8px); padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.05); -ms-overflow-style: none; scrollbar-width: none; }
         .category-scroll-container::-webkit-scrollbar { display: none; }
         
         .cat-item-wrapper { display: inline-flex; flex-direction: column; align-items: center; margin-right: 20px; cursor: pointer; transition: 0.2s; }
@@ -184,7 +219,7 @@
         .rating-fill { height: 100%; background: var(--gold); }
         .review-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
 
-        /* NEW: Back to Top */
+        /* Back to Top */
         .back-to-top {
             position: fixed; bottom: 30px; right: 30px;
             width: 50px; height: 50px;
@@ -202,7 +237,7 @@
         .footer-link { color: #888; text-decoration: none; display: block; margin-bottom: 10px; font-size: 0.9rem; transition: 0.3s;}
         .footer-link:hover { color: var(--gold); padding-left: 5px; }
 
-        #detail-view { position: fixed; inset: 0; background: #fff; z-index: 2000; overflow-y: auto; display: none; animation: fadeIn 0.3s; }
+        #detail-view { position: fixed; inset: 0; background: #fff; z-index: 2000; overflow-y: auto; display: none; animation: fadeIn 0.3s; padding-top: 35px; /* Added padding for banner */ }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         #loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
     </style>
@@ -221,12 +256,22 @@
     <h3 class="mt-3" style="color:var(--primary);font-family:'Playfair Display';">Al-Jazaa</h3>
 </div>
 
-<div class="announcement-bar">Shop & Earn Rewards • Secure GCash Payment</div>
+<!-- UPDATED: Moving Banner (Fixed on Top) -->
+<div class="announcement-bar">
+    <div class="announcement-content">
+        &nbsp;&nbsp;&nbsp;&nbsp;Shop & Earn Rewards • Secure GCash Payment • Nationwide Delivery • 5% of Profit Goes to Charity&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;Shop & Earn Rewards • Secure GCash Payment • Nationwide Delivery • 5% of Profit Goes to Charity&nbsp;&nbsp;&nbsp;&nbsp;
+    </div>
+</div>
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="#" onclick="routeTo('home')">Al-Jazaa Ph.</a>
+        <!-- UPDATED: Brand with Logo -->
+        <a class="navbar-brand" href="#" onclick="routeTo('home')">
+            <img src="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true" alt="Logo" class="nav-logo-img">
+            Al-Jazaa Ph.
+        </a>
         <div class="d-flex align-items-center order-lg-3 ms-auto ms-lg-0">
              <div class="cart-btn-wrap" onclick="routeTo('cart')">
                 <i class="fas fa-shopping-bag fa-lg" style="color:#333;"></i>
@@ -380,8 +425,43 @@
             <div id="checkout-order-summary" class="bg-white p-3 border rounded mb-3"></div>
             
             <div class="bg-white p-3 border rounded mb-3"><div class="d-flex justify-content-between mb-1"><span>Subtotal:</span><span id="sum-subtotal">₱0</span></div><div class="d-flex justify-content-between mb-1"><span>Delivery Fee:</span><span id="sum-shipping" class="text-danger">₱0</span></div><div class="d-flex justify-content-between mb-1 d-none" id="sum-donate-row"><span>Donation:</span><span id="sum-donation" class="text-success">₱0</span></div><hr><div class="d-flex justify-content-between fw-bold fs-5"><span>Grand Total:</span><span id="pay-total" class="text-primary">₱0</span></div></div>
-            <div class="bg-light p-3 rounded-3 border mb-3 d-flex align-items-center"><div class="bg-white p-2 rounded shadow-sm me-3"><i class="fas fa-qrcode fa-2x"></i></div><div><div class="fw-bold">GCash: 0921-429-5887</div><div class="small text-muted">Scan or Send exact amount.</div></div></div>
-            <div class="row g-3"><div class="col-md-6"><input type="text" class="form-control" id="c-ref" placeholder="GCash Reference No." required></div><div class="col-md-6 file-upload-wrapper"><input type="file" class="form-control" id="c-proof" accept="image/*" required><div class="upload-helper"><i class="fas fa-info-circle"></i> Please upload screenshot of payment</div></div></div>
+            
+            <!-- UPDATED: GCash Section with Logo & Collapse -->
+            <div class="bg-light p-3 rounded-3 border mb-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-white p-2 rounded shadow-sm me-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                        <!-- Official GCash Logo -->
+                        <img src="https://getcash.ph/wp-content/uploads/2021/01/GCash-Logo-Transparent-PNG-1.png" alt="GCash" style="max-width: 100%; max-height: 100%;">
+                    </div>
+                    <div>
+                        <div class="fw-bold">GCash Payment</div>
+                        <div class="small text-muted mb-1">Send exact amount to: <strong>0921-429-5887</strong></div>
+                        <a class="small fw-bold text-primary text-decoration-none" data-bs-toggle="collapse" href="#gcashQR" role="button" aria-expanded="false">
+                            <i class="fas fa-qrcode me-1"></i> Or Scan QR Code below
+                        </a>
+                    </div>
+                </div>
+                <!-- Collapsible QR Code Area -->
+                <div class="collapse mt-3" id="gcashQR">
+                    <div class="card card-body text-center border-0 shadow-sm">
+                        <small class="text-muted mb-2">Scan with GCash App</small>
+                        <!-- PLACEHOLDER FOR YOUR QR CODE. Replace the src below with your actual QR code image link if you have one. -->
+                        <img src="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true" alt="My QR Code" style="max-width: 200px; margin: 0 auto;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6"><input type="text" class="form-control" id="c-ref" placeholder="GCash Reference No." required></div>
+                <div class="col-md-6 file-upload-wrapper">
+                    <input type="file" class="form-control" id="c-proof" accept="image/*" required>
+                    <!-- UPDATED: Upload Confirmation Message -->
+                    <div id="upload-success-msg" class="d-none text-success small fw-bold mt-1">
+                        <i class="fas fa-check-circle me-1"></i> Image attached successfully!
+                    </div>
+                    <div class="upload-helper"><i class="fas fa-info-circle"></i> Please upload screenshot of payment</div>
+                </div>
+            </div>
             <div class="mt-4"><button id="btn-place-order" type="submit" class="btn btn-custom w-100 py-3" disabled>FILL DETAILS</button></div>
         </form>
     </div>
@@ -461,6 +541,19 @@
         fetchProducts(); updateCartCount();
         window.history.replaceState({ page: 'home' }, '', '');
         window.onpopstate = (e) => { if(e.state) renderPage(e.state.page); };
+        
+        // UPDATED: File Upload Listener for Success Message
+        const fileInput = document.getElementById('c-proof');
+        if(fileInput) {
+            fileInput.addEventListener('change', function() {
+                const msg = document.getElementById('upload-success-msg');
+                if(this.files && this.files.length > 0) {
+                    msg.classList.remove('d-none');
+                } else {
+                    msg.classList.add('d-none');
+                }
+            });
+        }
     });
 
     function routeTo(pageId) { window.history.pushState({ page: pageId }, '', ''); renderPage(pageId); }
@@ -640,6 +733,10 @@
         document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = 'none'); 
         document.querySelectorAll('.donate-pill').forEach(b => b.classList.remove('selected')); 
         
+        // Reset File Upload Msg
+        document.getElementById('c-proof').value = "";
+        document.getElementById('upload-success-msg').classList.add('d-none');
+        
         // --- POPULATE ORDER SUMMARY ---
         const summaryBox = document.getElementById('checkout-order-summary');
         if(cart.length > 0) {
@@ -718,7 +815,6 @@
     }
 
     // --- BACK TO TOP LOGIC ---
-    // Scroll to top function
     function scrollToTop() {
         if(document.getElementById('detail-view').style.display === 'block') {
             document.getElementById('detail-view').scrollTo({top: 0, behavior: 'smooth'});
@@ -727,7 +823,6 @@
         }
     }
 
-    // Show/Hide button on scroll
     function toggleBackToTop(scrollY) {
         const btn = document.getElementById('back-to-top');
         if (scrollY > 300) {
@@ -737,7 +832,6 @@
         }
     }
 
-    // Listeners for both window and modal scroll
     window.addEventListener('scroll', () => toggleBackToTop(window.scrollY));
     document.getElementById('detail-view').addEventListener('scroll', (e) => toggleBackToTop(e.target.scrollTop));
 
