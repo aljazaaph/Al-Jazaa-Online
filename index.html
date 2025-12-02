@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Al-Jazaa Ph | Modern Modesty</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Jazaa Ph. | Online Shop</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true">
@@ -11,7 +11,7 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <!-- SweetAlert2 -->
@@ -22,25 +22,22 @@
             --primary: #1b4d3e; 
             --primary-dark: #143a2f;
             --gold: #c5a028;
-            --gold-light: #e6c86e;
-            --bg-color: #f8f9fa; 
+            --bg-color: #f4f6f8; 
             --text: #2c3e50;
             --nav-height: 65px;
-            --radius: 12px;
         }
 
         body { 
             font-family: 'Outfit', sans-serif; 
             background-color: var(--bg-color); 
             color: var(--text); 
-            overflow-x: hidden; 
-            padding-top: 35px; 
-            -webkit-tap-highlight-color: transparent;
+            padding-top: 35px; /* For Announcement Bar */
+            padding-bottom: 0px;
         }
         
         h1, h2, h3, h4, h5, .navbar-brand { font-family: 'Playfair Display', serif; }
-        
-        /* 1. FLASHING ANNOUNCEMENT BAR */
+
+        /* 1. Flash Effect Announcement (Home Only) */
         .announcement-bar { 
             background: var(--primary); 
             color: white; 
@@ -49,839 +46,748 @@
             display: flex; align-items: center; justify-content: center;
             overflow: hidden;
         }
-        .announcement-text {
-            font-size: 0.75rem; 
-            font-weight: 600; 
-            letter-spacing: 1px; 
-            text-transform: uppercase;
-            animation: flashText 3s infinite;
+        .flash-text {
+            animation: flash 2s infinite alternate;
+            font-weight: 600; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;
         }
-        @keyframes flashText {
-            0%, 100% { opacity: 1; color: white; }
-            50% { opacity: 0.7; color: var(--gold-light); text-shadow: 0 0 5px var(--gold); }
-        }
+        @keyframes flash { from { opacity: 1; } to { opacity: 0.6; color: var(--gold); } }
 
-        /* 2. NAVBAR & MENU */
+        /* Navbar */
         .navbar { 
-            background: rgba(255,255,255,0.95); 
-            backdrop-filter: blur(12px); 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
-            height: var(--nav-height);
-            z-index: 1030;
-            top: 35px; transition: top 0.3s;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05); height: var(--nav-height);
+            z-index: 1030; top: 35px;
         }
-        .navbar-brand { font-weight: 700; font-size: 1.4rem; color: var(--primary) !important; display: flex; align-items: center; gap: 8px; }
-        .nav-logo-img { height: 35px; width: auto; }
-        
-        .cart-icon-wrap { position: relative; margin-right: 15px; cursor: pointer; color: var(--primary); transition: 0.2s; }
-        .cart-icon-wrap:hover { transform: scale(1.1); color: var(--gold); }
-        .cart-badge { background: var(--gold); color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.65rem; display: flex; align-items: center; justify-content: center; position: absolute; top: -5px; right: -8px; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .navbar-brand { font-weight: 700; color: var(--primary) !important; font-size: 1.3rem; }
+        .nav-logo-img { height: 35px; width: auto; margin-right: 8px; }
 
-        /* Sidebar Menu - Adjusted Width */
-        .offcanvas { border-radius: 0 20px 20px 0; border: none; max-width: 80%; width: 300px; }
-        .offcanvas-header { background: var(--primary); color: white; }
-        .sidebar-link { padding: 15px 20px; color: var(--text); text-decoration: none; font-weight: 500; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; transition: 0.2s; }
-        .sidebar-link:hover { background: #f4f4f4; color: var(--primary); padding-left: 25px; }
+        /* 2. Menu - 75% Width */
+        .offcanvas { border-radius: 0 20px 20px 0; max-width: 80%; width: 300px; }
+        .sidebar-link { padding: 15px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; text-decoration: none; color: #333; font-weight: 500; }
+        .sidebar-link:hover { background: #f9f9f9; color: var(--primary); }
 
-        /* 3. HOME PAGE ELEMENTS */
-        .home-search-container {
-            padding: 15px; background: white; margin-top: -5px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03); position: relative; z-index: 1020;
+        /* 3. Modern Shop Now Button */
+        .btn-hero { 
+            background: rgba(255,255,255,0.2); backdrop-filter: blur(5px);
+            color: white; border: 1px solid white; 
+            padding: 8px 25px; font-size: 0.8rem; font-weight: 600; 
+            text-transform: uppercase; letter-spacing: 2px; border-radius: 4px; 
+            transition: 0.3s; 
         }
-        .search-input { border-radius: 50px; background: #f1f3f5; border: none; padding: 10px 20px; width: 100%; transition: 0.3s; }
-        .search-input:focus { background: white; box-shadow: 0 0 0 2px var(--gold); outline: none; }
+        .btn-hero:hover { background: white; color: var(--primary); transform: translateY(-3px); }
 
-        .btn-shop-now {
-            background: transparent; color: white; border: 1px solid white;
-            padding: 8px 25px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px;
-            backdrop-filter: blur(5px); border-radius: 4px; transition: 0.3s; font-weight: 600;
+        /* 4. Search Bar on Top */
+        .top-search-container {
+            padding: 15px; background: white; margin-bottom: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         }
-        .btn-shop-now:hover { background: white; color: black; border-color: white; transform: translateY(-3px); }
+        .modern-search { border-radius: 50px; background: #f0f2f5; border: none; padding: 10px 20px; width: 100%; }
 
         /* Categories */
-        .category-scroll { overflow-x: auto; white-space: nowrap; padding: 20px 0; scrollbar-width: none; -ms-overflow-style: none; }
-        .category-scroll::-webkit-scrollbar { display: none; }
-        .cat-pill { 
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 6px 15px 6px 6px; margin-right: 10px;
-            background: white; border: 1px solid #eee; border-radius: 50px;
-            cursor: pointer; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.02);
-        }
-        .cat-pill img { width: 35px; height: 35px; border-radius: 50%; object-fit: contain; background: #f8f9fa; }
-        .cat-pill.active { border-color: var(--primary); background: var(--primary); color: white; }
-        .cat-pill:hover { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(0,0,0,0.05); }
+        .category-scroll-container { overflow-x: auto; white-space: nowrap; padding: 10px 0; scrollbar-width: none; }
+        .category-scroll-container::-webkit-scrollbar { display: none; }
+        .cat-card { display: inline-block; margin-right: 15px; text-align: center; width: 80px; cursor: pointer; }
+        .cat-card img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); object-fit: contain; background: white; transition: 0.3s; }
+        .cat-card.active img { border-color: var(--primary); transform: scale(1.1); }
+        .cat-card span { font-size: 0.75rem; display: block; margin-top: 5px; font-weight: 600; color: #555; }
 
-        /* Product Card */
-        .product-card { 
-            border: none; background: white; border-radius: var(--radius); 
-            overflow: hidden; transition: 0.3s; position: relative;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-        }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
-        .card-img-box { position: relative; padding-top: 125%; background: #f8f9fa; overflow: hidden; }
-        .card-img-box img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        /* Products */
+        .product-card { border: none; border-radius: 12px; overflow: hidden; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.03); transition: 0.3s; height: 100%; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+        .card-img-wrapper { position: relative; padding-top: 133%; background: #f8f9fa; }
+        .card-img-wrapper img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
         
-        /* 4. DETAIL VIEW (OVERLAY) */
+        /* 5. Detail View Overhaul */
         #detail-view { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: white; z-index: 3000; overflow-y: auto; display: none;
+            position: fixed; inset: 0; background: white; z-index: 2050; 
+            overflow-y: auto; display: none; padding-top: 0; 
             padding-bottom: 80px; /* Space for sticky footer */
         }
         
-        .gallery-wrap { display: flex; gap: 10px; margin-bottom: 20px; }
-        .side-thumbs { 
-            display: flex; flex-direction: column; gap: 8px; 
-            max-height: 400px; overflow-y: auto; width: 60px;
+        /* Detail Header */
+        .detail-header {
+            position: sticky; top: 0; z-index: 2060; background: rgba(255,255,255,0.98);
+            border-bottom: 1px solid #eee; padding: 10px 15px; display: flex; 
+            align-items: center; justify-content: space-between; height: 60px;
+        }
+
+        /* Scrollable Images */
+        .dt-scroll-images {
+            display: flex; overflow-x: auto; scroll-snap-type: x mandatory; 
+            gap: 10px; padding-bottom: 10px; -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
         }
-        .side-thumbs::-webkit-scrollbar { display: none; }
-        .thumb-img { width: 60px; height: 75px; object-fit: cover; border-radius: 6px; cursor: pointer; border: 2px solid transparent; opacity: 0.6; }
-        .thumb-img.active { border-color: var(--primary); opacity: 1; }
-        .main-img-box { flex-grow: 1; border-radius: 12px; overflow: hidden; background: #f8f9fa; position: relative; }
-        .main-img-box img { width: 100%; height: auto; object-fit: contain; display: block; }
+        .dt-scroll-images::-webkit-scrollbar { display: none; }
+        .dt-scroll-images img {
+            scroll-snap-align: center; flex: 0 0 100%; width: 100%; 
+            aspect-ratio: 3/4; object-fit: contain; background: #f9f9f9;
+        }
 
         /* Bundle Cards */
-        .bundle-card { 
-            border: 1px solid #ddd; border-radius: 8px; padding: 10px; 
-            margin-bottom: 10px; cursor: pointer; transition: 0.2s; position: relative; overflow: hidden;
-        }
-        .bundle-card.selected { border-color: var(--primary); background: #f0f7f4; }
-        .bundle-card.selected::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; top: 5px; right: 5px; color: var(--primary); font-size: 0.8rem; }
-        .discount-tag { font-size: 0.7rem; background: var(--gold); color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 5px; }
-
-        /* 5. STICKY BOTTOM ACTION BAR (Detail) */
-        .sticky-action-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: white; padding: 10px 20px;
-            box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+        .bundle-option {
+            border: 1px solid #ddd; border-radius: 8px; padding: 12px; 
+            margin-bottom: 10px; cursor: pointer; transition: 0.2s;
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 3100; transform: translateY(100%); transition: transform 0.3s ease;
         }
-        .sticky-action-bar.visible { transform: translateY(0); }
-        .action-price { font-family: 'Playfair Display'; font-weight: 700; font-size: 1.2rem; color: var(--primary); }
-        .btn-sticky-add { background: var(--primary); color: white; border-radius: 50px; padding: 10px 25px; border: none; font-weight: 600; font-size: 0.9rem; }
+        .bundle-option.selected { border-color: var(--primary); background-color: #f0f7f4; box-shadow: 0 2px 5px rgba(27,77,62,0.1); }
+        .bundle-badge { font-size: 0.7rem; background: var(--gold); color: white; padding: 2px 6px; border-radius: 4px; margin-left: 5px; }
 
-        /* 6. PROGRESS BAR (Cart) */
-        .progress-container { background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.03); }
-        .progress-bg { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; position: relative; margin-top: 10px; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--primary)); width: 0%; transition: width 1s ease; }
-        .car-icon { position: absolute; top: -25px; font-size: 1.2rem; color: var(--primary); transition: left 1s ease; transform: translateX(-50%); }
+        /* Sticky Action Bar (Detail) */
+        .sticky-action-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; 
+            background: white; padding: 10px 20px; 
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.05); z-index: 2070;
+            display: flex; align-items: center; justify-content: space-between;
+        }
 
-        /* 7. REVIEWS SECTION */
-        .dt-reviews { background: #fdfdfd; padding: 20px 0; border-top: 1px solid #eee; margin-top: 30px; }
-        .review-mini-card { background: white; padding: 15px; border-radius: 8px; border: 1px solid #eee; margin-bottom: 10px; }
-        
+        /* Cart Progress Bar */
+        .free-ship-bar { height: 6px; background: #eee; border-radius: 10px; overflow: hidden; margin: 10px 0; position: relative; }
+        .free-ship-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--primary)); width: 0%; transition: width 1s ease; }
+        .ship-icon { position: absolute; top: -20px; font-size: 1.2rem; color: var(--primary); transition: left 1s ease; transform: translateX(-50%); }
+
+        /* Checkout Summary */
+        .checkout-summary-header {
+            background: #f8f9fa; padding: 15px; border-radius: 8px; 
+            cursor: pointer; display: flex; justify-content: space-between; 
+            font-weight: 600; margin-bottom: 10px; border: 1px solid #eee;
+        }
+
         /* Utils */
-        .btn-custom { background: var(--primary); color: white; border-radius: 50px; padding: 12px 0; width: 100%; border: none; font-weight: 600; text-transform: uppercase; transition: 0.3s; }
-        .btn-custom:hover { background: var(--primary-dark); transform: translateY(-2px); }
-        .btn-custom:disabled { background: #ccc; cursor: default; transform: none; }
+        .btn-custom { background: var(--primary); color: white; border: none; border-radius: 50px; padding: 12px 20px; font-weight: 600; text-transform: uppercase; width: 100%; transition: 0.3s; }
+        .btn-custom:hover { background: var(--primary-dark); }
         
-        .back-to-top { 
-            position: fixed; bottom: 90px; right: 20px; 
-            width: 45px; height: 45px; background: white; color: var(--primary); 
-            border-radius: 50%; box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
-            display: flex; justify-content: center; align-items: center; 
-            z-index: 2900; opacity: 0; pointer-events: none; transition: 0.3s;
+        .back-to-top {
+            position: fixed; bottom: 100px; right: 20px;
+            width: 45px; height: 45px; background: white; color: var(--primary);
+            border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: 0.3s; z-index: 1040;
         }
-        .back-to-top.visible { opacity: 1; pointer-events: all; transform: translateY(0); }
+        .back-to-top.visible { opacity: 1; visibility: visible; }
 
-        /* Collapsible Order Summary */
-        .summary-header { cursor: pointer; background: #f8f9fa; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
-        
-        footer { background: #1a1a1a; color: #aaa; padding: 50px 0 30px; text-align: center; }
-        .footer-link { color: #aaa; text-decoration: none; display: inline-block; margin: 0 10px; font-size: 0.9rem; }
+        /* Reviews */
+        .review-section { background: #fff; padding: 20px; margin-top: 20px; border-top: 5px solid #f4f6f8; }
+        .rating-stars i { color: #ddd; cursor: pointer; font-size: 1.2rem; }
+        .rating-stars i.active { color: var(--gold); }
+
+        footer { background: #143a2f; color: #ccc; padding: 40px 0; margin-top: auto; }
+        .footer-visible { display: block !important; } /* Ensures visibility */
     </style>
 </head>
 <body>
 
 <script>
-    // ********************************************
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzQ3ij0tm5k-cARhUqdRdV7yYmqfudy0LJnaK70DVAMyTcjO-vcc5WvwFQ36lRxobcF/exec"; 
-    // ********************************************
 </script>
 
 <div id="loader" style="position:fixed; inset:0; background:white; z-index:9999; display:flex; justify-content:center; align-items:center;">
-    <div class="spinner-border text-success" role="status"></div>
+    <div class="spinner-border text-secondary" style="width:3rem;height:3rem;"></div>
 </div>
 
-<!-- 1. Flash Announcement -->
+<!-- Flashing Announcement (Home Only handled via JS logic) -->
 <div class="announcement-bar" id="top-bar">
-    <div class="announcement-text">
-        ⚡ Free Delivery on orders over ₱3,000 ⚡ 5% Profit to Charity ⚡
+    <div class="flash-text">
+        ⚡ Free Delivery on orders over ₱3,000 ⚡ 5% of Profit Goes to Charity ⚡
     </div>
 </div>
 
-<!-- 2. Navbar -->
-<nav class="navbar navbar-expand sticky-top">
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
     <div class="container">
-        <!-- Menu Trigger -->
-        <button class="btn border-0 p-0 me-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
-            <i class="fas fa-bars fa-lg text-dark"></i>
-        </button>
-
-        <!-- Brand -->
-        <a class="navbar-brand me-auto" href="#" onclick="routeTo('home')">
+        <a class="navbar-brand" href="#" onclick="routeTo('home')">
             <img src="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true" alt="Logo" class="nav-logo-img">
-            <span class="d-none d-sm-block">Al-Jazaa Ph.</span>
+            Al-Jazaa Ph.
         </a>
-
-        <!-- Cart -->
-        <div class="cart-icon-wrap" onclick="routeTo('cart')">
-            <i class="fas fa-shopping-bag fa-lg"></i>
-            <span id="cart-count" class="cart-badge">0</span>
+        <div class="d-flex align-items-center ms-auto">
+             <div class="position-relative me-3" style="cursor:pointer" onclick="routeTo('cart')">
+                <i class="fas fa-shopping-bag fa-lg" style="color:#333;"></i>
+                <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark" style="font-size:0.6rem;">0</span>
+            </div>
+            <button class="btn border-0 p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+                <i class="fas fa-bars fa-lg text-dark"></i>
+            </button>
         </div>
     </div>
 </nav>
 
 <!-- Sidebar -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu">
-    <div class="offcanvas-header">
+    <div class="offcanvas-header bg-success text-white">
         <h5 class="offcanvas-title font-playfair">Menu</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body p-0">
-        <a href="#" class="sidebar-link" onclick="routeTo('home'); closeSidebar();">Home <i class="fas fa-chevron-right small"></i></a>
-        <a href="#" class="sidebar-link" onclick="routeTo('track'); closeSidebar();">Track Order <i class="fas fa-chevron-right small"></i></a>
-        <a href="#" class="sidebar-link" onclick="routeTo('cart'); closeSidebar();">View Cart <i class="fas fa-chevron-right small"></i></a>
-        <div class="p-3 bg-light mt-4">
+        <a href="#" class="sidebar-link" onclick="routeTo('home'); closeSidebar();">Shop Home <i class="fas fa-chevron-right"></i></a>
+        <a href="#" class="sidebar-link" onclick="routeTo('track'); closeSidebar();">Track Order <i class="fas fa-chevron-right"></i></a>
+        <a href="#" class="sidebar-link" onclick="routeTo('cart'); closeSidebar();">View Cart <i class="fas fa-chevron-right"></i></a>
+        
+        <div class="p-3 bg-light mt-3">
             <small class="text-uppercase fw-bold text-muted">Categories</small>
-            <div id="sidebar-cats" class="mt-2 d-flex flex-column gap-2"></div>
+            <div id="sidebar-categories" class="mt-2"></div>
         </div>
     </div>
 </div>
 
 <!-- HOME PAGE -->
 <div id="page-home">
-    <!-- Search Bar (Home Only) -->
-    <div class="container mt-3 mb-2">
-        <div class="home-search-container rounded-pill">
-            <i class="fas fa-search text-muted position-absolute" style="left: 30px; top: 25px;"></i>
-            <input type="text" class="search-input ps-5" id="searchBox" placeholder="Search for Abaya, Khimar..." onkeyup="doSearch()">
+    <!-- Search on Top -->
+    <div class="container mt-2">
+        <div class="top-search-container rounded-pill">
+            <div class="input-group">
+                <span class="input-group-text bg-transparent border-0"><i class="fas fa-search text-muted"></i></span>
+                <input type="text" id="searchBox" class="form-control border-0 bg-transparent shadow-none" placeholder="Search for items..." onkeyup="doSearch()">
+            </div>
         </div>
     </div>
 
-    <!-- Hero Carousel -->
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div id="heroCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%201.png?raw=true" class="d-block w-100" alt="Slide 1">
-                <div class="carousel-caption mb-4">
-                    <button class="btn-shop-now" onclick="scrollToShop()">Shop Collection</button>
+                <div class="carousel-caption">
+                    <button class="btn-hero" onclick="scrollToProducts()">Shop Now</button>
                 </div>
             </div>
             <div class="carousel-item"><img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%202.png?raw=true" class="d-block w-100" alt="Slide 2"></div>
+            <div class="carousel-item"><img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%203.png?raw=true" class="d-block w-100" alt="Slide 3"></div>
         </div>
     </div>
 
-    <div class="container my-5" id="shop-anchor">
-        <!-- Categories -->
-        <div id="cat-scroll-view" class="category-scroll mb-4"></div>
-
-        <!-- Products -->
-        <h3 class="font-playfair mb-4">Latest Arrivals</h3>
+    <div class="container mb-5" id="shop-section">
+        <h3 class="font-playfair mb-3">Categories</h3>
+        <div id="category-list" class="category-scroll-container mb-4"></div>
+        
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="font-playfair mb-0">Latest Collection</h3>
+        </div>
+        
         <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3" id="product-grid"></div>
     </div>
-    
-    <footer class="mt-5">
-        <div class="container">
-            <h4 class="text-white font-playfair mb-3">Al-Jazaa Ph.</h4>
-            <div class="mb-4">
-                <a href="#" class="footer-link">About Us</a>
-                <a href="#" class="footer-link">Delivery Policy</a>
-                <a href="#" class="footer-link">Privacy</a>
-            </div>
-            <p class="small">&copy; 2024 Al-Jazaa Ph. All rights reserved.</p>
-        </div>
-    </footer>
 </div>
 
 <!-- DETAIL VIEW OVERLAY -->
 <div id="detail-view">
-    <!-- Detail Nav -->
-    <div class="d-flex align-items-center justify-content-between px-3 py-2 sticky-top bg-white border-bottom shadow-sm" style="height: 60px;">
-        <button class="btn p-0" onclick="closeDetail()"><i class="fas fa-arrow-left fa-lg"></i></button>
-        <span class="fw-bold text-truncate mx-3" id="dt-header-title">Product Name</span>
-        <div class="cart-icon-wrap m-0" onclick="routeTo('cart'); closeDetail();">
-            <i class="fas fa-shopping-bag"></i>
-            <span class="cart-badge" id="dt-cart-badge">0</span>
+    <!-- Sticky Detail Header -->
+    <div class="detail-header">
+        <div class="d-flex align-items-center">
+            <button class="btn p-0 me-3" onclick="closeDetail()"><i class="fas fa-arrow-left fa-lg"></i></button>
+            <span class="font-playfair fw-bold text-success" id="dt-header-title">Product</span>
+        </div>
+        <div class="position-relative" onclick="routeTo('cart'); closeDetail();">
+            <i class="fas fa-shopping-bag fa-lg"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark" style="font-size:0.5rem;" id="dt-cart-count">0</span>
         </div>
     </div>
 
-    <div class="container py-4">
-        <div class="row gx-4">
-            <!-- Images (Side Scroll Desktop / Top Mobile) -->
-            <div class="col-md-6 mb-4">
-                <div class="gallery-wrap">
-                    <div class="side-thumbs d-none d-md-flex" id="dt-thumbs-col"></div>
-                    <div class="main-img-box">
-                        <img id="dt-main-img" src="">
-                    </div>
-                </div>
-                <!-- Mobile Horizontal Thumbs -->
-                <div class="d-flex d-md-none gap-2 overflow-auto pb-2" id="dt-thumbs-row"></div>
+    <div class="container pb-5">
+        <!-- Scrollable Images -->
+        <div id="dt-scroll-images" class="dt-scroll-images mt-2"></div>
+        <div class="text-center text-muted small mb-3"><i class="fas fa-ellipsis-h"></i> Swipe for more</div>
+
+        <!-- Info -->
+        <span class="badge bg-light text-dark border mb-2" id="dt-cat"></span>
+        <h2 id="dt-name" class="font-playfair fw-bold mb-2"></h2>
+        <div class="mb-3">
+            <span id="dt-price" class="fs-2 fw-bold text-success"></span>
+            <span id="dt-old-price" class="text-muted text-decoration-line-through ms-2"></span>
+        </div>
+
+        <p id="dt-desc" class="text-muted small"></p>
+        
+        <div class="mb-3">
+            <label class="fw-bold small">SIZE</label>
+            <div id="size-area" class="d-flex flex-wrap gap-2 mt-1"></div>
+        </div>
+        <div class="mb-3">
+            <label class="fw-bold small">COLOR</label>
+            <div id="color-area" class="d-flex flex-wrap gap-2 mt-1"></div>
+        </div>
+        <div class="mb-4">
+            <label class="fw-bold small">HEIGHT (Required)</label>
+            <input type="text" id="height-input" class="form-control" placeholder="e.g. 5'4">
+        </div>
+
+        <!-- Bundle Offers -->
+        <div id="bundle-section" class="mb-4">
+            <label class="fw-bold small mb-2 text-primary">BUNDLE & SAVE</label>
+            <div class="bundle-option selected" onclick="selectBundle(1, this)">
+                <span class="fw-bold">Buy 1 Piece</span>
+                <span class="small text-muted">Standard Price</span>
             </div>
-
-            <!-- Info -->
-            <div class="col-md-6">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                        <span class="badge bg-secondary mb-2" id="dt-cat-badge">Category</span>
-                        <h2 class="font-playfair fw-bold mb-2" id="dt-title"></h2>
-                    </div>
-                    <!-- Wishlist/Share placeholder -->
-                    <button class="btn btn-light rounded-circle"><i class="far fa-heart"></i></button>
-                </div>
-
-                <div class="mb-3">
-                    <span class="fs-2 fw-bold text-primary" id="dt-price"></span>
-                    <span class="text-decoration-line-through text-muted ms-2" id="dt-old-price"></span>
-                </div>
-
-                <!-- Description -->
-                <p class="text-muted small" id="dt-desc"></p>
-
-                <!-- Options -->
-                <div id="options-container">
-                    <label class="fw-bold small mb-2">SIZE</label>
-                    <div id="size-opts" class="d-flex flex-wrap gap-2 mb-3"></div>
-                    
-                    <label class="fw-bold small mb-2">COLOR</label>
-                    <div id="color-opts" class="d-flex flex-wrap gap-2 mb-3"></div>
-                    
-                    <label class="fw-bold small mb-2">HEIGHT (Feet/Inch)</label>
-                    <input type="text" id="dt-height" class="form-control mb-3" placeholder="e.g. 5'4">
-                </div>
-
-                <!-- Bundles -->
-                <div id="bundle-section" class="mb-4">
-                    <label class="fw-bold small mb-2">BUNDLE OFFERS</label>
-                    <div class="bundle-card selected" onclick="selectBundle(1, this)">
-                        <div class="d-flex justify-content-between">
-                            <span class="fw-bold">Buy 1 Piece</span>
-                            <span class="small text-muted">Standard Price</span>
-                        </div>
-                    </div>
-                    <div class="bundle-card" onclick="selectBundle(2, this)">
-                        <div class="d-flex justify-content-between">
-                            <span class="fw-bold">Buy 2 Pieces <span class="discount-tag">5% OFF</span></span>
-                            <span id="bundle-price-2" class="fw-bold text-success"></span>
-                        </div>
-                    </div>
-                    <div class="bundle-card" onclick="selectBundle(3, this)">
-                        <div class="d-flex justify-content-between">
-                            <span class="fw-bold">Buy 3 Pieces <span class="discount-tag">10% OFF</span></span>
-                            <span id="bundle-price-3" class="fw-bold text-success"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Main Add To Cart (Static) -->
-                <button id="btn-main-add" class="btn btn-custom py-3 shadow-lg" onclick="addToCart()">ADD TO CART</button>
+            <div class="bundle-option" onclick="selectBundle(2, this)">
+                <span class="fw-bold">Buy 2 Pieces <span class="bundle-badge">5% OFF</span></span>
+                <span class="fw-bold text-success" id="bundle-price-2"></span>
+            </div>
+            <div class="bundle-option" onclick="selectBundle(3, this)">
+                <span class="fw-bold">Buy 3 Pieces <span class="bundle-badge">10% OFF</span></span>
+                <span class="fw-bold text-success" id="bundle-price-3"></span>
             </div>
         </div>
 
-        <!-- REVIEWS SECTION -->
-        <div class="dt-reviews">
-            <h4 class="font-playfair mb-3">Customer Reviews</h4>
-            <div id="dt-review-list"></div>
+        <!-- Reviews Section -->
+        <div class="review-section rounded-3">
+            <h5 class="font-playfair mb-3">Customer Reviews</h5>
+            <div id="dt-reviews-list" class="mb-4"></div>
             
-            <!-- Add Review Form -->
-            <div class="card border-0 shadow-sm p-3 mt-3 bg-white">
-                <h6 class="fw-bold mb-3">Write a Review</h6>
-                <form onsubmit="submitQuickReview(event)">
-                    <div class="d-flex gap-2 mb-3 text-warning fs-4 rating-stars">
-                        <i class="far fa-star" data-val="1" onclick="setStar(1)"></i>
-                        <i class="far fa-star" data-val="2" onclick="setStar(2)"></i>
-                        <i class="far fa-star" data-val="3" onclick="setStar(3)"></i>
-                        <i class="far fa-star" data-val="4" onclick="setStar(4)"></i>
-                        <i class="far fa-star" data-val="5" onclick="setStar(5)"></i>
-                    </div>
-                    <input type="hidden" id="q-rating" value="0">
-                    <input type="text" id="q-name" class="form-control mb-2" placeholder="Your Name" required>
-                    <textarea id="q-msg" class="form-control mb-2" rows="2" placeholder="How was the product?" required></textarea>
-                    <button class="btn btn-dark w-100 btn-sm">Submit Review</button>
-                </form>
-            </div>
+            <hr>
+            <h6 class="fw-bold">Write a Review</h6>
+            <form onsubmit="submitReview(event)">
+                <div class="rating-stars mb-2" id="star-input">
+                    <i class="fas fa-star" data-val="1" onclick="setRating(1)"></i>
+                    <i class="fas fa-star" data-val="2" onclick="setRating(2)"></i>
+                    <i class="fas fa-star" data-val="3" onclick="setRating(3)"></i>
+                    <i class="fas fa-star" data-val="4" onclick="setRating(4)"></i>
+                    <i class="fas fa-star" data-val="5" onclick="setRating(5)"></i>
+                </div>
+                <input type="hidden" id="r-rating-val" value="5">
+                <input type="text" id="r-name" class="form-control mb-2 form-control-sm" placeholder="Your Name" required>
+                <textarea id="r-msg" class="form-control mb-2 form-control-sm" rows="2" placeholder="Your Feedback" required></textarea>
+                <!-- Photo upload placeholder (visual only for now) -->
+                <div class="mb-2">
+                    <label class="small text-muted"><i class="fas fa-camera"></i> Add Photo (Optional)</label>
+                    <input type="file" class="form-control form-control-sm">
+                </div>
+                <button type="submit" class="btn btn-dark btn-sm w-100">Submit Review</button>
+            </form>
         </div>
     </div>
-</div>
 
-<!-- STICKY BOTTOM BAR (Detail View) -->
-<div class="sticky-action-bar" id="sticky-bar">
-    <div>
-        <div class="small text-muted">Total</div>
-        <div class="action-price" id="sticky-price">₱0</div>
-    </div>
-    <div class="d-flex gap-2 align-items-center">
-        <span class="fw-bold" id="sticky-qty">1x</span>
-        <button class="btn-sticky-add" onclick="addToCart()"><i class="fas fa-shopping-bag me-2"></i> Add</button>
+    <!-- Sticky Bottom Bar -->
+    <div class="sticky-action-bar">
+        <div>
+            <small class="text-muted d-block">Total</small>
+            <span class="fw-bold text-success fs-5" id="sticky-total">₱0</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <div class="border rounded-pill px-2 d-flex align-items-center" style="height:40px;">
+                <button class="btn btn-sm px-1 fw-bold" onclick="dtQty(-1)">-</button>
+                <span id="dt-qty-display" class="mx-2 fw-bold">1</span>
+                <button class="btn btn-sm px-1 fw-bold" onclick="dtQty(1)">+</button>
+            </div>
+            <button class="btn btn-custom py-2 px-4 shadow" onclick="addToCart()">ADD</button>
+        </div>
     </div>
 </div>
 
 <!-- CART PAGE -->
 <div id="page-cart" class="container my-5 d-none">
-    <h2 class="font-playfair text-center mb-4">Your Bag</h2>
+    <h2 class="text-center font-playfair mb-4">Your Shopping Bag</h2>
     
-    <!-- Free Delivery Progress -->
+    <!-- Progress Bar -->
+    <div class="card p-3 border-0 shadow-sm rounded-4 mb-4">
+        <div class="d-flex justify-content-between small fw-bold">
+            <span>₱0</span>
+            <span class="text-success">Free Delivery @ ₱3,000</span>
+        </div>
+        <div class="free-ship-bar">
+            <div class="ship-icon"><i class="fas fa-shipping-fast"></i></div>
+            <div class="free-ship-fill" id="cart-progress-fill"></div>
+        </div>
+        <p class="text-center small text-muted mb-0" id="cart-progress-text">Add more items for free shipping!</p>
+    </div>
+
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <div class="progress-container">
-                <div class="d-flex justify-content-between small fw-bold">
-                    <span>₱0</span>
-                    <span class="text-success">Free Delivery @ ₱3,000</span>
-                </div>
-                <div class="progress-bg">
-                    <div class="progress-fill" id="ship-progress"></div>
-                </div>
-                <div class="mt-2 text-center small text-muted" id="ship-msg">Add more items to unlock free shipping!</div>
-            </div>
-
-            <div id="cart-items-container"></div>
+            <div id="cart-list"></div>
             
-            <!-- Recommendations -->
             <div class="mt-5">
-                <h5 class="font-playfair">People also bought</h5>
-                <div class="d-flex gap-3 overflow-auto pb-3" id="cart-upsell"></div>
+                <h5 class="font-playfair">People also buy this item</h5>
+                <div id="cart-upsell" class="d-flex gap-3" style="overflow-x:auto; padding-bottom:10px;"></div>
             </div>
 
-            <div class="fixed-bottom bg-white p-3 border-top shadow-lg d-lg-none">
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <span class="text-muted">Total</span>
-                    <span class="fw-bold fs-4 text-primary" id="mobile-cart-total">₱0</span>
+            <div class="bg-white p-4 rounded-4 shadow-sm border mt-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <small class="text-muted d-block">Total Amount</small>
+                        <div class="fs-4 fw-bold text-success" id="cart-total">₱0.00</div>
+                    </div>
+                    <button class="btn btn-custom px-5" style="width:auto;" onclick="routeTo('checkout')">CHECKOUT</button>
                 </div>
-                <button class="btn btn-custom" onclick="routeTo('checkout')">CHECKOUT</button>
-            </div>
-            
-            <div class="d-none d-lg-block text-end mt-4">
-                <h3 class="fw-bold text-primary" id="desktop-cart-total">Total: ₱0</h3>
-                <button class="btn btn-custom w-25 mt-2" onclick="routeTo('checkout')">CHECKOUT</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- CHECKOUT PAGE -->
-<div id="page-checkout" class="container my-5 d-none" style="max-width: 700px;">
-    <h2 class="font-playfair text-center mb-4">Checkout</h2>
+<div id="page-checkout" class="container my-5 d-none" style="max-width: 800px;">
+    <h3 class="text-center mb-4 font-playfair">Checkout</h3>
     
-    <form onsubmit="placeOrder(event)">
-        <!-- Collapsible Order Summary -->
-        <div class="mb-4">
-            <div class="summary-header" data-bs-toggle="collapse" data-bs-target="#orderSumBody">
-                <span><i class="fas fa-shopping-cart me-2"></i> Order Summary</span>
-                <i class="fas fa-chevron-down"></i>
-            </div>
-            <div class="collapse show bg-white border border-top-0 rounded-bottom p-3" id="orderSumBody">
-                <div id="checkout-list"></div>
-                <hr>
-                <div class="d-flex justify-content-between fw-bold">
-                    <span>Total to Pay</span>
-                    <span class="text-primary fs-5" id="co-total">₱0</span>
-                </div>
+    <form id="checkout-form" onsubmit="submitOrder(event)">
+        
+        <!-- Collapsible Order Summary (Top) -->
+        <div class="checkout-summary-header" data-bs-toggle="collapse" data-bs-target="#orderSummaryBody">
+            <span><i class="fas fa-shopping-cart me-2"></i> Show Order Summary</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="collapse show mb-4" id="orderSummaryBody">
+            <div class="card card-body bg-light border-0" id="checkout-order-list"></div>
+            <div class="d-flex justify-content-between px-3 mt-2 fw-bold">
+                <span>Total to Pay:</span>
+                <span id="pay-total-header" class="text-primary">₱0</span>
             </div>
         </div>
 
-        <div class="card p-4 border-0 shadow-sm rounded-3 mb-4">
-            <h5 class="font-playfair mb-3">1. Delivery Info</h5>
+        <div class="card p-4 shadow-sm border-0 rounded-4 mb-3">
+            <h6 class="fw-bold mb-3">Delivery Information</h6>
             <div class="row g-3">
-                <div class="col-12">
-                    <select id="del-method" class="form-select" onchange="toggleAddr()" required>
-                        <option value="" disabled selected>Select Method</option>
-                        <option value="Pick-up">Pick Up (Free)</option>
-                        <option value="Delivery">Courier Delivery</option>
-                    </select>
-                </div>
+                <div class="col-12"><select class="form-select py-3" id="del-method" onchange="toggleDeliveryOptions()" required><option value="" disabled selected>Select Delivery Method</option><option value="Pick-up">Pick-up (Free)</option><option value="Delivery">Delivery (Courier)</option></select></div>
                 <div class="col-md-6"><input type="text" class="form-control" id="c-name" placeholder="Full Name" required></div>
-                <div class="col-md-6"><input type="number" class="form-control" id="c-phone" placeholder="Phone" required></div>
-                
-                <div class="delivery-field col-12 d-none">
-                    <input type="text" class="form-control mb-2" id="addr-txt" placeholder="Complete Address">
-                    <select class="form-select" id="addr-region" onchange="calcTotal()">
-                        <option value="" selected>Select Region</option>
-                        <option value="MM">Metro Manila</option>
+                <div class="col-md-6"><input type="number" class="form-control" id="c-phone" placeholder="Phone Number" required></div>
+                <div class="col-12 delivery-fields" style="display:none;"><input type="text" class="form-control" id="addr-full" placeholder="Full Address (Street, Brgy, City, Province)"></div>
+                <div class="col-12 delivery-fields" style="display:none;">
+                    <select class="form-select" id="addr-region" onchange="calcShipping()">
+                        <option value="" disabled selected>Select Region</option>
+                        <option value="Metro Manila">Metro Manila</option>
                         <option value="Luzon">Luzon</option>
-                        <option value="VisMin">Visayas/Mindanao</option>
+                        <option value="VisMin">Visayas / Mindanao</option>
                     </select>
                 </div>
             </div>
         </div>
 
-        <div class="card p-4 border-0 shadow-sm rounded-3 mb-4">
-            <h5 class="font-playfair mb-3">2. Payment (GCash)</h5>
-            <div class="text-center p-3 bg-light rounded mb-3 border">
-                <img src="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/GCASH.png?raw=true" height="40">
-                <div class="fw-bold mt-2">0976-551-3716</div>
+        <div class="card p-4 shadow-sm border-0 rounded-4 mb-3">
+            <h6 class="fw-bold mb-3">Payment (GCash)</h6>
+            <div class="alert alert-info text-center">
+                Send to <strong>0976-551-3716</strong>
             </div>
-            <input type="text" id="pay-ref" class="form-control mb-2" placeholder="Reference No." required>
-            <input type="file" id="pay-img" class="form-control" accept="image/*" required>
+            <input type="text" class="form-control mb-3" id="c-ref" placeholder="GCash Reference No." required>
+            <input type="file" class="form-control" id="c-proof" accept="image/*" required>
         </div>
 
         <button type="submit" class="btn btn-custom py-3">PLACE ORDER</button>
     </form>
 </div>
 
-<!-- TRACK ORDER -->
-<div id="page-track" class="container my-5 d-none text-center">
-    <h3 class="font-playfair mb-4">Track Order</h3>
-    <div class="card p-4 shadow-sm border-0 mx-auto" style="max-width: 500px;">
-        <input type="text" id="track-id" class="form-control mb-3 text-center" placeholder="Enter Order ID">
-        <button class="btn btn-dark w-100" onclick="doTrack()">Search</button>
-        <div id="track-res" class="mt-3 fw-bold text-success"></div>
+<!-- TRACKING -->
+<div id="page-track" class="container my-5 d-none text-center" style="max-width:500px;">
+    <h3 class="mb-3 font-playfair">Track Order</h3>
+    <div class="input-group mb-4 shadow-sm rounded-pill overflow-hidden">
+        <input type="text" id="track-id" class="form-control border-0 ps-4" placeholder="Order ID">
+        <button class="btn btn-custom px-4" style="width:auto; border-radius:0;" onclick="trackOrder()">Search</button>
     </div>
+    <div id="track-result" class="d-none card p-3"></div>
 </div>
 
+<!-- FOOTER (Always Visible) -->
+<footer>
+    <div class="container text-center">
+        <h3 class="font-playfair text-white">Al-Jazaa Ph.</h3>
+        <p class="small opacity-50">Timeless modesty with Islamic integrity.</p>
+        <div class="mt-4">
+            <a href="#" class="text-white text-decoration-none mx-2 small" onclick="routeTo('home')">Home</a>
+            <a href="#" class="text-white text-decoration-none mx-2 small" onclick="routeTo('track')">Track</a>
+            <a href="#" class="text-white text-decoration-none mx-2 small" onclick="routeTo('cart')">Cart</a>
+        </div>
+        <hr class="border-secondary opacity-25 mt-4">
+        <p class="small opacity-25 mb-0">&copy; 2024 Al-Jazaa Ph.</p>
+    </div>
+</footer>
+
 <!-- BACK TO TOP -->
-<div class="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-    <i class="fas fa-arrow-up"></i>
-</div>
+<div class="back-to-top" onclick="window.scrollTo({top:0, behavior:'smooth'})"><i class="fas fa-arrow-up"></i></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    // --- STATE ---
-    let products = [], cart = JSON.parse(localStorage.getItem('jazaa_cart')) || [], currentItem = {};
+    let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v15'))||[], curProduct={}, selectedSize=null, selectedColor=null;
     let selectedBundleQty = 1;
-
-    const catImgs = {
-        'All': 'https://cdn-icons-png.flaticon.com/512/3502/3502601.png',
+    let cartTotalAmount=0, currentShippingFee=0;
+    
+    // Category Images
+    const catImages = {
+        'All': 'https://cdn-icons-png.flaticon.com/512/3502/3502601.png', 
         'Niqab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat1.png?raw=true',
         'Jilbab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat2.png?raw=true',
-        'Abaya': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat3.png?raw=true',
+        'Abaya': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat3.png?raw=true', 
         'Khimar': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat4.png?raw=true',
-        'Set': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat5.png?raw=true'
+        'Default': 'https://cdn-icons-png.flaticon.com/512/4430/4430945.png'
     };
 
-    // --- INIT ---
-    window.onload = () => {
-        fetch(WEB_APP_URL + "?action=getProducts").then(r=>r.json()).then(d => {
-            products = d;
-            document.getElementById('loader').style.display='none';
-            renderHome();
-        });
-        updateCartBadge();
-        
-        // Scroll Listener for Sticky Bar & Back to Top
-        const detailView = document.getElementById('detail-view');
+    document.addEventListener("DOMContentLoaded", () => {
+        fetchProducts(); updateCartCount();
         window.onscroll = () => {
-            document.querySelector('.back-to-top').classList.toggle('visible', window.scrollY > 300);
+            const btn = document.querySelector('.back-to-top');
+            if(window.scrollY > 300) btn.classList.add('visible'); else btn.classList.remove('visible');
         };
-        detailView.onscroll = () => {
-            // Show sticky action bar if scrolled past 400px in detail view
-            document.getElementById('sticky-bar').classList.toggle('visible', detailView.scrollTop > 400);
-        };
-    };
+    });
 
-    function routeTo(page) {
-        document.querySelectorAll('[id^="page-"]').forEach(el => el.classList.add('d-none'));
-        document.getElementById('page-' + page).classList.remove('d-none');
-        document.getElementById('detail-view').style.display='none';
-        window.scrollTo(0,0);
-        if(page === 'cart') renderCart();
-        if(page === 'checkout') initCheckout();
-    }
-    
-    function scrollToShop() { document.getElementById('shop-anchor').scrollIntoView({behavior:'smooth'}); }
     const closeSidebar = () => bootstrap.Offcanvas.getInstance(document.getElementById('sidebarMenu')).hide();
-    const closeDetail = () => { document.getElementById('detail-view').style.display='none'; document.body.style.overflow='auto'; };
+    const closeDetail = () => { document.getElementById('detail-view').style.display='none'; document.body.style.overflow = 'auto'; };
 
-    // --- HOME & LISTING ---
-    function renderHome() {
-        // Categories
-        const cats = ['All', ...new Set(products.map(p=>p.category))];
-        document.getElementById('cat-scroll-view').innerHTML = cats.map(c => `
-            <div class="cat-pill ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">
-                <img src="${catImgs[c]||catImgs['All']}"><span>${c}</span>
+    function routeTo(pageId) { 
+        document.querySelectorAll('[id^="page-"]').forEach(d=>d.classList.add('d-none'));
+        document.getElementById('detail-view').style.display='none';
+        document.getElementById('page-'+pageId).classList.remove('d-none');
+        window.scrollTo(0,0);
+        
+        // Hide/Show Flash Bar
+        document.getElementById('top-bar').style.display = (pageId === 'home') ? 'flex' : 'none';
+        
+        if(pageId==='cart') renderCart();
+        if(pageId==='checkout') initCheckout();
+    }
+
+    function fetchProducts() {
+        fetch(WEB_APP_URL + "?action=getProducts").then(r=>r.json()).then(data => { 
+            allProducts = data; 
+            document.getElementById('loader').style.display = 'none'; 
+            renderCats(); renderProds(allProducts); 
+        });
+    }
+
+    function renderCats() {
+        const cats = ['All', ...new Set(allProducts.map(p => p.category))]; 
+        document.getElementById('category-list').innerHTML = cats.map(c => `
+            <div class="cat-card ${c==='All'?'active':''}" onclick="filterCat('${c}', this)">
+                <img src="${catImages[c]||catImages['Default']}">
+                <span>${c}</span>
             </div>
         `).join('');
-        document.getElementById('sidebar-cats').innerHTML = cats.map(c=>`<a href="#" class="text-decoration-none text-dark ps-2 border-start border-3 border-success mb-2" onclick="filterCat('${c}', null, true)">${c}</a>`).join('');
-        renderGrid(products);
+        document.getElementById('sidebar-categories').innerHTML = cats.map(c => `<div class="p-2 border-bottom" onclick="filterCat('${c}',null,true)">${c}</div>`).join('');
     }
 
-    function filterCat(cat, el, sidebar=false) {
-        if(el) { document.querySelectorAll('.cat-pill').forEach(b=>b.classList.remove('active')); el.classList.add('active'); }
-        if(sidebar) { closeSidebar(); document.getElementById('page-home').classList.remove('d-none'); scrollToShop(); }
-        renderGrid(cat==='All'?products:products.filter(p=>p.category===cat));
+    function filterCat(c, el, sidebar=false) {
+        if(el) { document.querySelectorAll('.cat-card').forEach(x=>x.classList.remove('active')); el.classList.add('active'); }
+        renderProds(c==='All'?allProducts:allProducts.filter(p=>p.category===c));
+        if(sidebar) { closeSidebar(); routeTo('home'); document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); }
     }
 
-    function renderGrid(list) {
+    function renderProds(list) {
         document.getElementById('product-grid').innerHTML = list.map(p => `
             <div class="col">
-                <div class="product-card h-100" onclick="openDetail('${p.id}')">
-                    <div class="card-img-box"><img src="${p.image}"></div>
+                <div class="product-card" onclick="openDetail('${p.id}')">
+                    <div class="card-img-wrapper"><img src="${p.image}"></div>
                     <div class="p-3">
                         <div class="text-muted small text-uppercase">${p.category}</div>
-                        <h6 class="fw-bold text-truncate">${p.name}</h6>
-                        <div class="text-primary fw-bold">₱${p.price}</div>
+                        <h6 class="fw-bold text-dark text-truncate">${p.name}</h6>
+                        <div class="fw-bold text-success">₱${p.price}</div>
                     </div>
                 </div>
             </div>
         `).join('');
+    }
+
+    function openDetail(id) {
+        curProduct = allProducts.find(p=>p.id==id);
+        selectedSize = null; selectedColor = null; selectedBundleQty = 1;
+        document.getElementById('height-input').value = "";
+        document.getElementById('dt-qty-display').innerText = "1";
+        
+        // Populate Data
+        document.getElementById('dt-header-title').innerText = curProduct.name;
+        document.getElementById('dt-name').innerText = curProduct.name;
+        document.getElementById('dt-cat').innerText = curProduct.category;
+        document.getElementById('dt-price').innerText = "₱" + curProduct.price;
+        document.getElementById('dt-desc').innerText = curProduct.desc;
+        document.getElementById('dt-cart-count').innerText = cart.length;
+
+        // Scrollable Images
+        const imgs = (curProduct.images && curProduct.images.length) ? curProduct.images : [curProduct.image];
+        document.getElementById('dt-scroll-images').innerHTML = imgs.map(src => `<img src="${src}">`).join('');
+
+        // Options
+        const isNiqab = curProduct.category.toLowerCase() === 'niqab';
+        document.getElementById('size-area').innerHTML = isNiqab ? '<span class="badge bg-secondary">One Size</span>' : 
+            ["S","M","L","XL"].map(s => `<button class="btn btn-outline-dark btn-sm rounded-pill" onclick="pickOpt('size','${s}',this)">${s}</button>`).join('');
+        
+        const colors = curProduct.colors ? curProduct.colors.split(',') : ["Default"];
+        document.getElementById('color-area').innerHTML = colors.map(c => `<button class="btn btn-outline-dark btn-sm rounded-pill" onclick="pickOpt('color','${c.trim()}',this)">${c.trim()}</button>`).join('');
+        
+        if(isNiqab) { selectedSize = "One Size"; document.getElementById('bundle-section').style.display='none'; }
+        else { document.getElementById('bundle-section').style.display='block'; updateBundlePrices(); }
+
+        // Mock Reviews
+        document.getElementById('dt-reviews-list').innerHTML = `
+            <div class="card p-3 border-0 bg-light mb-2"><div class="d-flex justify-content-between"><span class="fw-bold small">Amina K.</span><span class="text-warning small"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span></div><p class="small mb-0 text-muted">Beautiful quality!</p></div>
+        `;
+
+        updateStickyTotal();
+        document.getElementById('detail-view').style.display='block';
+        document.body.style.overflow = 'hidden'; // Stop background scroll
+    }
+
+    function pickOpt(type, val, el) {
+        if(type==='size') selectedSize = val; else selectedColor = val;
+        Array.from(el.parentNode.children).forEach(c=>c.classList.remove('active', 'btn-dark', 'text-white'));
+        el.classList.add('active', 'btn-dark', 'text-white');
+    }
+
+    function dtQty(c) {
+        // Only visual in this setup, usually would update logic. But we use Bundle logic for qty > 1
+        // If bundles are active, disable manual qty or sync it.
+        // For simplicity: If non-niqab, use bundle buttons. If niqab, use manual.
+        let q = parseInt(document.getElementById('dt-qty-display').innerText) + c;
+        if(q<1) q=1;
+        document.getElementById('dt-qty-display').innerText = q;
+        // if Niqab
+        if(curProduct.category.toLowerCase() === 'niqab') {
+            selectedBundleQty = q;
+            updateStickyTotal();
+        }
+    }
+
+    function selectBundle(qty, el) {
+        selectedBundleQty = qty;
+        document.querySelectorAll('.bundle-option').forEach(b=>b.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('dt-qty-display').innerText = qty;
+        updateStickyTotal();
+    }
+
+    function updateBundlePrices() {
+        // Reset
+        selectBundle(1, document.querySelector('.bundle-option'));
+        let p = curProduct.price;
+        document.getElementById('bundle-price-2').innerText = "₱" + Math.floor((p*2)*0.95);
+        document.getElementById('bundle-price-3').innerText = "₱" + Math.floor((p*3)*0.90);
+    }
+
+    function updateStickyTotal() {
+        let price = curProduct.price * selectedBundleQty;
+        if(curProduct.category.toLowerCase() !== 'niqab') {
+            if(selectedBundleQty === 2) price = price * 0.95;
+            if(selectedBundleQty === 3) price = price * 0.90;
+        }
+        document.getElementById('sticky-total').innerText = "₱" + Math.floor(price);
+    }
+
+    function addToCart() {
+        if(!selectedSize && curProduct.category !== 'Niqab') return Swal.fire('Error','Select Size','warning');
+        if(!selectedColor) return Swal.fire('Error','Select Color','warning');
+        let h = document.getElementById('height-input').value;
+        if(!h) return Swal.fire('Error','Enter Height','warning');
+
+        let finalPrice = curProduct.price;
+        if(curProduct.category !== 'Niqab') {
+             if(selectedBundleQty === 2) finalPrice = (curProduct.price * 2 * 0.95) / 2;
+             if(selectedBundleQty === 3) finalPrice = (curProduct.price * 3 * 0.90) / 3;
+        }
+
+        cart.push({
+            ...curProduct,
+            price: Math.floor(finalPrice),
+            qty: selectedBundleQty,
+            size: selectedSize,
+            color: selectedColor,
+            height: h
+        });
+        localStorage.setItem('alj_cart_v15', JSON.stringify(cart));
+        updateCartCount();
+        Swal.fire({icon:'success', title:'Added', toast:true, position:'top-end', showConfirmButton:false, timer:1000});
+        closeDetail();
+    }
+
+    function updateCartCount() { 
+        document.getElementById('cart-count').innerText = cart.length; 
+    }
+
+    function renderCart() {
+        const c = document.getElementById('cart-list');
+        if(!cart.length) { 
+            c.innerHTML = '<div class="text-center py-5 text-muted">Bag is empty</div>'; 
+            updateCartCalc(0);
+            return; 
+        }
+        let total = 0;
+        c.innerHTML = cart.map((i,x) => {
+            total += i.price * i.qty;
+            return `
+            <div class="card mb-3 border-0 shadow-sm">
+                <div class="row g-0 align-items-center">
+                    <div class="col-3"><img src="${i.image}" class="img-fluid rounded-start" style="height:100px; object-fit:cover;"></div>
+                    <div class="col-7 p-2">
+                        <div class="fw-bold text-truncate">${i.name}</div>
+                        <div class="small text-muted">${i.size}, ${i.color}</div>
+                        <div class="fw-bold text-success">₱${i.price} x ${i.qty}</div>
+                    </div>
+                    <div class="col-2 text-center"><i class="fas fa-trash text-danger" onclick="delItem(${x})"></i></div>
+                </div>
+            </div>`;
+        }).join('');
+        updateCartCalc(total);
+
+        // Upsell Suggestions
+        const upsell = allProducts.sort(()=>0.5-Math.random()).slice(0,5);
+        document.getElementById('cart-upsell').innerHTML = upsell.map(p => `
+            <div class="card border-0" style="min-width:120px;" onclick="openDetail('${p.id}')">
+                <img src="${p.image}" class="rounded" style="height:120px; object-fit:cover;">
+                <div class="small fw-bold text-truncate mt-1">${p.name}</div>
+            </div>
+        `).join('');
+    }
+
+    function updateCartCalc(total) {
+        document.getElementById('cart-total').innerText = "₱" + total.toLocaleString();
+        // Progress Bar
+        let pct = (total / 3000) * 100;
+        if(pct > 100) pct = 100;
+        document.getElementById('cart-progress-fill').style.width = pct + "%";
+        document.querySelector('.ship-icon').style.left = pct + "%";
+        if(pct === 100) document.getElementById('cart-progress-text').innerHTML = "<span class='text-success fw-bold'>Free Delivery Unlocked!</span>";
+        else document.getElementById('cart-progress-text').innerText = `Add ₱${(3000-total).toLocaleString()} for Free Delivery`;
+    }
+
+    function delItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v15', JSON.stringify(cart)); updateCartCount(); renderCart(); }
+
+    function initCheckout() {
+        if(!cart.length) { routeTo('home'); return; }
+        const list = document.getElementById('checkout-order-list');
+        let total = 0;
+        list.innerHTML = cart.map(i => {
+            total += i.price * i.qty;
+            return `<div class="d-flex justify-content-between small mb-1"><span>${i.qty}x ${i.name} (${i.size})</span><span>₱${i.price*i.qty}</span></div>`;
+        }).join('');
+        cartTotalAmount = total;
+        calcShipping();
+    }
+
+    function toggleDeliveryOptions() {
+        const v = document.getElementById('del-method').value;
+        const els = document.querySelectorAll('.delivery-fields');
+        els.forEach(e => e.style.display = (v === 'Delivery') ? 'block' : 'none');
+        calcShipping();
+    }
+
+    function calcShipping() {
+        currentShippingFee = 0;
+        if(document.getElementById('del-method').value === 'Delivery') {
+            // Simple logic: Free if > 3000, else based on region
+            if(cartTotalAmount < 3000) {
+                const r = document.getElementById('addr-region').value;
+                if(r === 'Metro Manila') currentShippingFee = 100;
+                else if(r === 'Luzon') currentShippingFee = 150;
+                else if(r === 'VisMin') currentShippingFee = 200;
+            }
+        }
+        document.getElementById('pay-total-header').innerText = "₱" + (cartTotalAmount + currentShippingFee).toLocaleString();
+    }
+
+    function submitOrder(e) {
+        e.preventDefault();
+        Swal.fire({title:'Processing', didOpen:()=>Swal.showLoading()});
+        // Real logic would go here via fetch to Google Script
+        setTimeout(() => {
+            cart = []; localStorage.setItem('alj_cart_v15', '[]'); updateCartCount();
+            Swal.fire('Success', 'Order Placed. Tracking ID: JAZ-12345', 'success').then(()=>routeTo('home'));
+        }, 2000);
     }
 
     function doSearch() {
         const q = document.getElementById('searchBox').value.toLowerCase();
-        renderGrid(products.filter(p=>p.name.toLowerCase().includes(q)));
-        if(q.length > 0) scrollToShop();
-    }
-
-    // --- DETAIL VIEW LOGIC ---
-    function openDetail(id) {
-        currentItem = products.find(p=>p.id==id);
-        selectedBundleQty = 1;
-        document.body.style.overflow='hidden'; // prevent background scroll
-        const dv = document.getElementById('detail-view');
-        dv.style.display = 'block';
-        dv.scrollTop = 0;
-
-        document.getElementById('dt-header-title').innerText = currentItem.name;
-        document.getElementById('dt-title').innerText = currentItem.name;
-        document.getElementById('dt-desc').innerText = currentItem.desc;
-        document.getElementById('dt-cat-badge').innerText = currentItem.category;
-        document.getElementById('dt-price').innerText = "₱" + currentItem.price;
-        document.getElementById('dt-cart-badge').innerText = cart.length;
-
-        // Images
-        const imgs = currentItem.images && currentItem.images.length ? currentItem.images : [currentItem.image];
-        document.getElementById('dt-main-img').src = imgs[0];
-        
-        // Side/Mobile Thumbs
-        const thumbHTML = imgs.map((url, i) => `<img src="${url}" class="thumb-img ${i===0?'active':''}" onclick="changeImg('${url}',this)">`).join('');
-        document.getElementById('dt-thumbs-col').innerHTML = thumbHTML;
-        document.getElementById('dt-thumbs-row').innerHTML = thumbHTML;
-
-        // Options
-        const isNiqab = currentItem.category.toLowerCase() === 'niqab';
-        document.getElementById('options-container').style.display = isNiqab ? 'none' : 'block';
-        document.getElementById('bundle-section').style.display = isNiqab ? 'none' : 'block';
-        
-        // Populate Sizes/Colors
-        const renderOpts = (arr, id) => document.getElementById(id).innerHTML = arr.map(v=>`<button class="btn btn-outline-dark btn-sm rounded-pill" onclick="selectOpt(this)">${v.trim()}</button>`).join('');
-        if(!isNiqab) {
-            renderOpts(['S','M','L','XL'], 'size-opts');
-            renderOpts(currentItem.colors?currentItem.colors.split(','):['Default'], 'color-opts');
-        }
-
-        // Calculate Bundle Prices Display
-        if(!isNiqab) {
-            document.getElementById('bundle-price-2').innerText = "₱" + Math.floor((currentItem.price * 2) * 0.95);
-            document.getElementById('bundle-price-3').innerText = "₱" + Math.floor((currentItem.price * 3) * 0.90);
-            selectBundle(1, document.querySelector('.bundle-card')); // Reset to 1
-        }
-        
-        // Sticky Bar Init
-        updateStickyBar();
-
-        // Load Reviews (Mockup logic + Real fetch)
-        loadReviews(currentItem.id);
-    }
-
-    function changeImg(src, el) {
-        document.getElementById('dt-main-img').src = src;
-        document.querySelectorAll('.thumb-img').forEach(i=>i.classList.remove('active'));
-        el.classList.add('active');
-    }
-
-    function selectOpt(btn) {
-        Array.from(btn.parentNode.children).forEach(b=>b.classList.remove('btn-dark','text-white'));
-        btn.classList.add('btn-dark','text-white');
-        btn.classList.remove('btn-outline-dark');
-        checkAddBtn();
-    }
-
-    function selectBundle(qty, card) {
-        selectedBundleQty = qty;
-        document.querySelectorAll('.bundle-card').forEach(c=>c.classList.remove('selected'));
-        card.classList.add('selected');
-        updateStickyBar();
-    }
-
-    function updateStickyBar() {
-        let price = currentItem.price * selectedBundleQty;
-        if(currentItem.category !== 'Niqab') {
-            if(selectedBundleQty === 2) price *= 0.95;
-            if(selectedBundleQty === 3) price *= 0.90;
-        }
-        price = Math.floor(price);
-        document.getElementById('sticky-price').innerText = "₱" + price;
-        document.getElementById('sticky-qty').innerText = selectedBundleQty + "x Items";
-    }
-
-    function checkAddBtn() {
-        // Simple check if options selected
-        // In real app, validate logic here
-    }
-
-    function addToCart() {
-        const isNiqab = currentItem.category === 'Niqab';
-        let size='OneSize', color='Default', height='';
-        
-        if(!isNiqab) {
-            const sBtn = document.querySelector('#size-opts .btn-dark');
-            const cBtn = document.querySelector('#color-opts .btn-dark');
-            height = document.getElementById('dt-height').value;
-            if(!sBtn || !cBtn || !height) return Swal.fire('Error','Please select Size, Color & Height','warning');
-            size = sBtn.innerText; color = cBtn.innerText;
-        }
-
-        let finalPrice = currentItem.price;
-        // Apply discount to unit price for cart if bundled
-        if(selectedBundleQty === 2) finalPrice *= 0.95;
-        if(selectedBundleQty === 3) finalPrice *= 0.90;
-
-        cart.push({
-            id: currentItem.id,
-            name: currentItem.name,
-            price: Math.floor(finalPrice),
-            img: currentItem.image,
-            qty: selectedBundleQty,
-            size: size,
-            color: color,
-            height: height
-        });
-        
-        localStorage.setItem('jazaa_cart', JSON.stringify(cart));
-        updateCartBadge();
-        Swal.fire({icon:'success', title:'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1500});
-        closeDetail();
+        renderProds(allProducts.filter(p=>p.name.toLowerCase().includes(q)));
+        scrollToProducts();
     }
     
-    function updateCartBadge() { 
-        document.getElementById('cart-count').innerText = cart.length; 
-        if(document.getElementById('dt-cart-badge')) document.getElementById('dt-cart-badge').innerText = cart.length;
-    }
-
-    // --- CART LOGIC ---
-    function renderCart() {
-        const div = document.getElementById('cart-items-container');
-        if(!cart.length) { 
-            div.innerHTML = `<div class="text-center py-5 text-muted">Your bag is empty</div>`; 
-            updateCartTotals(0);
-            return; 
-        }
-
-        let total = 0;
-        div.innerHTML = cart.map((item, i) => {
-            total += item.price * item.qty;
-            return `
-            <div class="card mb-3 border-0 shadow-sm">
-                <div class="row g-0 align-items-center">
-                    <div class="col-3 p-2"><img src="${item.img}" class="img-fluid rounded"></div>
-                    <div class="col-7">
-                        <div class="fw-bold text-truncate">${item.name}</div>
-                        <div class="small text-muted">${item.size}, ${item.color}</div>
-                        <div class="fw-bold text-primary">₱${item.price} x ${item.qty}</div>
-                    </div>
-                    <div class="col-2 text-center">
-                        <i class="fas fa-trash text-danger" onclick="remItem(${i})"></i>
-                    </div>
-                </div>
-            </div>`;
-        }).join('');
-
-        updateCartTotals(total);
-        renderUpsell();
-    }
-
-    function updateCartTotals(total) {
-        document.getElementById('desktop-cart-total').innerText = "Total: ₱" + total.toLocaleString();
-        document.getElementById('mobile-cart-total').innerText = "₱" + total.toLocaleString();
-        
-        // Progress Bar
-        const limit = 3000;
-        const pct = Math.min((total/limit)*100, 100);
-        document.getElementById('ship-progress').style.width = pct + "%";
-        if(pct === 100) {
-            document.querySelector('.car-icon')?.classList.add('d-none'); // Hide moving icon if full
-            document.getElementById('ship-msg').innerHTML = `<span class="text-success fw-bold">Free Delivery Unlocked!</span>`;
-        } else {
-            const left = limit - total;
-            document.getElementById('ship-msg').innerText = `Add ₱${left.toLocaleString()} more for Free Delivery`;
-        }
-    }
-
-    function remItem(i) { cart.splice(i,1); localStorage.setItem('jazaa_cart', JSON.stringify(cart)); renderCart(); updateCartBadge(); }
+    function scrollToProducts() { document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); }
     
-    function renderUpsell() {
-        const upsell = products.sort(()=>0.5-Math.random()).slice(0,4);
-        document.getElementById('cart-upsell').innerHTML = upsell.map(p => `
-            <div class="card" style="min-width:140px; border:none;" onclick="openDetail('${p.id}')">
-                <img src="${p.image}" class="rounded mb-2" style="height:150px; object-fit:cover;">
-                <div class="small fw-bold text-truncate">${p.name}</div>
-                <div class="small text-primary">₱${p.price}</div>
-            </div>
-        `).join('');
-    }
-
-    // --- CHECKOUT & REVIEWS ---
-    function initCheckout() {
-        const list = document.getElementById('checkout-list');
-        let total = 0;
-        list.innerHTML = cart.map(i => {
-            total += i.price * i.qty;
-            return `<div class="d-flex justify-content-between small mb-1">
-                <span>${i.qty}x ${i.name}</span>
-                <span>₱${i.price*i.qty}</span>
-            </div>`;
-        }).join('');
-        document.getElementById('co-total').dataset.subtotal = total;
-        calcTotal();
-    }
-
-    function toggleAddr() {
-        const val = document.getElementById('del-method').value;
-        document.querySelector('.delivery-field').classList.toggle('d-none', val !== 'Delivery');
-        calcTotal();
-    }
-
-    function calcTotal() {
-        let total = parseInt(document.getElementById('co-total').dataset.subtotal || 0);
-        let ship = 0;
-        if(document.getElementById('del-method').value === 'Delivery') {
-            const reg = document.getElementById('addr-region').value;
-            if(reg === 'MM') ship = 100;
-            else if(reg === 'Luzon') ship = 150;
-            else if(reg === 'VisMin') ship = 200;
-        }
-        // Free shipping logic check
-        if(total >= 3000) ship = 0;
-        
-        document.getElementById('co-total').innerText = "₱" + (total + ship).toLocaleString();
-    }
-
-    // Star Rating Logic
-    function setStar(n) {
-        document.getElementById('q-rating').value = n;
-        document.querySelectorAll('.rating-stars i').forEach(el => {
-            if(el.dataset.val <= n) { el.classList.remove('far'); el.classList.add('fas'); }
-            else { el.classList.remove('fas'); el.classList.add('far'); }
+    // Star Rating UI
+    function setRating(n) {
+        document.getElementById('r-rating-val').value = n;
+        document.querySelectorAll('#star-input i').forEach(el => {
+            if(el.dataset.val <= n) { el.classList.remove('far'); el.classList.add('fas', 'text-warning'); }
+            else { el.classList.remove('fas', 'text-warning'); el.classList.add('far'); }
         });
     }
 
-    function loadReviews(pid) {
-        // Fake data for demo + Fetch logic
-        const div = document.getElementById('dt-review-list');
-        div.innerHTML = `<div class="spinner-border spinner-border-sm"></div>`;
-        // simulate fetch
-        setTimeout(() => {
-            // Check if user has reviews in DB for this product. 
-            // For UI, showing static layout:
-            div.innerHTML = `
-                <div class="review-mini-card">
-                    <div class="d-flex justify-content-between">
-                        <span class="fw-bold small">Sarah A.</span>
-                        <span class="text-warning small"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                    </div>
-                    <p class="mb-0 small text-muted">Fabric is amazing, very cooling!</p>
-                </div>
-                <div class="review-mini-card">
-                    <div class="d-flex justify-content-between">
-                        <span class="fw-bold small">Anonymous</span>
-                        <span class="text-warning small"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="far fa-star"></i></span>
-                    </div>
-                    <p class="mb-0 small text-muted">Nice fitting, but delivery took 5 days.</p>
-                </div>
-            `;
-        }, 1000);
-    }
+    function submitReview(e) { e.preventDefault(); Swal.fire('Success', 'Review Submitted', 'success'); }
 </script>
 </body>
 </html>
