@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Al-Jazaa Ph</title>
+    <title>Al-Jazaa Ph.</title>
     
     <link rel="icon" type="image/png" href="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -141,13 +141,14 @@
             <div id="full-product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
         </div>
 
-        <!-- DETAIL PAGE -->
+        <!-- DETAIL PAGE (FIXED LAYOUT) -->
         <div id="page-detail" class="view-section hidden pb-[90px] md:pb-12 bg-white min-h-screen">
             <div class="md:hidden h-[60px] flex items-center px-4 border-b bg-white shadow-sm shrink-0 sticky top-0 z-40">
                 <button onclick="window.history.back()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100"><i class="fas fa-arrow-left text-xl text-gray-700"></i></button>
                 <span class="ml-4 font-bold text-lg text-primary truncate">Product Details</span>
             </div>
             <div class="hidden md:block container mx-auto px-4 py-6"><button onclick="window.history.back()" class="flex items-center text-gray-500 hover:text-primary transition"><i class="fas fa-arrow-left mr-2"></i> Back to Shop</button></div>
+            
             <div class="container mx-auto px-0 md:px-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-12">
                     <div class="relative w-full bg-gray-50 md:rounded-3xl overflow-hidden aspect-[3/4] md:aspect-[4/5] md:sticky md:top-24">
@@ -160,15 +161,33 @@
                         <h1 id="dt-name" class="font-serif text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight"></h1>
                         <div class="mb-6 flex items-center gap-3"><span id="dt-price-display" class="text-2xl md:text-3xl font-bold text-green-700"></span><span id="dt-old-price" class="text-lg text-gray-400 line-through hidden"></span></div>
                         <p id="dt-desc" class="text-gray-600 text-sm leading-relaxed mb-8 border-b border-gray-100 pb-6"></p>
+                        
+                        <!-- Fixed Layout Options -->
                         <div class="space-y-6 mb-8">
                             <div><label class="block text-xs font-bold text-gray-800 mb-2 uppercase tracking-wide">Size <span class="text-red-500">*</span></label><div id="size-opts" class="flex flex-wrap gap-3"></div></div>
                             <div><label class="block text-xs font-bold text-gray-800 mb-2 uppercase tracking-wide">Color <span class="text-red-500">*</span></label><div id="color-opts" class="flex flex-wrap gap-3"></div></div>
-                            <div><label class="block text-xs font-bold text-gray-800 mb-2 uppercase tracking-wide">Height <span class="text-red-500">*</span></label><input type="text" id="dt-height" class="w-full md:w-1/2 p-3 bg-white border border-gray-300 rounded focus:border-primary outline-none text-sm transition" placeholder="e.g. 5'4" oninput="checkAddBtn()"></div>
-                            <div class="pt-4 flex flex-col md:flex-row gap-4 items-start md:items-end">
-                                <div class="w-full md:w-auto"><label class="block text-xs font-bold text-gray-800 mb-2 uppercase tracking-wide">Quantity</label><div class="flex items-center border border-gray-300 rounded h-12 w-full md:w-40 bg-white"><button onclick="changeQty(-1)" class="w-12 h-full text-gray-600 hover:bg-gray-50 font-bold">-</button><input type="text" id="dt-qty" value="1" readonly class="flex-1 text-center font-bold text-gray-800 outline-none h-full"><button onclick="changeQty(1)" class="w-12 h-full text-gray-600 hover:bg-gray-50 font-bold">+</button></div></div>
-                                <button id="btn-add-desktop" onclick="addToCart()" disabled class="hidden md:block flex-1 bg-primary hover:bg-primary-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white h-12 px-8 rounded font-bold uppercase tracking-wide shadow-lg transition w-full">Add to Cart</button>
+                            <div><label class="block text-xs font-bold text-gray-800 mb-2 uppercase tracking-wide">Height <span class="text-red-500">*</span></label><input type="text" id="dt-height" class="w-full md:w-full p-3 bg-white border border-gray-300 rounded focus:border-primary outline-none text-sm transition" placeholder="e.g. 5'4" oninput="checkAddBtn()"></div>
+                            
+                            <!-- Quantity and Add to Cart Row (FIXED) -->
+                            <div class="pt-4 flex flex-col md:flex-row gap-4 items-stretch">
+                                <!-- Quantity -->
+                                <div class="w-full md:w-32 shrink-0">
+                                    <label class="block text-xs font-bold text-gray-800 mb-2 uppercase tracking-wide">Quantity</label>
+                                    <div class="flex items-center border border-gray-300 rounded-lg h-12 bg-white w-full">
+                                        <button onclick="changeQty(-1)" class="w-10 h-full text-gray-600 hover:bg-gray-50 rounded-l-lg font-bold">-</button>
+                                        <input type="text" id="dt-qty" value="1" readonly class="flex-1 text-center font-bold text-gray-800 outline-none h-full bg-transparent w-full">
+                                        <button onclick="changeQty(1)" class="w-10 h-full text-gray-600 hover:bg-gray-50 rounded-r-lg font-bold">+</button>
+                                    </div>
+                                </div>
+                                <!-- Desktop Button -->
+                                <div class="hidden md:flex flex-1 flex-col justify-end">
+                                    <button id="btn-add-desktop" onclick="addToCart()" disabled class="h-12 w-full bg-primary hover:bg-primary-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-8 rounded font-bold uppercase tracking-wide shadow-lg transition">
+                                        Add to Cart
+                                    </button>
+                                </div>
                             </div>
                         </div>
+
                         <div id="bundle-area" class="mb-10 hidden bg-gray-50 p-4 rounded-xl border border-gray-100">
                             <label class="block text-xs font-bold text-primary mb-3 uppercase">Bundle Offers</label>
                             <div class="space-y-3">
@@ -201,8 +220,9 @@
         <div id="page-checkout" class="view-section hidden container mx-auto px-4 py-8 pb-32 max-w-2xl">
             <div class="bg-white rounded-xl shadow-lg p-5 border border-gray-100">
                 <h2 class="font-serif text-2xl font-bold text-primary text-center mb-1">Checkout</h2>
-                <p class="text-center text-xs text-gray-500 mb-6">Complete your details to place order</p>
+                <p class="text-center text-xs text-gray-500 mb-6">Complete your details</p>
                 <form id="checkout-form" onsubmit="submitOrder(event)" oninput="validateCheckoutForm()">
+                    <!-- Donation -->
                     <div class="bg-green-50 p-4 rounded-lg border border-green-100 mb-6 text-center">
                         <div class="font-bold text-primary text-sm mb-1">✨ Donate to Orphans (Sadaqah) ✨</div>
                         <p class="text-xs text-gray-600 mb-3">Add a small percentage to help those in need.</p>
@@ -214,6 +234,7 @@
                         </div>
                         <textarea id="donation-note" class="w-full p-2 text-xs border rounded bg-white mt-2 hidden" placeholder="Special Intention / Note"></textarea>
                     </div>
+                    <!-- Contact/Del -->
                     <h6 class="font-bold text-xs uppercase text-gray-400 mb-3">1. Delivery & Address</h6>
                     <div class="space-y-3 mb-6">
                         <select id="del-method" class="w-full p-3 bg-gray-50 border rounded-lg text-sm outline-none focus:border-primary" onchange="toggleDeliveryOptions()" required><option value="" disabled selected>Select Delivery Method</option><option value="Pick-up">Pick-up (Free)</option><option value="Delivery">Delivery (Courier)</option></select>
@@ -226,12 +247,14 @@
                             <input type="text" id="addr-zip" class="w-full p-3 bg-gray-50 border rounded-lg text-sm" placeholder="Zip Code">
                         </div>
                     </div>
+                    <!-- Payment -->
                     <h6 class="font-bold text-xs uppercase text-gray-400 mb-3">2. Payment</h6>
                     <div class="bg-gray-50 p-4 rounded-lg border mb-4">
                         <div class="flex items-center gap-3 mb-3"><div class="bg-blue-500 text-white font-bold p-2 rounded text-xs">GCash</div><div class="text-sm"><div class="font-bold">Send to: 0976-551-3716</div></div></div>
                         <input type="text" id="c-ref" class="w-full p-3 bg-white border rounded-lg text-sm mb-3" placeholder="GCash Reference No." required>
                         <label class="block w-full border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:bg-white transition"><span class="text-xs text-gray-500"><i class="fas fa-camera mr-1"></i> Upload Payment Screenshot</span><input type="file" id="c-proof" accept="image/*" class="hidden"></label><div id="upload-msg" class="text-center text-xs text-green-600 font-bold mt-2 hidden">Screenshot Attached!</div>
                     </div>
+                    <!-- Totals -->
                     <div class="bg-white border-t border-b py-4 mb-6"><div class="flex justify-between text-sm mb-1"><span>Subtotal:</span> <span id="sum-subtotal">₱0</span></div><div class="flex justify-between text-sm mb-1"><span>Delivery Fee:</span> <span id="sum-shipping" class="text-red-500">₱0</span></div><div class="flex justify-between text-sm mb-1 hidden text-green-600 font-bold" id="sum-donate-row"><span>Donation:</span> <span id="sum-donation">₱0</span></div><div class="flex justify-between text-xl font-bold text-primary mt-2 border-t pt-2"><span>Grand Total:</span> <span id="pay-total">₱0</span></div></div>
                     <button type="submit" id="btn-place-order" class="w-full bg-gray-300 text-white py-4 rounded-lg font-bold text-lg uppercase tracking-wide transition" disabled>Fill Details</button>
                 </form>
@@ -239,7 +262,7 @@
         </div>
     </main>
 
-    <!-- POPUP MODALS (TRACKING & REVIEWS) -->
+    <!-- POPUP MODALS -->
     
     <!-- Track Order Modal -->
     <div id="modal-track" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="closeModal('track')">
@@ -385,24 +408,58 @@
 
         function renderCats() {
             const cats = ['All', ...new Set(allProducts.map(p => p.category))];
+            
+            // 1. Grid Render
             document.getElementById('category-grid').innerHTML = cats.map(c => {
                 let img = catImages[c] || catImages['Default'];
-                return `<div onclick="filterCat('${c}')" class="flex flex-col gap-2 cursor-pointer group"><div class="relative w-full aspect-square rounded-xl overflow-hidden bg-gray-100 shadow-sm border border-gray-100 group-hover:border-gold transition"><img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='${catImages['Default']}'"></div><div class="text-center"><span class="font-bold text-gray-800 text-sm uppercase tracking-wide group-hover:text-primary transition">${c}</span></div></div>`;
+                return `<div onclick="filterCat('${c}')" class="flex flex-col gap-2 cursor-pointer group">
+                    <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-gray-100 shadow-sm border border-gray-100 group-hover:border-gold transition">
+                        <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='${catImages['Default']}'">
+                    </div>
+                    <div class="text-center">
+                        <span class="font-bold text-gray-800 text-sm uppercase tracking-wide group-hover:text-primary transition">${c}</span>
+                    </div>
+                </div>`;
             }).join('');
-            document.getElementById('sidebar-cats-list').innerHTML = cats.map(c => `<div onclick="filterCat('${c}'); toggleMobileMenu()" class="px-3 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded cursor-pointer transition flex items-center justify-between">${c} <i class="fas fa-chevron-right text-xs opacity-50"></i></div>`).join('');
+
+            // 2. Menu List Render
+            document.getElementById('sidebar-cats-list').innerHTML = cats.map(c => 
+                `<div onclick="filterCat('${c}'); toggleMobileMenu()" class="px-3 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded cursor-pointer transition flex items-center justify-between">
+                    ${c} <i class="fas fa-chevron-right text-xs opacity-50"></i>
+                </div>`
+            ).join('');
         }
 
         function renderSuggested() {
             const items = allProducts.sort(() => 0.5 - Math.random()).slice(0, 6);
             document.getElementById('suggested-container').innerHTML = items.map(p => `
-                <div onclick="openDetail('${p.id}')" class="snap-start shrink-0 w-40 bg-white rounded-lg shadow-sm border overflow-hidden cursor-pointer"><img src="${p.image}" class="w-full h-40 object-cover"><div class="p-2"><div class="flex text-gold text-[10px] mb-1">★★★★★</div><div class="text-xs font-bold text-gray-800 truncate">${p.name}</div><div class="text-primary font-bold text-sm">₱${p.price}</div></div></div>`).join('');
+                <div onclick="openDetail('${p.id}')" class="snap-start shrink-0 w-40 bg-white rounded-lg shadow-sm border overflow-hidden cursor-pointer">
+                    <img src="${p.image}" class="w-full h-40 object-cover">
+                    <div class="p-2">
+                        <div class="flex text-gold text-[10px] mb-1">★★★★★</div>
+                        <div class="text-xs font-bold text-gray-800 truncate">${p.name}</div>
+                        <div class="text-primary font-bold text-sm">₱${p.price}</div>
+                    </div>
+                </div>`).join('');
         }
 
         function filterCat(c) {
             const list = c === 'All' ? allProducts : allProducts.filter(p => p.category === c);
             document.getElementById('grid-title').innerText = c;
             document.getElementById('full-product-grid').innerHTML = list.map(p => `
-                <div onclick="openDetail('${p.id}')" class="bg-white rounded-lg shadow-sm border overflow-hidden cursor-pointer"><div class="relative w-full pt-[133%] bg-gray-50"><img src="${p.image}" class="absolute top-0 left-0 w-full h-full object-cover">${p.salePercent > 0 ? `<span class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded">SALE</span>` : ''}</div><div class="p-3"><div class="font-bold text-sm truncate mb-1">${p.name}</div><div class="flex items-center gap-2"><span class="text-primary font-bold">₱${p.price}</span>${p.salePercent > 0 ? `<span class="text-[10px] text-gray-400 line-through">₱${p.originalPrice}</span>` : ''}</div></div></div>`).join('');
+                <div onclick="openDetail('${p.id}')" class="bg-white rounded-lg shadow-sm border overflow-hidden cursor-pointer">
+                    <div class="relative w-full pt-[133%] bg-gray-50">
+                        <img src="${p.image}" class="absolute top-0 left-0 w-full h-full object-cover">
+                        ${p.salePercent > 0 ? `<span class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded">SALE</span>` : ''}
+                    </div>
+                    <div class="p-3">
+                        <div class="font-bold text-sm truncate mb-1">${p.name}</div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-primary font-bold">₱${p.price}</span>
+                            ${p.salePercent > 0 ? `<span class="text-[10px] text-gray-400 line-through">₱${p.originalPrice}</span>` : ''}
+                        </div>
+                    </div>
+                </div>`).join('');
             routeTo('grid');
         }
 
