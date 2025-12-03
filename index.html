@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Al-Jazaa Ph.</title>
+    <title>Al-Jazaa Ph</title>
     
     <link rel="icon" type="image/png" href="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- ADDED HTML2CANVAS FOR RECEIPT GENERATION -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -46,9 +48,14 @@
         .step-item.active .step-line, .step-item.completed .step-line { background: #1b4d3e; }
         .step-text { font-size: 10px; font-weight: 600; color: #9ca3af; margin-top: 8px; text-align: center; text-transform: uppercase; letter-spacing: 0.5px; transition: color 0.3s; }
         .step-item.active .step-text { color: #1b4d3e; }
+
+        /* Receipt Styles */
+        #receipt-render-area { font-family: 'Courier New', Courier, monospace; background: #fff; width: 380px; padding: 20px; color: #000; position: absolute; top: -9999px; left: -9999px; border: 1px solid #ddd; }
+        .dashed-line { border-bottom: 1px dashed #000; margin: 10px 0; }
     </style>
 </head>
-<body class="bg-bg-soft text-gray-800 antialiased pt-[70px] pb-[80px]">
+<!-- ADJUSTED PADDING TOP TO 100px TO FIT BANNER + NAV -->
+<body class="bg-bg-soft text-gray-800 antialiased pt-[100px] pb-[80px]">
 
     <script>const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzQ3ij0tm5k-cARhUqdRdV7yYmqfudy0LJnaK70DVAMyTcjO-vcc5WvwFQ36lRxobcF/exec";</script>
 
@@ -56,8 +63,13 @@
         <div class="loader-spin mb-4"></div><h3 class="font-serif text-2xl text-primary font-bold">Al-Jazaa</h3>
     </div>
 
-    <!-- NAVBAR -->
-    <nav class="fixed top-0 w-full z-40 glass-nav h-[70px] flex items-center shadow-sm">
+    <!-- TOP OFFER BANNER -->
+    <div class="fixed top-0 left-0 w-full h-[30px] bg-primary text-white text-[11px] font-bold tracking-wider z-[60] flex items-center justify-center uppercase">
+        <i class="fas fa-shipping-fast mr-2"></i> Free Shipping on orders over ₱3,000!
+    </div>
+
+    <!-- NAVBAR (Top adjusted to 30px) -->
+    <nav class="fixed top-[30px] w-full z-40 glass-nav h-[70px] flex items-center shadow-sm">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <a href="#" onclick="routeTo('home')" class="flex items-center gap-2 text-primary font-serif font-bold text-xl md:text-2xl">
                 <img src="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true" alt="Logo" class="h-10 w-auto"> Al-Jazaa Ph.
@@ -71,6 +83,28 @@
             </div>
         </div>
     </nav>
+
+    <!-- HIDDEN RECEIPT TEMPLATE -->
+    <div id="receipt-render-area">
+        <div class="text-center mb-4">
+            <h2 class="font-bold text-xl">AL-JAZAA PH.</h2>
+            <div class="text-xs">Modesty with Integrity</div>
+            <div class="text-xs mt-1">aljazaa.ph@gmail.com</div>
+        </div>
+        <div class="dashed-line"></div>
+        <div class="flex justify-between text-xs mb-1"><span>Date:</span> <span id="rec-date"></span></div>
+        <div class="flex justify-between text-xs mb-1"><span>Order ID:</span> <span id="rec-id" class="font-bold"></span></div>
+        <div class="flex justify-between text-xs mb-1"><span>Customer:</span> <span id="rec-name"></span></div>
+        <div class="dashed-line"></div>
+        <div id="rec-items" class="text-xs space-y-2"></div>
+        <div class="dashed-line"></div>
+        <div class="flex justify-between text-xs"><span>Subtotal:</span> <span id="rec-sub"></span></div>
+        <div class="flex justify-between text-xs"><span>Shipping:</span> <span id="rec-ship"></span></div>
+        <div class="flex justify-between text-xs" id="rec-don-row"><span>Donation:</span> <span id="rec-don"></span></div>
+        <div class="flex justify-between text-xs font-bold mt-2 text-sm"><span>TOTAL:</span> <span id="rec-total"></span></div>
+        <div class="dashed-line"></div>
+        <div class="text-center text-[10px] mt-4">Thank you for supporting our small business!<br>Jazakallahu Khairan.</div>
+    </div>
 
     <!-- MENU DASHBOARD -->
     <div id="mobile-menu" class="fixed inset-y-0 right-0 w-72 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
@@ -97,7 +131,7 @@
         <!-- HOME PAGE -->
         <div id="page-home" class="view-section">
             <div class="container mx-auto px-4 mt-6 mb-8">
-                <!-- MODIFIED SEARCH BAR -->
+                <!-- SEARCH BAR -->
                 <div class="relative flex shadow-sm rounded-full overflow-hidden border border-gray-200">
                     <input type="text" id="searchBox" class="w-full pl-5 pr-12 py-3 outline-none focus:ring-1 focus:ring-primary bg-white text-sm" placeholder="Search products..." onkeydown="if(event.key === 'Enter') doSearch()">
                     <button onclick="doSearch()" class="bg-primary text-white px-5 hover:bg-primary-dark transition"><i class="fas fa-search"></i></button>
@@ -157,7 +191,7 @@
 
         <!-- DETAIL PAGE -->
         <div id="page-detail" class="view-section hidden pb-[90px] md:pb-12 bg-white min-h-screen">
-            <div class="md:hidden h-[60px] flex items-center px-4 border-b bg-white shadow-sm shrink-0 sticky top-0 z-40">
+            <div class="md:hidden h-[60px] flex items-center px-4 border-b bg-white shadow-sm shrink-0 sticky top-[30px] z-40">
                 <button onclick="window.history.back()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100"><i class="fas fa-arrow-left text-xl text-gray-700"></i></button>
                 <span class="ml-4 font-bold text-lg text-primary truncate">Product Details</span>
             </div>
@@ -165,7 +199,7 @@
             
             <div class="container mx-auto px-0 md:px-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-12">
-                    <div class="relative w-full bg-gray-50 md:rounded-3xl overflow-hidden aspect-[3/4] md:aspect-[4/5] md:sticky md:top-24">
+                    <div class="relative w-full bg-gray-50 md:rounded-3xl overflow-hidden aspect-[3/4] md:aspect-[4/5] md:sticky md:top-32">
                         <img id="dt-img" class="w-full h-full object-contain md:object-cover">
                         <span id="dt-badge" class="absolute top-4 left-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded hidden">SALE</span>
                         <div id="dt-gallery" class="absolute bottom-4 left-0 w-full flex justify-center gap-2 px-4 overflow-x-auto hide-scrollbar"></div>
@@ -221,7 +255,6 @@
             <h2 class="font-serif text-2xl font-bold text-center mb-6">Shopping Bag</h2>
             <div id="cart-content" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6"></div>
             
-            <!-- RELATED ITEMS IN CART -->
             <div id="cart-related-section" class="hidden mb-6">
                  <h3 class="font-bold text-gray-700 mb-3 text-sm uppercase tracking-wide">You May Also Like</h3>
                  <div id="cart-related-items" class="flex overflow-x-auto gap-3 pb-2 hide-scrollbar"></div>
@@ -229,7 +262,6 @@
 
             <div id="cart-summary" class="hidden bg-white p-5 rounded-xl border shadow-sm sticky bottom-[90px]">
                 <div class="flex justify-between items-center mb-4"><span class="text-gray-500">Subtotal</span><span id="cart-total" class="font-bold text-xl text-primary">₱0</span></div>
-                <!-- FIXED BUTTON WIDTH -->
                 <div class="max-w-md mx-auto">
                     <button onclick="routeTo('checkout')" class="w-full bg-gold text-white py-3 rounded-lg font-bold uppercase tracking-wide shadow-md hover:bg-yellow-600 transition">Checkout</button>
                 </div>
@@ -242,7 +274,6 @@
                 <h2 class="font-serif text-2xl font-bold text-primary text-center mb-1">Checkout</h2>
                 <p class="text-center text-xs text-gray-500 mb-6">Complete your details</p>
                 
-                <!-- ORDER SUMMARY WITH IMAGES -->
                 <div class="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
                     <h6 class="font-bold text-xs uppercase text-gray-500 mb-3">Order Summary</h6>
                     <div id="checkout-items-list" class="space-y-3 mb-3"></div>
@@ -287,7 +318,6 @@
                         <div class="flex justify-between text-sm mb-1"><span>Delivery Fee:</span> <span id="sum-shipping" class="text-red-500">₱0</span></div>
                         <div class="flex justify-between text-sm mb-1 hidden text-green-600 font-bold" id="sum-donate-row"><span>Donation:</span> <span id="sum-donation">₱0</span></div>
                         <div class="flex justify-between text-xl font-bold text-primary mt-2 border-t pt-2"><span>Grand Total:</span> <span id="pay-total">₱0</span></div>
-                        <!-- DISCOUNT ROW -->
                         <div id="sum-discount-row" class="flex justify-between text-sm mt-2 text-green-600 hidden bg-green-50 px-2 py-1 rounded">
                             <span class="font-bold">Total Savings:</span> <span id="sum-discount">₱0</span>
                         </div>
@@ -300,7 +330,7 @@
 
     <!-- POPUP MODALS -->
     
-    <!-- Track Order Modal (MODIFIED) -->
+    <!-- Track Order Modal -->
     <div id="modal-track" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="closeModal('track')">
         <div class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl relative transform transition-all" onclick="event.stopPropagation()">
             <button onclick="closeModal('track')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700"><i class="fas fa-times text-xl"></i></button>
@@ -311,7 +341,6 @@
             </div>
             
             <div id="track-result" class="hidden">
-                <!-- STEPPER PROGRESS -->
                 <div class="flex justify-between items-center mb-8 relative px-2">
                     <div class="step-item" id="step-pending">
                         <div class="step-circle"><i class="fas fa-hourglass-start"></i></div>
@@ -437,7 +466,6 @@
                 modal.classList.remove('hidden');
                 modal.firstElementChild.classList.add('modal-enter');
                 if(type === 'reviews') renderReviews(allReviews, 'main-reviews-list');
-                // Reset stepper when opening track
                 if(type === 'track') {
                     document.getElementById('track-result').classList.add('hidden');
                     document.getElementById('track-id').value = '';
@@ -482,8 +510,6 @@
 
         function renderCats() {
             const cats = ['All', ...new Set(allProducts.map(p => p.category))];
-            
-            // 1. Grid Render
             document.getElementById('category-grid').innerHTML = cats.map(c => {
                 let img = catImages[c] || catImages['Default'];
                 return `<div onclick="filterCat('${c}')" class="flex flex-col gap-2 cursor-pointer group">
@@ -495,8 +521,6 @@
                     </div>
                 </div>`;
             }).join('');
-
-            // 2. Menu List Render
             document.getElementById('sidebar-cats-list').innerHTML = cats.map(c => 
                 `<div onclick="filterCat('${c}'); toggleMobileMenu()" class="px-3 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded cursor-pointer transition flex items-center justify-between">
                     ${c} <i class="fas fa-chevron-right text-xs opacity-50"></i>
@@ -541,12 +565,10 @@
         function openDetail(id) {
             curProduct = allProducts.find(p => p.id == id);
             selectedSize = null; selectedColor = null; bundleQty = 1; document.getElementById('dt-height').value = '';
-            
             document.getElementById('dt-img').src = curProduct.image;
             document.getElementById('dt-name').innerText = curProduct.name;
             document.getElementById('dt-cat').innerText = curProduct.category;
             document.getElementById('dt-desc').innerText = curProduct.desc;
-            
             if(curProduct.salePercent > 0) {
                 document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice;
                 document.getElementById('dt-old-price').classList.remove('hidden');
@@ -627,19 +649,8 @@
 
         function addToCart() {
             let unitP = curProduct.price;
-            // Calculate discounted unit price based on bundle
             if(curProduct.category.toLowerCase() !== 'niqab') { if(bundleQty===2) unitP=(curProduct.price*2*0.95)/2; if(bundleQty===3) unitP=(curProduct.price*3*0.90)/3; }
-            
-            // Save basePrice to calculate savings later
-            cart.push({ 
-                ...curProduct, 
-                size: selectedSize, 
-                color: selectedColor, 
-                height: document.getElementById('dt-height').value, 
-                qty: bundleQty, 
-                price: Math.ceil(unitP),
-                basePrice: curProduct.price // Store original single unit price
-            });
+            cart.push({ ...curProduct, size: selectedSize, color: selectedColor, height: document.getElementById('dt-height').value, qty: bundleQty, price: Math.ceil(unitP), basePrice: curProduct.price });
             localStorage.setItem('alj_cart_v17', JSON.stringify(cart)); updateCartBadge();
             Swal.fire({icon:'success', title:'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1500});
             window.history.back();
@@ -649,12 +660,7 @@
 
         function renderCart() {
             const c = document.getElementById('cart-content');
-            if(cart.length === 0) { 
-                c.innerHTML = '<div class="p-10 text-center text-gray-500">Your bag is empty</div>'; 
-                document.getElementById('cart-summary').classList.add('hidden'); 
-                document.getElementById('cart-related-section').classList.add('hidden');
-                return; 
-            }
+            if(cart.length === 0) { c.innerHTML = '<div class="p-10 text-center text-gray-500">Your bag is empty</div>'; document.getElementById('cart-summary').classList.add('hidden'); document.getElementById('cart-related-section').classList.add('hidden'); return; }
             document.getElementById('cart-summary').classList.remove('hidden');
             let t = 0;
             c.innerHTML = cart.map((i, idx) => {
@@ -662,54 +668,20 @@
                 return `<div class="flex gap-3 p-4 border-b last:border-0"><img src="${i.image}" class="w-20 h-20 object-cover rounded bg-gray-50"><div class="flex-1"><div class="flex justify-between"><h4 class="font-bold text-sm text-gray-800">${i.name}</h4><button onclick="remItem(${idx})" class="text-red-400"><i class="fas fa-trash"></i></button></div><div class="text-xs text-gray-500 mb-1">${i.size} | ${i.color}</div><div class="flex justify-between items-end"><span class="text-primary font-bold">₱${i.price}</span><span class="text-xs bg-gray-100 px-2 py-1 rounded">Qty: ${i.qty}</span></div></div></div>`;
             }).join('');
             document.getElementById('cart-total').innerText = "₱" + t.toLocaleString();
-
-            // RENDER RELATED IN CART
             renderCartRelated();
         }
 
         function renderCartRelated() {
-            const section = document.getElementById('cart-related-section');
-            const container = document.getElementById('cart-related-items');
-            
-            // Filter items not in cart
-            const cartIds = cart.map(i => i.id);
-            const suggestions = allProducts.filter(p => !cartIds.includes(p.id)).sort(()=>0.5-Math.random()).slice(0, 4);
-            
-            if(suggestions.length > 0) {
-                section.classList.remove('hidden');
-                container.innerHTML = suggestions.map(p => `
-                    <div onclick="openDetail('${p.id}')" class="min-w-[100px] w-[100px] cursor-pointer group">
-                        <div class="w-full h-24 rounded bg-gray-100 overflow-hidden mb-1 relative border border-gray-100">
-                            <img src="${p.image}" class="w-full h-full object-cover">
-                        </div>
-                        <div class="text-[10px] font-bold truncate">${p.name}</div>
-                        <div class="text-[10px] text-primary font-bold">₱${p.price}</div>
-                    </div>
-                `).join('');
-            } else {
-                section.classList.add('hidden');
-            }
+            const section = document.getElementById('cart-related-section'); const container = document.getElementById('cart-related-items');
+            const cartIds = cart.map(i => i.id); const suggestions = allProducts.filter(p => !cartIds.includes(p.id)).sort(()=>0.5-Math.random()).slice(0, 4);
+            if(suggestions.length > 0) { section.classList.remove('hidden'); container.innerHTML = suggestions.map(p => `<div onclick="openDetail('${p.id}')" class="min-w-[100px] w-[100px] cursor-pointer group"><div class="w-full h-24 rounded bg-gray-100 overflow-hidden mb-1 relative border border-gray-100"><img src="${p.image}" class="w-full h-full object-cover"></div><div class="text-[10px] font-bold truncate">${p.name}</div><div class="text-[10px] text-primary font-bold">₱${p.price}</div></div>`).join(''); } else { section.classList.add('hidden'); }
         }
 
         function remItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v17', JSON.stringify(cart)); updateCartBadge(); renderCart(); }
 
         function initCheckout() {
             cartTotalAmount = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
-            
-            // Render Order Summary Items
-            const summaryList = document.getElementById('checkout-items-list');
-            summaryList.innerHTML = cart.map(item => `
-                <div class="flex gap-3 items-center border-b border-gray-100 pb-2 last:border-0 last:pb-0">
-                    <img src="${item.image}" class="w-10 h-10 rounded object-cover bg-white border">
-                    <div class="flex-1">
-                        <div class="text-xs font-bold text-gray-800 truncate">${item.name}</div>
-                        <div class="text-[10px] text-gray-500">${item.size} / ${item.color}</div>
-                    </div>
-                    <div class="text-xs font-bold text-primary">x${item.qty}</div>
-                    <div class="text-xs font-bold">₱${(item.price * item.qty).toLocaleString()}</div>
-                </div>
-            `).join('');
-
+            document.getElementById('checkout-items-list').innerHTML = cart.map(item => `<div class="flex gap-3 items-center border-b border-gray-100 pb-2 last:border-0 last:pb-0"><img src="${item.image}" class="w-10 h-10 rounded object-cover bg-white border"><div class="flex-1"><div class="text-xs font-bold text-gray-800 truncate">${item.name}</div><div class="text-[10px] text-gray-500">${item.size} / ${item.color}</div></div><div class="text-xs font-bold text-primary">x${item.qty}</div><div class="text-xs font-bold">₱${(item.price * item.qty).toLocaleString()}</div></div>`).join('');
             currentDonationPercent = 0; currentShippingFee = 0;
             document.getElementById('del-method').value = ""; document.getElementById('delivery-fields').classList.add('hidden');
             document.getElementById('c-proof').value = ""; document.getElementById('upload-msg').classList.add('hidden');
@@ -719,8 +691,7 @@
 
         function toggleDeliveryOptions() {
             const m = document.getElementById('del-method').value; const fields = document.getElementById('delivery-fields'); const inputs = fields.querySelectorAll('input, select');
-            if (m === 'Delivery') { fields.classList.remove('hidden'); inputs.forEach(i => i.required = true); calcShipping(); } 
-            else { fields.classList.add('hidden'); inputs.forEach(i => i.required = false); currentShippingFee = 0; }
+            if (m === 'Delivery') { fields.classList.remove('hidden'); inputs.forEach(i => i.required = true); calcShipping(); } else { fields.classList.add('hidden'); inputs.forEach(i => i.required = false); currentShippingFee = 0; }
             updateCheckoutCalc();
         }
 
@@ -728,7 +699,8 @@
             if (document.getElementById('del-method').value !== 'Delivery') return;
             const region = document.getElementById('addr-region').value; let fee = 0;
             if(region === 'Metro Manila') fee = 90; else if(region === 'Luzon') fee = 150; else if(region === 'Visayas') fee = 210; else if(region === 'Mindanao') fee = 220; else if(region === 'Island') fee = 250;
-            if(cartTotalAmount >= 3000) fee = 0; currentShippingFee = fee; updateCheckoutCalc();
+            if(cartTotalAmount >= 3000) fee = 0; // FREE SHIPPING LOGIC
+            currentShippingFee = fee; updateCheckoutCalc();
         }
 
         function selectDonation(p, el) {
@@ -739,26 +711,11 @@
 
         function updateCheckoutCalc() {
             const don = Math.ceil(cartTotalAmount * currentDonationPercent); const total = cartTotalAmount + currentShippingFee + don;
-            
-            // Discount Calc
-            let theoreticalTotal = 0;
-            cart.forEach(item => {
-                // If item has a saved basePrice use it, otherwise fallback to price
-                const bp = item.basePrice || item.price;
-                theoreticalTotal += (bp * item.qty);
-            });
+            let theoreticalTotal = 0; cart.forEach(item => { const bp = item.basePrice || item.price; theoreticalTotal += (bp * item.qty); });
             const discount = theoreticalTotal - cartTotalAmount;
-
             document.getElementById('sum-subtotal').innerText = "₱" + cartTotalAmount.toLocaleString(); document.getElementById('sum-shipping').innerText = "₱" + currentShippingFee;
             if(don > 0) { document.getElementById('sum-donate-row').classList.remove('hidden'); document.getElementById('sum-donation').innerText = "₱" + don; } else document.getElementById('sum-donate-row').classList.add('hidden');
-            
-            if(discount > 0) {
-                document.getElementById('sum-discount-row').classList.remove('hidden');
-                document.getElementById('sum-discount').innerText = "₱" + discount.toLocaleString();
-            } else {
-                document.getElementById('sum-discount-row').classList.add('hidden');
-            }
-
+            if(discount > 0) { document.getElementById('sum-discount-row').classList.remove('hidden'); document.getElementById('sum-discount').innerText = "₱" + discount.toLocaleString(); } else { document.getElementById('sum-discount-row').classList.add('hidden'); }
             document.getElementById('pay-total').innerText = "₱" + total.toLocaleString(); validateCheckoutForm();
         }
 
@@ -770,19 +727,80 @@
         function submitOrder(e) {
             e.preventDefault(); const file = document.getElementById('c-proof').files[0];
             Swal.fire({ title: 'Processing...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            
+            // Prepare Data for Receipt before sending
+            const custName = document.getElementById('c-name').value;
+            const donationAmt = Math.ceil(cartTotalAmount * currentDonationPercent);
+            const totalVal = "₱" + (cartTotalAmount + currentShippingFee + donationAmt).toLocaleString();
+            const receiptItems = [...cart]; // Copy cart items
+            const receiptSub = "₱" + cartTotalAmount.toLocaleString();
+            const receiptShip = "₱" + currentShippingFee;
+            const receiptDon = "₱" + donationAmt;
+
             const reader = new FileReader();
             reader.onload = function(evt) {
-                const don = Math.ceil(cartTotalAmount * currentDonationPercent); const totalVal = cartTotalAmount + currentShippingFee + don;
-                let addr = "Pick-up"; if (document.getElementById('del-method').value === 'Delivery') { addr = `${document.getElementById('addr-street').value}, ${document.getElementById('addr-brgy').value}, ${document.getElementById('addr-city').value}, ${document.getElementById('addr-prov').value}`; }
                 const payload = {
-                    action: 'placeOrder', cust: { name: document.getElementById('c-name').value, phone: document.getElementById('c-phone').value, email: document.getElementById('c-email').value, addr: addr },
-                    pay: { ref: document.getElementById('c-ref').value, image: evt.target.result, mime: file.type }, cart: cart, total: "₱" + totalVal.toLocaleString(),
-                    donation: { percent: (currentDonationPercent * 100) + "%", amount: don, note: document.getElementById('donation-note').value }, delivery: { method: document.getElementById('del-method').value, region: document.getElementById('addr-region').value || "N/A", fee: currentShippingFee }
+                    action: 'placeOrder', cust: { name: custName, phone: document.getElementById('c-phone').value, email: document.getElementById('c-email').value, addr: (document.getElementById('del-method').value === 'Delivery') ? `${document.getElementById('addr-street').value}, ${document.getElementById('addr-brgy').value}, ${document.getElementById('addr-city').value}` : "Pick-up" },
+                    pay: { ref: document.getElementById('c-ref').value, image: evt.target.result, mime: file.type }, cart: cart, total: totalVal,
+                    donation: { percent: (currentDonationPercent * 100) + "%", amount: donationAmt, note: document.getElementById('donation-note').value }, delivery: { method: document.getElementById('del-method').value, region: document.getElementById('addr-region').value || "N/A", fee: currentShippingFee }
                 };
+                
                 fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r => r.json()).then(d => {
-                    if(d.status === 'success') { cart = []; localStorage.setItem('alj_cart_v17', JSON.stringify(cart)); Swal.fire({ icon:'success', title: 'Placed!', text: `ID: ${d.orderId}` }).then(() => window.location.reload()); } else Swal.fire('Error', d.error, 'error');
+                    if(d.status === 'success') { 
+                        cart = []; localStorage.setItem('alj_cart_v17', JSON.stringify(cart)); 
+                        
+                        // SHOW DOWNLOAD PROMPT
+                        Swal.fire({ 
+                            icon:'success', 
+                            title: 'Order Placed!', 
+                            text: `ID: ${d.orderId}. Download your receipt?`,
+                            showCancelButton: true,
+                            confirmButtonText: 'Download Receipt',
+                            cancelButtonText: 'No, Thanks'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                downloadReceipt(d.orderId, custName, receiptItems, receiptSub, receiptShip, receiptDon, totalVal);
+                            } else {
+                                window.location.reload();
+                            }
+                        });
+                    } else Swal.fire('Error', d.error, 'error');
                 });
             }; reader.readAsDataURL(file);
+        }
+
+        function downloadReceipt(id, name, items, sub, ship, don, total) {
+            // Populate Hidden Receipt
+            document.getElementById('rec-date').innerText = new Date().toLocaleString();
+            document.getElementById('rec-id').innerText = id;
+            document.getElementById('rec-name').innerText = name;
+            document.getElementById('rec-sub').innerText = sub;
+            document.getElementById('rec-ship').innerText = ship;
+            if(don !== "₱0") { 
+                document.getElementById('rec-don-row').classList.remove('hidden'); 
+                document.getElementById('rec-don').innerText = don; 
+            } else { 
+                document.getElementById('rec-don-row').classList.add('hidden'); 
+            }
+            document.getElementById('rec-total').innerText = total;
+
+            document.getElementById('rec-items').innerHTML = items.map(i => `
+                <div class="flex justify-between">
+                    <span>${i.qty}x ${i.name.substring(0,20)}</span>
+                    <span>₱${(i.price * i.qty).toLocaleString()}</span>
+                </div>
+                <div class="text-[10px] text-gray-500 pl-4">${i.size}, ${i.color}</div>
+            `).join('');
+
+            // Generate Image
+            const element = document.getElementById('receipt-render-area');
+            html2canvas(element).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Receipt-${id}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+                setTimeout(() => window.location.reload(), 2000); // Reload after download
+            });
         }
 
         function renderReviews(list, containerId, isSlider = false) {
@@ -814,51 +832,29 @@
             fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify({ action: 'submitReview', name: name, email: 'N/A', phone: 'N/A', feedback: fb, rating: rating }) });
         }
 
-        // --- NEW SEARCH LOGIC ---
         function doSearch() {
-            const q = document.getElementById('searchBox').value.toLowerCase();
-            if(!q) return; // Don't search empty
+            const q = document.getElementById('searchBox').value.toLowerCase(); if(!q) return;
             const matches = allProducts.filter(p => p.name.toLowerCase().includes(q));
             document.getElementById('grid-title').innerText = `Search: "${q}"`;
-            document.getElementById('full-product-grid').innerHTML = matches.map(p => `
-                <div onclick="openDetail('${p.id}')" class="bg-white rounded-lg shadow-sm border overflow-hidden cursor-pointer"><img src="${p.image}" class="w-full h-40 object-cover"><div class="p-2 font-bold text-sm">${p.name}</div></div>`).join('');
+            document.getElementById('full-product-grid').innerHTML = matches.map(p => `<div onclick="openDetail('${p.id}')" class="bg-white rounded-lg shadow-sm border overflow-hidden cursor-pointer"><img src="${p.image}" class="w-full h-40 object-cover"><div class="p-2 font-bold text-sm">${p.name}</div></div>`).join('');
             routeTo('grid');
         }
 
-        // --- TRACK ORDER LOGIC (UPDATED) ---
         function trackOrder() {
             const id = document.getElementById('track-id').value; if(!id) return; 
             Swal.fire({didOpen:()=>Swal.showLoading()});
-            
             fetch(`${WEB_APP_URL}?action=trackOrder&orderId=${id}`).then(r=>r.json()).then(d => {
                 Swal.close(); 
                 document.getElementById('track-result').classList.remove('hidden');
-                
                 if (d.status === 'found') {
-                    // Reset steps
                     document.querySelectorAll('.step-item').forEach(s => s.classList.remove('active', 'completed'));
-                    
-                    // Map text status to step ID
-                    const statusMap = {
-                        'Pending': 1,
-                        'Verified': 2,
-                        'In Progress': 3,
-                        'Ready': 4,
-                        'Delivered': 5
-                    };
-                    
-                    const s = d.currStatus || 'Pending';
-                    const level = statusMap[s] || 1; // Default to 1 if unknown
-
+                    const statusMap = {'Pending': 1, 'Verified': 2, 'In Progress': 3, 'Ready': 4, 'Delivered': 5};
+                    const s = d.currStatus || 'Pending'; const level = statusMap[s] || 1;
                     const steps = ['pending', 'verified', 'progress', 'ready', 'delivered'];
-                    
-                    // Animate steps
                     for(let i=0; i < 5; i++) {
                         const el = document.getElementById('step-' + steps[i]);
-                        if(i + 1 < level) el.classList.add('completed');
-                        else if(i + 1 === level) el.classList.add('active');
+                        if(i + 1 < level) el.classList.add('completed'); else if(i + 1 === level) el.classList.add('active');
                     }
-
                     document.getElementById('t-date').innerText = d.date || '-'; 
                     document.getElementById('t-total').innerText = d.total || '-';
                     document.getElementById('t-msg').innerText = `Status: ${s}`;
