@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Al-Jazaa Ph | Modest Fashion</title>
+    <title>Al-Jazaa Ph</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true">
@@ -132,7 +132,7 @@
                 <h2 class="font-serif text-2xl font-bold text-primary mb-4">Shop Categories</h2>
                 <!-- Responsive Grid: 2 cols Mobile, 3 cols Laptop -->
                 <div id="category-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <!-- JS Injected -->
+                    <!-- JS Injected: Full Image Tiles -->
                 </div>
             </section>
 
@@ -582,9 +582,12 @@
             const cats = ['All', ...new Set(allProducts.map(p => p.category))];
             document.getElementById('category-grid').innerHTML = cats.map(c => {
                 let img = catImages[c] || catImages['Default'];
-                return `<div onclick="filterCat('${c}')" class="bg-white rounded-xl shadow-sm border p-4 flex flex-col items-center justify-center cursor-pointer hover:border-gold transition h-32 group">
-                    <img src="${img}" class="w-12 h-12 mb-2 object-contain group-hover:scale-110 transition duration-300">
-                    <span class="font-bold text-sm text-gray-700">${c}</span>
+                // MODIFIED: Full Image Tile Layout
+                return `<div onclick="filterCat('${c}')" class="relative h-32 rounded-xl overflow-hidden shadow-sm cursor-pointer group">
+                    <img src="${img}" class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-110" onerror="this.src='${catImages['Default']}'">
+                    <div class="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition flex items-center justify-center">
+                        <span class="font-bold text-white text-lg uppercase tracking-wide drop-shadow-md">${c}</span>
+                    </div>
                 </div>`;
             }).join('');
         }
