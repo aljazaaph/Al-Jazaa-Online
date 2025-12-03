@@ -2,437 +2,774 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Jazaa Ph | Modest Wear</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Al-Jazaa Ph. | Online Shop</title>
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'primary': '#1b4d3e', // Original Primary
-                        'primary-dark': '#143a2f',
-                        'gold': '#c5a028',
-                        'bg-light': '#eff2f5', // Original Background
-                    },
-                    fontFamily: {
-                        'serif': ['Playfair Display', 'serif'],
-                        'sans': ['Outfit', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <style>
-        /* Custom Styles to match original theme and ensure Playfair is used */
-        h1, h2, h3, h4, .font-serif { font-family: 'Playfair Display', serif; }
-        body { font-family: 'Outfit', sans-serif; }
-        
-        /* Category Hover Effect */
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        :root {
+            --primary: #1b4d3e; 
+            --primary-dark: #143a2f;
+            --gold: #c5a028;
+            --bg-color: #eff2f5; 
+            --text: #2c3e50;
+            --nav-height: 70px;
         }
 
-        /* Suggested Products Carousel Styling */
-        .carousel-snap {
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-        }
-        .carousel-item-snap {
-            scroll-snap-align: start;
-            flex-shrink: 0;
-            width: 70vw; /* Mobile view: 1.5-2 items visible */
-        }
-        @media (min-width: 640px) {
-            .carousel-item-snap {
-                width: 300px; /* Tablet/Desktop fixed width */
-            }
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text); 
+            overflow-x: hidden; 
+            padding-top: 35px; 
+            padding-bottom: 80px; /* Space for sticky bar */
         }
         
-        /* Accordion Arrow */
-        .accordion-arrow {
-            transition: transform 0.3s ease;
+        h1, h2, h3, h4, h5, .navbar-brand { font-family: 'Playfair Display', serif; }
+
+        /* Announcement Bar */
+        .announcement-bar { 
+            background: var(--primary); 
+            color: white; 
+            height: 35px;
+            overflow: hidden;
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 2000;
+            display: flex; align-items: center; justify-content: center;
+            animation: flashPulse 2s infinite alternate;
         }
-        .accordion-item[open] .accordion-arrow {
-            transform: rotate(180deg);
+        @keyframes flashPulse {
+            0% { opacity: 1; background-color: var(--primary); }
+            50% { opacity: 0.9; background-color: #246652; }
+            100% { opacity: 1; background-color: var(--primary); }
+        }
+        .announcement-content {
+            display: inline-block; white-space: nowrap; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
         }
 
-        /* Utility for Star Rating */
-        .star-gold { color: #c5a028; }
-        .star-gray { color: #d1d5db; }
+        /* Navbar */
+        .navbar { 
+            background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); 
+            box-shadow: 0 2px 15px rgba(0,0,0,0.04); height: var(--nav-height);
+            z-index: 1030; top: 35px; 
+        }
+        .navbar-brand { font-weight: 700; font-size: 1.5rem; color: var(--primary) !important; display: flex; align-items: center; gap: 10px; }
+        .nav-logo-img { height: 40px; width: auto; }
+        
+        /* Sidebar */
+        .offcanvas { border-radius: 0 20px 20px 0; border: none; width: 75% !important; max-width: 350px; }
+        .offcanvas-header { background: var(--primary); color: white; }
+        .sidebar-link { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; color: var(--text); text-decoration: none; font-weight: 500; border-bottom: 1px solid #f0f0f0; transition: 0.2s; cursor: pointer; }
+        .sidebar-link:hover { background-color: #f8f9fa; color: var(--primary); }
+        .policy-box { background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 15px; margin-top: 20px; max-height: 200px; overflow-y: auto; font-size: 0.85rem; color: #666; }
 
-        /* Hide Scrollbar for Carousels */
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
+        .btn-hero { background-color: var(--primary); color: var(--gold); border: 2px solid var(--gold); padding: 8px 30px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 50px; transition: all 0.3s ease; font-family: 'Playfair Display', serif; font-size: 0.9rem; }
+        .cart-btn-wrap { position: relative; display: inline-flex; align-items: center; text-decoration: none; margin-right: 15px; cursor: pointer;}
+        .cart-badge { background: var(--gold); color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: bold; position: absolute; top: -5px; right: -8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+
+        /* Category Scroll */
+        .category-scroll-container { overflow-x: auto; white-space: nowrap; position: sticky; top: calc(var(--nav-height) + 35px); z-index: 900; background: rgba(239, 242, 245, 0.95); backdrop-filter: blur(8px); padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.05); -ms-overflow-style: none; scrollbar-width: none; }
+        .category-scroll-container::-webkit-scrollbar { display: none; }
+        .cat-item-wrapper { display: inline-flex; flex-direction: column; align-items: center; margin-right: 20px; cursor: pointer; transition: 0.2s; }
+        .cat-item-wrapper.active .cat-circle-img { border-color: var(--primary); transform: scale(1.05); box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.2); }
+        .cat-item-wrapper.active .cat-title { color: var(--primary); font-weight: 700; }
+        .cat-circle-img { width: 60px; height: 60px; border-radius: 50%; object-fit: contain; background-color: white; border: 2px solid #ddd; margin-bottom: 8px; transition: 0.3s; }
+        .cat-title { font-size: 0.8rem; color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Product Card */
+        .product-card { border: none; background: white; transition: 0.3s; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); height: 100%; position: relative; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+        .card-img-wrapper { position: relative; width: 100%; padding-top: 133%; overflow: hidden; background: #f8f9fa; }
+        .mini-carousel { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .mini-carousel img { width: 100%; height: 100%; object-fit: contain; object-position: center; background-color: #fff; }
+        .stock-label { position: absolute; top: 10px; left: 10px; padding: 4px 10px; font-size: 0.65rem; color: white; font-weight: 700; text-transform: uppercase; border-radius: 4px; z-index: 10; }
+        .in-stock { background: rgba(27, 77, 62, 0.9); }
+        .out-stock { background: rgba(150, 150, 150, 0.9); }
+        .sale-badge { position: absolute; top: 10px; right: 10px; background: #d32f2f; color: white; padding: 4px 8px; font-size: 0.7rem; font-weight: 700; border-radius: 4px; z-index: 10; }
+        .original-price { text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 5px; }
+        .sale-price-text { color: #d32f2f; font-weight: 700; }
+        
+        /* Detail View (Mobile Full Screen) */
+        #detail-view { 
+            position: fixed; inset: 0; background: #fff; z-index: 2000; 
+            overflow-y: auto; display: none; animation: slideUp 0.3s ease-out; 
+            padding-top: 0; padding-bottom: 90px; /* Space for Sticky Bar */
         }
-        .no-scrollbar {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        
+        .dt-img-container { position: relative; border-radius: 0; overflow: hidden; background: #f8f9fa; margin-bottom: 15px; }
+        .dt-main-img { width: 100%; object-fit: contain; aspect-ratio: 3/4; transition: 0.3s; background-color: #fff; }
+        
+        .popular-badge-overlay { 
+            position: absolute; top: 15px; left: 15px; background: rgba(255, 255, 255, 0.95); 
+            padding: 8px 12px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            z-index: 20; display: flex; align-items: center; gap: 8px;
         }
+        .popular-stars { color: var(--gold); font-size: 0.8rem; }
+        .popular-text { font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .gallery-container { 
+            display: flex; gap: 10px; overflow-x: auto; 
+            margin-top: 15px; padding: 10px 15px; scrollbar-width: none; -ms-overflow-style: none;
+        }
+        .gallery-container::-webkit-scrollbar { display: none; }
+        .thumb-img { width: 70px; height: 70px; border-radius: 8px; object-fit: contain; background: #fff; cursor: pointer; border: 2px solid transparent; opacity: 0.6; transition: 0.2s; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .thumb-img:hover { opacity: 1; }
+        .thumb-img.active { border-color: var(--primary); opacity: 1; transform: scale(1.05); }
+
+        .qty-selector { display: inline-flex; align-items: center; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; height: 45px; background: white; }
+        .qty-btn { background: white; border: none; padding: 0 15px; font-weight: bold; cursor: pointer; color: var(--primary); height: 100%; font-size: 1.2rem; }
+        .qty-input { width: 40px; border: none; text-align: center; font-weight: 600; outline: none; background: white; }
+        
+        .btn-custom { background: var(--primary); color: white; border-radius: 50px; padding: 12px 30px; font-weight: 600; border: none; text-transform: uppercase; transition: 0.3s; }
+        .btn-custom:hover { background: var(--primary-dark); color: white; transform: translateY(-2px); shadow: 0 5px 15px rgba(27, 77, 62, 0.3); }
+        .btn-custom:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; opacity: 0.7; }
+        
+        .option-btn { min-width: 40px; height: 40px; padding: 0 15px; border: 1px solid #ddd; background: white; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; margin-right: 8px; margin-bottom: 8px; font-size: 0.9rem; }
+        .option-btn:hover { border-color: var(--primary); }
+        .option-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .desc-container { position: relative; margin-bottom: 20px; }
+        .desc-content { color: #666; font-size: 0.95rem; line-height: 1.6; }
+        
+        .related-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; -ms-overflow-style: none; scrollbar-width: none; }
+        .related-scroll::-webkit-scrollbar { display: none; }
+        .related-card { min-width: 140px; width: 140px; border: none; cursor: pointer; }
+        .related-card img { border-radius: 8px; width: 100%; aspect-ratio: 3/4; object-fit: contain; background:#fff; margin-bottom: 8px; }
+        
+        .marquee-container { width: 100%; overflow: hidden; background: var(--primary); color: var(--gold); padding: 10px 0; border-radius: 8px; margin-bottom: 10px; }
+        .marquee-content { display: inline-block; white-space: nowrap; animation: marquee 15s linear infinite; font-weight: 700; letter-spacing: 2px; font-family: 'Playfair Display'; }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        .donate-pill { flex: 1; border: 1px solid var(--primary); color: var(--primary); background: transparent; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; }
+        .donate-pill:hover, .donate-pill.selected { background: var(--primary); color: white; }
+        .file-upload-wrapper { position: relative; }
+        .upload-helper { font-size: 0.75rem; color: #d32f2f; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
+
+        /* Reviews */
+        .rating-stars { display: flex; flex-direction: row-reverse; justify-content: start; gap: 5px; }
+        .rating-stars input { display: none; }
+        .rating-stars label { cursor: pointer; color: #ddd; font-size: 1.5rem; transition: 0.2s; }
+        .rating-stars input:checked ~ label, .rating-stars input:checked ~ label ~ label { color: var(--gold); }
+        .review-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 15px; }
+        .rating-summary-bar { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; flex-grow: 1; margin: 0 10px; }
+        .rating-fill { height: 100%; background: var(--gold); }
+
+        /* Sticky Bottom Bar for Detail View (FIXED) */
+        .sticky-action-bar { 
+            position: fixed; bottom: 0; left: 0; width: 100%; 
+            background: white; border-top: 1px solid #eee; padding: 15px 20px; 
+            z-index: 3000; display: none; justify-content: space-between; align-items: center; 
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05); 
+        }
+        .sticky-action-bar.visible { display: flex; }
+        .sticky-price { font-family: 'Playfair Display'; font-weight: 700; color: var(--primary); font-size: 1.4rem; }
+
+        /* Bundles */
+        .bundle-option { border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
+        .bundle-option:hover { background: #f9f9f9; border-color: var(--primary); }
+        .bundle-option.selected { background: #f0f8f5; border-color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .bundle-discount { font-size: 0.7rem; background: var(--gold); color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 5px; }
+
+        footer { background: #143a2f; color: #888; padding: 60px 0 30px; margin-top: 80px; }
+        .footer-heading { color: white; font-family: 'Playfair Display'; margin-bottom: 20px; }
+        .footer-link { color: #888; text-decoration: none; display: block; margin-bottom: 10px; font-size: 0.9rem; transition: 0.3s;}
+        .footer-link:hover { color: var(--gold); padding-left: 5px; }
+
+        #loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
     </style>
 </head>
-<body class="bg-bg-light text-gray-800 font-sans">
+<body>
 
-    <header class="bg-primary text-white text-center py-2 text-sm sticky top-0 z-50 shadow-md">
-        5% of Profit Goes to Charity • **Free Shipping** on orders over ₱2500
-    </header>
+<script>
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzQ3ij0tm5k-cARhUqdRdV7yYmqfudy0LJnaK70DVAMyTcjO-vcc5WvwFQ36lRxobcF/exec"; 
+</script>
 
-    <nav class="sticky top-8 bg-white shadow-lg z-40">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-primary font-serif">Al-Jazaa Ph.</h1>
-            <div class="flex items-center space-x-4">
-                <i class="fas fa-search text-xl text-gray-600"></i>
-                <div class="relative">
-                    <i class="fas fa-shopping-bag text-xl text-gray-600"></i>
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-white text-xs font-bold rounded-full h-4 w-4 flex items-center justify-center">0</span>
-                </div>
+<div id="loader">
+    <div class="spinner-border text-secondary" style="width:3rem;height:3rem;"></div>
+    <h3 class="mt-3" style="color:var(--primary);font-family:'Playfair Display';">Al-Jazaa</h3>
+</div>
+
+<!-- Flashing Top Bar -->
+<div class="announcement-bar" id="top-announcement">
+    <div class="announcement-content">
+        Shop & Earn Rewards • Secure GCash Payment • Nationwide Delivery • 5% of Profit Goes to Charity
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="#" onclick="routeTo('home')">
+            <img src="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true" alt="Logo" class="nav-logo-img">
+            Al-Jazaa Ph.
+        </a>
+        <div class="d-flex align-items-center order-lg-3 ms-auto ms-lg-0">
+             <div class="cart-btn-wrap" onclick="routeTo('cart')">
+                <i class="fas fa-shopping-bag fa-lg" style="color:#333;"></i>
+                <span id="cart-count" class="cart-badge">0</span>
+            </div>
+            <button class="btn btn-link text-dark p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
+                <i class="fas fa-bars fa-lg"></i>
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- Sidebar -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Menu</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+        <div class="sidebar-link" onclick="routeTo('home'); closeSidebar();">Shop Home <i class="fas fa-chevron-right"></i></div>
+        <div class="sidebar-link" onclick="routeTo('track'); closeSidebar();">Track Order <i class="fas fa-chevron-right"></i></div>
+        <div class="sidebar-link" onclick="routeTo('reviews'); closeSidebar();">Customer Care & Feedback <i class="fas fa-chevron-right"></i></div>
+        
+        <hr class="my-3 opacity-25">
+        <p class="small text-uppercase text-muted fw-bold ms-2 mb-2">Categories</p>
+        <div id="sidebar-categories"></div>
+        <div class="mt-auto">
+            <div class="policy-box">
+                <h6>About Al-Jazaa Ph.</h6><p>Al-Jazaa Ph. is committed to providing timeless modesty with Islamic integrity. Our collection is designed to follow the conditions of hijab, with deep consideration for every detail.</p>
+                <h6>Payment Policy</h6><p>We strictly accept GCash payments. Verification required via uploading the proof of payment.</p>
             </div>
         </div>
-        <div class="px-4 pb-3 sm:hidden">
-            <input type="text" placeholder="Search products..." class="w-full p-2 border border-gray-300 rounded-lg text-sm focus:ring-primary focus:border-primary">
+    </div>
+</div>
+
+<!-- HOME -->
+<div id="page-home">
+    <div class="container mt-2 mb-3">
+        <div class="position-relative">
+            <input type="text" id="searchBox" class="form-control rounded-pill ps-4 py-2 border-secondary bg-white" placeholder="Search products..." onkeyup="doSearch()">
+            <i class="fas fa-search position-absolute text-muted" style="right: 20px; top: 12px;"></i>
         </div>
-    </nav>
+    </div>
+
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%201.png?raw=true" class="d-block w-100" alt="Slide 1">
+                <div class="carousel-caption"><button class="btn-hero shadow-lg" onclick="scrollToProducts()">Shop Now</button></div>
+            </div>
+            <div class="carousel-item"><img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%202.png?raw=true" class="d-block w-100" alt="Slide 2"></div>
+            <div class="carousel-item"><img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%203.png?raw=true" class="d-block w-100" alt="Slide 3"></div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
+    </div>
+
+    <div class="container my-5" id="shop-section">
+        <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="mb-0">Latest Collection</h2></div>
+        
+        <!-- Category Circles -->
+        <div id="category-list" class="category-scroll-container mb-4"></div>
+        
+        <div class="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-3 g-md-4" id="product-grid"></div>
+    </div>
+</div>
+
+<!-- DETAIL VIEW -->
+<div id="detail-view">
+    <div class="sticky-top bg-white border-bottom shadow-sm d-flex align-items-center px-3" style="height:60px;">
+        <button class="btn btn-light rounded-circle shadow-sm" style="width:40px;height:40px;" onclick="window.history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <span class="ms-3 fw-bold fs-5 text-truncate" id="dt-header-title">Product Details</span>
+    </div>
     
-    <main class="container mx-auto px-4 py-6">
-
-        <section class="mb-8">
-            <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%201.png?raw=true" alt="Hero Banner" class="w-full rounded-xl shadow-lg">
-        </section>
-
-        <section class="mb-12">
-            <h2 class="text-3xl font-serif font-semibold text-primary mb-6">🛍️ Shop By Category</h2>
-            <div id="category-showcase-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                <a href="#products?category=Abayas" class="category-card block rounded-xl overflow-hidden shadow-lg bg-white transition duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-2xl">
-                    <div class="p-4 flex flex-col items-center">
-                        <img src="https://via.placeholder.com/150/1b4d3e/FFFFFF?text=Abaya" alt="Abaya Category" class="w-24 h-24 object-cover rounded-full border-4 border-primary/20 mb-3">
-                        <h3 class="text-lg font-semibold text-gray-800">Abayas</h3>
-                        <p class="text-sm text-gray-500">View Collection</p>
+    <div class="container py-3">
+        <div class="row gx-5">
+            <div class="col-md-5 mb-4">
+                <div class="dt-img-container">
+                    <div id="dt-pop-badge" class="popular-badge-overlay d-none">
+                        <span class="popular-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
+                        <span class="popular-text" id="pop-text">Best Seller</span>
                     </div>
-                </a>
-                <a href="#products?category=Hijabs" class="category-card block rounded-xl overflow-hidden shadow-lg bg-white transition duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-2xl">
-                    <div class="p-4 flex flex-col items-center">
-                        <img src="https://via.placeholder.com/150/1b4d3e/FFFFFF?text=Hijab" alt="Hijab Category" class="w-24 h-24 object-cover rounded-full border-4 border-primary/20 mb-3">
-                        <h3 class="text-lg font-semibold text-gray-800">Hijabs</h3>
-                        <p class="text-sm text-gray-500">View Collection</p>
-                    </div>
-                </a>
-                <a href="#products?category=Niqabs" class="category-card block rounded-xl overflow-hidden shadow-lg bg-white transition duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-2xl">
-                    <div class="p-4 flex flex-col items-center">
-                        <img src="https://via.placeholder.com/150/1b4d3e/FFFFFF?text=Niqab" alt="Niqab Category" class="w-24 h-24 object-cover rounded-full border-4 border-primary/20 mb-3">
-                        <h3 class="text-lg font-semibold text-gray-800">Niqabs</h3>
-                        <p class="text-sm text-gray-500">View Collection</p>
-                    </div>
-                </a>
-                <a href="#products?category=Accessories" class="category-card block rounded-xl overflow-hidden shadow-lg bg-white transition duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-2xl lg:block hidden">
-                    <div class="p-4 flex flex-col items-center">
-                        <img src="https://via.placeholder.com/150/1b4d3e/FFFFFF?text=Accessory" alt="Accessories Category" class="w-24 h-24 object-cover rounded-full border-4 border-primary/20 mb-3">
-                        <h3 class="text-lg font-semibold text-gray-800">Accessories</h3>
-                        <p class="text-sm text-gray-500">View Collection</p>
-                    </div>
-                </a>
-                 <a href="#products?category=New" class="category-card block rounded-xl overflow-hidden shadow-lg bg-white transition duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-2xl lg:block hidden">
-                    <div class="p-4 flex flex-col items-center">
-                        <img src="https://via.placeholder.com/150/1b4d3e/FFFFFF?text=New" alt="New Category" class="w-24 h-24 object-cover rounded-full border-4 border-primary/20 mb-3">
-                        <h3 class="text-lg font-semibold text-gray-800">New Arrivals</h3>
-                        <p class="text-sm text-gray-500">View Collection</p>
-                    </div>
-                </a>
+                    <img id="dt-img" src="" class="dt-main-img">
+                </div>
+                <div id="dt-gallery" class="gallery-container"></div>
             </div>
-        </section>
-        
-        <section class="mb-12">
-            <h2 class="text-3xl font-serif font-semibold text-primary mb-6">🌟 Suggested for You</h2>
-            <div id="suggested-products-carousel" class="flex overflow-x-scroll no-scrollbar space-x-4 pb-4 carousel-snap">
+            <div class="col-md-7">
+                <span class="badge bg-light text-dark mb-2 border" id="dt-cat"></span>
+                <h1 id="dt-name" class="display-6 fw-bold"></h1>
+                <div class="my-3"><span id="dt-old-price" class="original-price fs-4 d-none"></span><span id="dt-price" class="text-success fw-bold fs-3"></span><span id="dt-sale-badge" class="badge bg-danger ms-2 d-none">SALE</span></div>
                 
-                <div class="carousel-item-snap bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 ease-in-out transform hover:shadow-xl">
-                    <img src="https://via.placeholder.com/400x500/1b4d3e/FFFFFF?text=Suggested+Product+1" alt="Product 1" class="w-full h-auto object-cover aspect-[3/4]">
-                    <div class="p-4">
-                        <h3 class="font-medium text-gray-900 truncate">Essential Maxi Skirt</h3>
-                        <p class="text-lg font-bold text-primary my-1">₱1,250</p>
-                        <div class="flex items-center space-x-1">
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gray-300 text-sm"></i>
-                            <span class="text-xs text-gray-500">(4.2)</span>
-                        </div>
-                        <button class="w-full mt-3 bg-primary text-white py-2 rounded-lg text-sm hover:bg-primary-dark transition">Add to Cart</button>
+                <div class="desc-container">
+                    <div class="desc-content" id="dt-desc"></div>
+                </div>
+
+                <!-- Options -->
+                <div id="size-row" class="mb-3">
+                    <label class="fw-bold mb-2 small text-uppercase">Size <span class="text-danger">*</span></label>
+                    <div id="size-area" class="d-flex flex-wrap"></div>
+                </div>
+                <div class="mb-3"><label class="fw-bold mb-2 small text-uppercase">Color <span class="text-danger">*</span></label><div id="color-area" class="d-flex flex-wrap"></div></div>
+                
+                <!-- Bundles -->
+                <div id="bundle-container" class="mb-4">
+                    <label class="fw-bold mb-2 small text-uppercase text-primary">Bundle Offers</label>
+                    <div class="bundle-option selected" onclick="selectBundle(1, this)">
+                        <div><span class="fw-bold">1 Piece</span> <span class="text-muted small ms-2">Standard Price</span></div>
+                    </div>
+                    <div class="bundle-option" onclick="selectBundle(2, this)">
+                        <div><span class="fw-bold">2 Pieces</span> <span class="bundle-discount">5% OFF</span></div>
+                        <div class="fw-bold text-success" id="bundle-price-2"></div>
+                    </div>
+                    <div class="bundle-option" onclick="selectBundle(3, this)">
+                        <div><span class="fw-bold">3 Pieces</span> <span class="bundle-discount">10% OFF</span></div>
+                        <div class="fw-bold text-success" id="bundle-price-3"></div>
                     </div>
                 </div>
 
-                <div class="carousel-item-snap bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 ease-in-out transform hover:shadow-xl">
-                    <img src="https://via.placeholder.com/400x500/1b4d3e/FFFFFF?text=Suggested+Product+2" alt="Product 2" class="w-full h-auto object-cover aspect-[3/4]">
-                    <div class="p-4">
-                        <h3 class="font-medium text-gray-900 truncate">Premium Chiffon Shawl</h3>
-                        <p class="text-lg font-bold text-primary my-1">₱650</p>
-                        <div class="flex items-center space-x-1">
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <span class="text-xs text-gray-500">(5.0)</span>
-                        </div>
-                        <button class="w-full mt-3 bg-primary text-white py-2 rounded-lg text-sm hover:bg-primary-dark transition">Add to Cart</button>
-                    </div>
+                <div class="row mb-4">
+                    <div class="col-12"><label class="fw-bold mb-2 small text-uppercase">Height <span class="text-danger">*</span></label><input type="text" id="height-input" class="form-control" placeholder="e.g. 5'4" oninput="checkInputs()"></div>
                 </div>
                 
-                <div class="carousel-item-snap bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 ease-in-out transform hover:shadow-xl">
-                    <img src="https://via.placeholder.com/400x500/1b4d3e/FFFFFF?text=Suggested+Product+3" alt="Product 3" class="w-full h-auto object-cover aspect-[3/4]">
-                    <div class="p-4">
-                        <h3 class="font-medium text-gray-900 truncate">Modesty Tunic Top</h3>
-                        <p class="text-lg font-bold text-primary my-1">₱990</p>
-                        <div class="flex items-center space-x-1">
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gray-300 text-sm"></i>
-                            <i class="fas fa-star text-gray-300 text-sm"></i>
-                            <span class="text-xs text-gray-500">(3.8)</span>
-                        </div>
-                        <button class="w-full mt-3 bg-primary text-white py-2 rounded-lg text-sm hover:bg-primary-dark transition">Add to Cart</button>
+                <!-- Reviews Section inside Detail -->
+                <div class="mt-4 pt-4 border-top">
+                    <h5 class="font-playfair mb-3">Customer Reviews</h5>
+                    
+                    <div class="card p-3 bg-light border-0 mb-4">
+                        <h6 class="fw-bold text-sm">Write a Review</h6>
+                        <form onsubmit="submitInstantReview(event)">
+                            <div class="rating-stars mb-2 d-flex flex-row-reverse justify-content-end">
+                                <input type="radio" name="d-rating" id="dr5" value="5" required><label for="dr5">★</label>
+                                <input type="radio" name="d-rating" id="dr4" value="4"><label for="dr4">★</label>
+                                <input type="radio" name="d-rating" id="dr3" value="3"><label for="dr3">★</label>
+                                <input type="radio" name="d-rating" id="dr2" value="2"><label for="dr2">★</label>
+                                <input type="radio" name="d-rating" id="dr1" value="1"><label for="dr1">★</label>
+                            </div>
+                            <input type="text" id="d-r-name" class="form-control mb-2" placeholder="Your Name" required>
+                            <textarea id="d-r-feedback" class="form-control mb-2" rows="2" placeholder="Share your thoughts..." required></textarea>
+                            <button type="submit" class="btn btn-dark btn-sm w-100">Post Review</button>
+                        </form>
                     </div>
-                </div>
-                
-                <div class="carousel-item-snap bg-white rounded-xl shadow-lg overflow-hidden transition duration-300 ease-in-out transform hover:shadow-xl">
-                    <img src="https://via.placeholder.com/400x500/1b4d3e/FFFFFF?text=Suggested+Product+4" alt="Product 4" class="w-full h-auto object-cover aspect-[3/4]">
-                    <div class="p-4">
-                        <h3 class="font-medium text-gray-900 truncate">Simple Cotton Jilbab</h3>
-                        <p class="text-lg font-bold text-primary my-1">₱1,800</p>
-                        <div class="flex items-center space-x-1">
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gold text-sm"></i>
-                            <i class="fas fa-star text-gray-300 text-sm"></i>
-                            <span class="text-xs text-gray-500">(4.5)</span>
-                        </div>
-                        <button class="w-full mt-3 bg-primary text-white py-2 rounded-lg text-sm hover:bg-primary-dark transition">Add to Cart</button>
-                    </div>
-                </div>
-                
-            </div>
-        </section>
 
-        <section class="mb-12">
-            <h2 class="text-3xl font-serif font-semibold text-primary mb-6">🎁 Current Promotions</h2>
-            <div id="promotional-banners" class="flex flex-col md:flex-row gap-4">
-                
-                <div class="w-full md:w-1/3 bg-white p-2 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-xl">
-                    <img src="https://via.placeholder.com/600x400/1b4d3e/FFFFFF?text=Promo+1+-+New+Customer" alt="New Customer Promo" class="w-full rounded-lg object-cover">
-                    <p class="text-center text-sm font-semibold pt-2 text-primary">10% OFF First Order</p>
+                    <div id="detail-reviews-list"></div>
                 </div>
 
-                <div class="w-full md:w-1/3 bg-white p-2 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-xl">
-                    <img src="https://via.placeholder.com/600x400/1b4d3e/FFFFFF?text=Promo+2+-+Ramadan+Sale" alt="Seasonal Sale" class="w-full rounded-lg object-cover">
-                    <p class="text-center text-sm font-semibold pt-2 text-primary">Ramadan Collection Out Now</p>
-                </div>
-
-                <div class="w-full md:w-1/3 bg-white p-2 rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-[1.02] hover:shadow-xl">
-                    <img src="https://via.placeholder.com/600x400/1b4d3e/FFFFFF?text=Promo+3+-+Free+Pouch" alt="Free Gift Promo" class="w-full rounded-lg object-cover">
-                    <p class="text-center text-sm font-semibold pt-2 text-primary">FREE Pouch on all Abayas</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="mb-12">
-            <h2 class="text-3xl font-serif font-semibold text-primary mb-6">💬 Customer Feedback</h2>
-            
-            <div id="review-slider" class="flex overflow-x-scroll no-scrollbar space-x-4 pb-4">
-                
-                <div class="flex-shrink-0 w-80 bg-white rounded-xl p-6 shadow-xl border-t-4 border-gold">
-                    <div class="flex justify-between items-start mb-3">
-                        <p class="font-bold text-primary">Aisha K.</p>
-                        <p class="text-xs text-gray-500">Dec 1, 2025</p>
-                    </div>
-                    <div class="flex mb-3">
-                        <i class="fas fa-star star-gold"></i>
-                        <i class="fas fa-star star-gold"></i>
-                        <i class="fas fa-star star-gold"></i>
-                        <i class="fas fa-star star-gold"></i>
-                        <i class="fas fa-star star-gold"></i>
-                    </div>
-                    <p class="text-gray-700 italic">"The quality is excellent and the fit is perfect for modesty. Will definitely purchase again, Masha'Allah!"</p>
-                </div>
-                
-                <div class="flex-shrink-0 w-80 bg-white rounded-xl p-6 shadow-xl border-t-4 border-gold">
-                    <div class="flex justify-between items-start mb-3">
-                        <p class="font-bold text-primary">Fatima S.</p>
-                        <p class="text-xs text-gray-500">Nov 25, 2025</p>
-                    </div>
-                    <div class="flex mb-3">
-                        <i class="fas fa-star star-gold"></i>
-                        <i class="fas fa-star star-gold"></i>
-                        <i class="fas fa-star star-gold"></i>
-                        <i class="fas fa-star star-gold"></i>
-                        <i class="fas fa-star star-gray"></i>
-                    </div>
-                    <p class="text-gray-700 italic">"Fast delivery, but the color was slightly darker than the picture. Still a beautiful niqab."</p>
-                </div>
-                
-                <div class="flex-shrink-0 w-80 bg-white rounded-xl p-6 shadow-xl border-t-4 border-gold">
-                    <div class="flex justify-between items-start mb-3">
-                        <p class="font-bold text-primary">Zainab M.</p>
-                        <p class="text-xs text-gray-500">Nov 18, 2025</p>
-                    </div>
-                    <div class="flex mb-3">
-                        <i class="fas fa-star star-gold"></i>
-                        <i class="fas fa-star star-gold"></i>
-                        <i class="fas fa-star star-gold"></i>
-                        <i class="fas fa-star star-gold"></i>
-                        <i class="fas fa-star star-gold"></i>
-                    </div>
-                    <p class="text-gray-700 italic">"May Allah bless your business. The best quality abaya I have ever bought in the Philippines."</p>
-                </div>
-            </div>
-
-            <h3 class="text-2xl font-serif font-semibold text-primary mt-8 mb-4">Post Your Feedback</h3>
-            <form class="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
-                <div class="mb-4">
-                    <label for="review-name" class="block text-sm font-medium text-gray-700">Your Name</label>
-                    <input type="text" id="review-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2">
-                </div>
-                <div class="mb-4">
-                    <label for="review-rating" class="block text-sm font-medium text-gray-700">Star Rating</label>
-                    <div id="review-rating" class="flex items-center mt-1 space-x-1">
-                        <i class="far fa-star text-xl star-gold cursor-pointer hover:text-gold/70" data-rating="1"></i>
-                        <i class="far fa-star text-xl star-gold cursor-pointer hover:text-gold/70" data-rating="2"></i>
-                        <i class="far fa-star text-xl star-gold cursor-pointer hover:text-gold/70" data-rating="3"></i>
-                        <i class="far fa-star text-xl star-gold cursor-pointer hover:text-gold/70" data-rating="4"></i>
-                        <i class="far fa-star text-xl star-gold cursor-pointer hover:text-gold/70" data-rating="5"></i>
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <label for="review-feedback" class="block text-sm font-medium text-gray-700">Your Feedback</label>
-                    <textarea id="review-feedback" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary p-2"></textarea>
-                </div>
-                <button type="submit" class="w-full bg-primary text-white py-2 rounded-lg font-semibold hover:bg-primary-dark transition duration-200">Submit Review</button>
-            </form>
-        </section>
-
-        <section class="mb-12">
-            <h2 class="text-3xl font-serif font-semibold text-primary mb-6">ℹ️ Company & Policies</h2>
-            <div id="policy-accordion" class="space-y-3">
-                
-                <details class="accordion-item bg-white p-4 rounded-xl shadow-lg cursor-pointer">
-                    <summary class="flex justify-between items-center text-lg font-semibold text-primary">
-                        About Al-Jazaa Ph.
-                        <i class="fas fa-chevron-down accordion-arrow text-primary"></i>
-                    </summary>
-                    <div class="pt-2 text-gray-600 border-t mt-2">
-                        Al-Jazaa Ph. is committed to providing timeless modesty with Islamic integrity. Our collection is designed to follow the conditions of hijab, with deep consideration for every detail. We carefully select colors and styles to avoid 'Tabarruj', allowing you to wear your faith with dignity and modesty.
-                    </div>
-                </details>
-
-                <details class="accordion-item bg-white p-4 rounded-xl shadow-lg cursor-pointer">
-                    <summary class="flex justify-between items-center text-lg font-semibold text-primary">
-                        Payment Policy
-                        <i class="fas fa-chevron-down accordion-arrow text-primary"></i>
-                    </summary>
-                    <div class="pt-2 text-gray-600 border-t mt-2">
-                        We strictly accept **GCash** payments. Verification is required via uploading the proof of payment during checkout. Your order will be processed only after successful payment verification.
-                    </div>
-                </details>
-                
-                <details class="accordion-item bg-white p-4 rounded-xl shadow-lg cursor-pointer">
-                    <summary class="flex justify-between items-center text-lg font-semibold text-primary">
-                        Return Policy
-                        <i class="fas fa-chevron-down accordion-arrow text-primary"></i>
-                    </summary>
-                    <div class="pt-2 text-gray-600 border-t mt-2">
-                        Returns are accepted within **7 days** of delivery for store credit only, provided the items are unworn, unwashed, and have all original tags attached. Custom-made items are non-returnable. Customer is responsible for return shipping costs.
-                    </div>
-                </details>
-                
-                <details class="accordion-item bg-white p-4 rounded-xl shadow-lg cursor-pointer">
-                    <summary class="flex justify-between items-center text-lg font-semibold text-primary">
-                        Delivery Information
-                        <i class="fas fa-chevron-down accordion-arrow text-primary"></i>
-                    </summary>
-                    <div class="pt-2 text-gray-600 border-t mt-2">
-                        Nationwide delivery via **J&T courier**. Shipping fees vary by region and weight. Standard delivery times: **3-7 days** inside Metro Manila, and **7-10 days** outside Metro Manila. Tracking number will be provided after shipment.
-                    </div>
-                </details>
-
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="bg-primary-dark text-gray-400 pt-10 pb-6">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                
-                <div>
-                    <h4 class="text-xl font-serif text-white mb-4">Contact Us</h4>
-                    <p class="flex items-center mb-2">
-                        <i class="fas fa-phone mr-3 text-gold"></i> Call: **+63 917 123 4567** (Simulated)
-                    </p>
-                    <p class="flex items-center mb-2">
-                        <i class="fab fa-whatsapp mr-3 text-gold"></i> WhatsApp: **+63 917 123 4567**
-                    </p>
-                    <p class="flex items-center mb-2">
-                        <i class="fas fa-envelope mr-3 text-gold"></i> Email: **aljazaa.ph@gmail.com**
-                    </p>
-                </div>
-
-                <div>
-                    <h4 class="text-xl font-serif text-white mb-4">Follow Us</h4>
-                    <div class="flex space-x-4 text-2xl">
-                        <a href="#" class="text-gray-400 hover:text-gold transition"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-gold transition"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-gold transition"><i class="fab fa-tiktok"></i></a>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="text-xl font-serif text-white mb-4">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-gold transition">Terms of Service</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-gold transition">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-gold transition">Track Your Order</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="text-center border-t border-gray-700 pt-6">
-                <p class="text-sm">&copy; <span id="current-year">2025</span> **Al-Jazaa Ph.** All Rights Reserved.</p>
-                <p class="text-xs mt-1">Designed for Modesty with Integrity</p>
+                <hr><h5 class="font-playfair mb-3">You might also like</h5><div id="related-products" class="related-scroll"></div>
             </div>
         </div>
-    </footer>
+    </div>
+    
+    <!-- STICKY ACTION BAR INSIDE DETAIL VIEW -->
+    <div class="sticky-action-bar visible" id="sticky-bar">
+        <div>
+            <div class="text-muted small" style="font-size:0.7rem;">Total Price</div>
+            <div class="sticky-price" id="sticky-price-display">₱0</div>
+        </div>
+        <div class="d-flex gap-2 align-items-center">
+            <div class="qty-selector">
+                <button class="qty-btn" onclick="dtQty(-1)">-</button>
+                <input type="number" id="dt-qty-val" class="qty-input" value="1" readonly>
+                <button class="qty-btn" onclick="dtQty(1)">+</button>
+            </div>
+            <button id="add-btn" class="btn btn-custom px-4" onclick="addToCart()" disabled>ADD TO BAG</button>
+        </div>
+    </div>
+</div>
 
-    <script>
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+<!-- CART -->
+<div id="page-cart" class="container my-5 d-none">
+    <h2 class="mb-4 text-center">Your Shopping Bag</h2>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden"><div class="table-responsive"><table class="table align-middle mb-0"><tbody id="cart-table"></tbody></table></div></div>
+            <div class="d-flex justify-content-between align-items-center bg-white p-4 rounded-4 shadow-sm border"><div><small class="text-muted d-block">Total Amount</small><div class="fs-4 fw-bold text-success" id="cart-total">₱0.00</div></div><button id="btn-checkout" class="btn btn-custom px-4" onclick="routeTo('checkout')">CHECKOUT</button></div>
+        </div>
+    </div>
+</div>
 
-        // Simple star rating interaction
-        const stars = document.querySelectorAll('#review-rating i');
-        stars.forEach(star => {
-            star.addEventListener('click', () => {
-                const rating = parseInt(star.getAttribute('data-rating'));
-                stars.forEach(s => {
-                    const sRating = parseInt(s.getAttribute('data-rating'));
-                    if (sRating <= rating) {
-                        s.classList.remove('far');
-                        s.classList.add('fas');
-                    } else {
-                        s.classList.remove('fas');
-                        s.classList.add('far');
-                    }
-                });
-                console.log('Selected Rating:', rating);
-            });
-        });
+<!-- CHECKOUT (Exact Original Logic) -->
+<div id="page-checkout" class="container my-5 d-none" style="max-width: 800px;">
+    <div class="card p-4 p-md-5 shadow-lg border-0 rounded-4">
+        <h3 class="text-center mb-2 font-playfair">Checkout</h3>
+        <p class="text-center text-muted small mb-4">Complete your details to place order</p>
+        <form id="checkout-form" onsubmit="submitOrder(event)" oninput="validateCheckoutForm()">
+            
+            <div class="mb-4 bg-light p-3 rounded border">
+                <div class="marquee-container shadow-sm mb-3"><div class="marquee-content">✨ DONATE TO ORPHANS • SADQA JARIYAH • HELP THOSE IN NEED • AL-JAZAA PH CHARITY ✨</div></div>
+                <p class="small text-muted mb-2 text-center fw-bold">Be among those who care for Orphans. Select Sadaqah amount (Added to Total)</p>
+                <div class="d-flex gap-2 flex-wrap justify-content-center mb-2">
+                    <button type="button" class="donate-pill" onclick="selectDonation(0.05, this)">5%</button>
+                    <button type="button" class="donate-pill" onclick="selectDonation(0.10, this)">10%</button>
+                    <button type="button" class="donate-pill" onclick="selectDonation(0.20, this)">20%</button>
+                    <button type="button" class="donate-pill" onclick="selectDonation(0.50, this)">50%</button>
+                    <button type="button" class="donate-pill" onclick="selectDonation(0, this)">None</button>
+                </div>
+                <textarea id="donation-note" class="form-control d-none mt-2" rows="2" placeholder="Special Note / Intention (Optional)"></textarea>
+            </div>
+
+            <h6 class="text-uppercase fw-bold text-muted small mb-3">1. Delivery & Address</h6>
+            <div class="row g-3 mb-4">
+                <div class="col-12"><select class="form-select py-3" id="del-method" onchange="toggleDeliveryOptions()" required><option value="" disabled selected>Select Delivery Method</option><option value="Pick-up">Pick-up (Free)</option><option value="Delivery">Delivery (Courier)</option></select></div>
+                <div class="col-md-6"><input type="text" class="form-control" id="c-name" placeholder="Full Name" required></div><div class="col-md-6"><input type="number" class="form-control" id="c-phone" placeholder="Phone Number" required></div><div class="col-12"><input type="email" class="form-control" id="c-email" placeholder="Email Address" required></div>
+                <div class="col-12 delivery-fields" style="display:none;"><hr class="opacity-25 my-1"><label class="small fw-bold text-primary mt-2">Shipping Address</label></div>
+                <div class="col-md-8 delivery-fields"><input type="text" class="form-control" id="addr-street" placeholder="House / Street / Subdivision"></div><div class="col-md-4 delivery-fields"><input type="text" class="form-control" id="addr-brgy" placeholder="Barangay"></div><div class="col-md-6 delivery-fields"><input type="text" class="form-control" id="addr-city" placeholder="City"></div><div class="col-md-6 delivery-fields"><input type="text" class="form-control" id="addr-prov" placeholder="Province"></div>
+                <div class="col-md-8 delivery-fields"><select class="form-select" id="addr-region" onchange="calcShipping()"><option value="" disabled selected>Select Region</option><option value="Metro Manila">Metro Manila</option><option value="Luzon">Luzon</option><option value="Visayas">Visayas</option><option value="Mindanao">Mindanao</option><option value="Island">Island / Remote Areas</option></select></div><div class="col-md-4 delivery-fields"><input type="text" class="form-control" id="addr-zip" placeholder="Zip Code"></div>
+            </div>
+            
+            <div class="bg-white p-3 border rounded mb-3">
+                <div class="d-flex justify-content-between mb-1"><span>Subtotal:</span><span id="sum-subtotal">₱0</span></div>
+                <div class="d-flex justify-content-between mb-1"><span>Delivery Fee:</span><span id="sum-shipping" class="text-danger">₱0</span></div>
+                <div class="d-flex justify-content-between mb-1 d-none" id="sum-donate-row"><span>Donation:</span><span id="sum-donation" class="text-success">₱0</span></div>
+                <hr><div class="d-flex justify-content-between fw-bold fs-5"><span>Grand Total:</span><span id="pay-total" class="text-primary">₱0</span></div>
+            </div>
+            
+            <h6 class="text-uppercase fw-bold text-muted small mb-3">2. Payment Summary</h6>
+            <div class="bg-light p-3 rounded-3 border mb-3">
+                <div class="d-flex align-items-center">
+                    <div class="bg-white p-2 rounded shadow-sm me-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                        <img src="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/GCASH.png?raw=true" alt="GCash" style="max-width: 100%; max-height: 100%;">
+                    </div>
+                    <div>
+                        <div class="fw-bold">GCash Payment</div>
+                        <div class="small text-muted mb-1">Send exact amount to: <strong>0976-551-3716</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6"><input type="text" class="form-control" id="c-ref" placeholder="GCash Reference No." required></div>
+                <div class="col-md-6 file-upload-wrapper">
+                    <input type="file" class="form-control" id="c-proof" accept="image/*" required>
+                    <div id="upload-success-msg" class="d-none text-success small fw-bold mt-1"><i class="fas fa-check-circle me-1"></i> Image attached!</div>
+                    <div class="upload-helper"><i class="fas fa-info-circle"></i> Please upload screenshot of payment</div>
+                </div>
+            </div>
+            <div class="mt-4"><button id="btn-place-order" type="submit" class="btn btn-custom w-100 py-3" disabled>FILL DETAILS</button></div>
+        </form>
+    </div>
+</div>
+
+<!-- TRACKING -->
+<div id="page-track" class="container my-5 d-none text-center" style="max-width:500px; min-height:50vh;">
+    <h3 class="mb-3">Track Order</h3>
+    <div class="input-group mb-4 shadow-sm rounded-pill overflow-hidden"><input type="text" id="track-id" class="form-control border-0 ps-4" placeholder="Enter Order ID"><button class="btn btn-custom px-4" onclick="trackOrder()">Search</button></div>
+    <div id="track-result" class="card p-4 shadow-sm border-0 rounded-4 d-none text-start bg-white"><div class="fw-bold text-success fs-4 text-center mb-3" id="t-status"></div><hr><div class="d-flex justify-content-between"><span>Date:</span> <span id="t-date"></span></div><div class="d-flex justify-content-between mt-2"><span>Total:</span> <span id="t-total"></span></div></div>
+</div>
+
+<!-- REVIEWS (Main) -->
+<div id="page-reviews" class="container my-5 d-none">
+    <div class="row g-5">
+        <div class="col-lg-7 mx-auto">
+            <h3 class="font-playfair mb-4">What our customers say</h3>
+            <div id="reviews-list"></div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-4"><h3 class="footer-heading">Al-Jazaa Ph.</h3><p class="small text-light">Providing timeless modesty with Islamic integrity.</p></div>
+            <div class="col-md-4"><h5 class="text-white mb-3" style="font-family:'Outfit'">Links</h5><a href="#" class="footer-link" onclick="routeTo('home')">Shop Collection</a><a href="#" class="footer-link" onclick="routeTo('track')">Track Order</a><a href="#" class="footer-link" onclick="routeTo('reviews')">Customer Care</a></div>
+            <div class="col-md-4"><h5 class="text-white mb-3" style="font-family:'Outfit'">Contact</h5><p class="footer-link mb-1">aljazaa.ph@gmail.com</p><p class="footer-link">0921-429-xxxx</p></div>
+        </div>
+        <hr class="border-secondary mt-5"><p class="text-center small text-light mb-0">&copy; 2024 Al-Jazaa Ph. All rights reserved.</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v14'))||[], curProduct={}, selectedSize=null, selectedColor=null;
+    let selectedBundleQty = 1;
+    let cartTotalAmount=0, currentDonationPercent=0, currentShippingFee=0;
+    let allReviews = [];
+
+    const catImages = {
+        'All': 'https://cdn-icons-png.flaticon.com/512/3502/3502601.png', 
+        'Jilbab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat2.png?raw=true',
+        'Khimar': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat4.png?raw=true',
+        'Abayah': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat3.png?raw=true',
+        'Abaya': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat3.png?raw=true', 
+        'Set': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat5.png?raw=true',
+        'Skirt': 'https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/skirt.png?raw=true',
+        'Niqab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat1.png?raw=true',
+        'Sale': 'https://github.com/ianianguro-art/Menu-POS/blob/main/big-sale-woolpack-1.jpg?raw=true',
+        'Default': 'https://cdn-icons-png.flaticon.com/512/4430/4430945.png'
+    };
+
+    const getSidebar = () => bootstrap.Offcanvas.getInstance(document.getElementById('sidebarMenu'));
+    const closeSidebar = () => { const s = getSidebar(); if(s) s.hide(); };
+
+    document.addEventListener("DOMContentLoaded", () => {
+        fetchProducts(); updateCartCount();
         
-        // ** NOTE: Integration with the existing GAS functions (like getProducts, submitReview) **
-        // ** requires copying the existing <script> blocks from the original index.html into this file. **
-        // ** The provided context did not contain the main JS logic, so it is omitted here. **
-        // ** The routing functions (routeTo, closeSidebar) must be carried over to maintain app functionality. **
-    </script>
+        // --- MOBILE BACK BUTTON LOGIC ---
+        window.history.replaceState({ page: 'home' }, '', '');
+        window.onpopstate = (e) => {
+            if(e.state) renderPage(e.state.page);
+            else renderPage('home');
+        };
+
+        const fileInput = document.getElementById('c-proof');
+        if(fileInput) {
+            fileInput.addEventListener('change', function() {
+                validateCheckoutForm(); 
+                const msg = document.getElementById('upload-success-msg');
+                if(this.files && this.files.length > 0) msg.classList.remove('d-none');
+                else msg.classList.add('d-none');
+            });
+        }
+    });
+
+    function routeTo(pageId) { 
+        window.history.pushState({ page: pageId }, '', ''); 
+        renderPage(pageId); 
+    }
+
+    function renderPage(pageId) {
+        ['page-home', 'page-cart', 'page-checkout', 'page-track', 'page-reviews'].forEach(id => document.getElementById(id).classList.add('d-none'));
+        document.getElementById('detail-view').style.display = 'none'; 
+        document.getElementById('heroCarousel').classList.add('d-none'); 
+        window.scrollTo(0,0);
+        
+        if(pageId === 'home') { 
+            document.getElementById('page-home').classList.remove('d-none'); 
+            document.getElementById('heroCarousel').classList.remove('d-none'); 
+            document.getElementById('top-announcement').style.display = 'flex';
+        } else if (pageId === 'detail') {
+            document.getElementById('detail-view').style.display = 'block';
+            document.getElementById('top-announcement').style.display = 'none';
+        } else { 
+            document.getElementById('page-' + pageId).classList.remove('d-none'); 
+            document.getElementById('top-announcement').style.display = 'none';
+        }
+        
+        if(pageId === 'cart') renderCart();
+        if(pageId === 'checkout') { if(cart.length === 0) { routeTo('home'); return; } initCheckout(); }
+        if(pageId === 'reviews') renderMainReviews();
+    }
+
+    // --- PRODUCTS ---
+    function fetchProducts() { 
+        fetch(WEB_APP_URL + "?action=getProducts").then(r => r.json()).then(data => { 
+            allProducts = data; document.getElementById('loader').style.display = 'none'; 
+            renderCats(); renderProds(allProducts); 
+            // Fetch reviews
+            fetch(WEB_APP_URL + "?action=getReviews").then(r=>r.json()).then(res => { allReviews = res; });
+        }); 
+    }
+    
+    function renderCats() { 
+        const cats = ['All', ...new Set(allProducts.map(p => p.category))]; 
+        document.getElementById('category-list').innerHTML = cats.map(c => {
+            let imgUrl = catImages[c] ? catImages[c] : catImages['Default'];
+            return `<div class="cat-item-wrapper" onclick="filterCat('${c}', this)"><img src="${imgUrl}" class="cat-circle-img" onerror="this.src='${catImages['Default']}'"><span class="cat-title">${c}</span></div>`; 
+        }).join(''); 
+        document.getElementById('sidebar-categories').innerHTML = cats.map(c => `<div class="sidebar-link" onclick="filterCat('${c}', null, true)">${c} <i class="fas fa-chevron-right"></i></div>`).join(''); 
+    }
+
+    function filterCat(c, el, fromSidebar = false) { 
+        if(el) { document.querySelectorAll('.cat-item-wrapper').forEach(btn => btn.classList.remove('active')); el.classList.add('active'); } 
+        renderProds(c === 'All' ? allProducts : allProducts.filter(p => p.category === c)); 
+        if(fromSidebar) { closeSidebar(); routeTo('home'); document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); } 
+    }
+    
+    function renderProds(list) { 
+        document.getElementById('product-grid').innerHTML = list.map(p => { 
+            let saleBadge = (p.salePercent > 0) ? `<span class="sale-badge">${p.salePercent}% OFF</span>` : ''; 
+            let priceDisplay = (p.salePercent > 0) ? `<span class="original-price">₱${p.originalPrice}</span> <span class="sale-price-text">₱${p.price}</span>` : `<div class="fw-bold text-dark">₱${p.price}</div>`; 
+            return `<div class="col"><div class="card product-card" onclick="openDetail('${p.id}')" style="cursor:pointer">
+            <span class="stock-label ${p.inStock?'in-stock':'out-stock'}">${p.inStock?'In Stock':'Out of Stock'}</span>${saleBadge}
+            <div class="card-img-wrapper"><img src="${p.image}" class="w-100 h-100 position-absolute start-0 top-0 object-fit-cover bg-light"></div>
+            <div class="card-body py-2"><h6 class="card-title text-dark mb-1 text-truncate">${p.name}</h6>${priceDisplay}</div></div></div>`; 
+        }).join(''); 
+    }
+
+    // --- DETAIL VIEW ---
+    function openDetail(id) {
+        // PUSH STATE for back button
+        window.history.pushState({ page: 'detail' }, '', '');
+
+        curProduct = allProducts.find(p => p.id == id); selectedSize = null; selectedColor = null; selectedBundleQty = 1;
+        document.getElementById('height-input').value = ""; document.getElementById('dt-qty-val').value = 1;
+
+        let imgList = (curProduct.images && curProduct.images.length > 0) ? curProduct.images : [curProduct.image];
+        document.getElementById('dt-img').src = imgList[0];
+        document.getElementById('dt-gallery').innerHTML = imgList.map((src, i) => `<img src="${src}" class="thumb-img ${i===0?'active':''}" onclick="document.getElementById('dt-img').src='${src}'; document.querySelectorAll('.thumb-img').forEach(e=>e.classList.remove('active')); this.classList.add('active');">`).join('');
+
+        document.getElementById('dt-cat').innerText = curProduct.category; document.getElementById('dt-name').innerText = curProduct.name; 
+        document.getElementById('dt-desc').innerText = curProduct.desc;
+
+        if(curProduct.salePercent > 0) { document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice; document.getElementById('dt-old-price').classList.remove('d-none'); document.getElementById('dt-sale-badge').innerText = curProduct.salePercent + "% OFF"; document.getElementById('dt-sale-badge').classList.remove('d-none'); document.getElementById('dt-price-display').innerText = "₱" + curProduct.price; document.getElementById('dt-price-display').classList.add('text-danger'); } else { document.getElementById('dt-old-price').classList.add('d-none'); document.getElementById('dt-sale-badge').classList.add('d-none'); document.getElementById('dt-price-display').innerText = "₱" + curProduct.price; document.getElementById('dt-price-display').classList.remove('text-danger'); }
+        
+        const isNiqab = (curProduct.category.toLowerCase() === 'niqab');
+        if(isNiqab) { 
+            document.getElementById('size-row').style.display = 'none'; 
+            document.getElementById('bundle-container').style.display = 'none';
+            selectedSize = "One Size"; 
+        } else { 
+            document.getElementById('size-row').style.display = 'block'; 
+            document.getElementById('bundle-container').style.display = 'block';
+            document.getElementById('size-area').innerHTML = ["S","M","L","XL"].map(s => `<div class="option-btn size-opt" onclick="pickOption('size','${s}', this)">${s}</div>`).join('');
+            document.getElementById('bundle-price-2').innerText = "₱" + Math.floor((curProduct.price*2)*0.95);
+            document.getElementById('bundle-price-3').innerText = "₱" + Math.floor((curProduct.price*3)*0.90);
+            selectBundle(1, document.querySelector('.bundle-option')); 
+        }
+
+        let colorList = curProduct.colors ? curProduct.colors.split(',') : ["Default"]; 
+        document.getElementById('color-area').innerHTML = colorList.map(c => `<div class="option-btn color-opt" onclick="pickOption('color','${c.trim()}', this)">${c.trim()}</div>`).join('');
+        
+        const badge = document.getElementById('dt-pop-badge');
+        if(curProduct.inStock) { badge.classList.remove('d-none'); } else { badge.classList.add('d-none'); }
+
+        renderRelated(curProduct.category, curProduct.id); 
+        renderDetailReviews(); 
+        
+        document.getElementById('detail-view').style.display = 'block';
+        document.getElementById('top-announcement').style.display = 'none';
+        
+        updateStickyBar();
+        checkInputs();
+    }
+
+    function pickOption(type, val, el) { let grp = type === 'size' ? '.size-opt' : '.color-opt'; document.querySelectorAll(grp).forEach(b => b.classList.remove('selected')); el.classList.add('selected'); if(type==='size') selectedSize = val; else selectedColor = val; checkInputs(); }
+
+    function checkInputs() { const h = document.getElementById('height-input').value.trim(); const btn = document.getElementById('add-btn'); btn.disabled = !(curProduct.inStock && selectedSize && selectedColor && h !== ""); }
+
+    function selectBundle(qty, el) {
+        selectedBundleQty = qty;
+        document.querySelectorAll('.bundle-option').forEach(b => b.classList.remove('selected'));
+        el.classList.add('selected');
+        document.getElementById('dt-qty-val').value = qty; 
+        updateStickyBar();
+    }
+
+    function updateStickyBar() {
+        let price = curProduct.price * selectedBundleQty;
+        if(curProduct.category.toLowerCase() !== 'niqab') {
+            if(selectedBundleQty === 2) price *= 0.95;
+            if(selectedBundleQty === 3) price *= 0.90;
+        }
+        document.getElementById('sticky-price-display').innerText = "₱" + Math.floor(price);
+    }
+
+    function dtQty(change) { 
+        let el = document.getElementById('dt-qty-val'); let val = parseInt(el.value) + change; if(val < 1) val = 1; el.value = val; 
+        if(curProduct.category.toLowerCase() !== 'niqab') {
+            const opts = document.querySelectorAll('.bundle-option');
+            if(val===1) selectBundle(1, opts[0]); else if(val===2) selectBundle(2, opts[1]); else if(val===3) selectBundle(3, opts[2]); else { selectedBundleQty = val; updateStickyBar(); }
+        } else { selectedBundleQty = val; updateStickyBar(); }
+    }
+    
+    function addToCart() {
+        if(!selectedSize || !selectedColor || !document.getElementById('height-input').value) return;
+        let unitP = curProduct.price;
+        if(curProduct.category.toLowerCase() !== 'niqab') {
+             if(selectedBundleQty===2) unitP = (curProduct.price*2*0.95)/2; if(selectedBundleQty===3) unitP = (curProduct.price*3*0.90)/3;
+        }
+        cart.push({...curProduct, price: Math.floor(unitP), size: selectedSize, color: selectedColor, height: document.getElementById('height-input').value, qty: selectedBundleQty}); 
+        localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); updateCartCount(); Swal.fire({icon: 'success', title: 'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1500}); 
+        window.history.back(); // Use History back
+    }
+    
+    function updateCartCount() { document.getElementById('cart-count').innerText = cart.length; }
+    
+    function renderCart() { 
+        let total = 0; const tb = document.getElementById('cart-table'); 
+        if(cart.length === 0) { tb.innerHTML = '<tr><td class="text-center py-5">Shopping bag is empty</td></tr>'; document.getElementById('btn-checkout').disabled = true; } 
+        else { 
+            document.getElementById('btn-checkout').disabled = false; 
+            tb.innerHTML = cart.map((i,x) => { total += (i.price * i.qty); return `<tr style="border-bottom:1px solid #f0f0f0;"><td class="ps-3" style="width:70px;"><img src="${i.image}" width="60" class="rounded-3 shadow-sm"></td><td><div class="fw-bold">${i.name}</div><div class="small text-muted mb-1">Size: ${i.size} | Color: ${i.color}</div><div class="small text-muted mb-1">Height: ${i.height}</div><div class="text-primary fw-bold">₱${i.price}</div></td><td style="width:120px;"><div class="badge bg-secondary">Qty: ${i.qty}</div></td><td class="text-end pe-4"><i class="fas fa-trash-alt text-danger" style="cursor:pointer; opacity:0.6;" onclick="delItem(${x})"></i></td></tr>`; }).join(''); 
+        } 
+        document.getElementById('cart-total').innerText = "₱" + total.toLocaleString(); 
+    }
+    function delItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); updateCartCount(); renderCart(); }
+    
+    // --- INSTANT REVIEWS ---
+    function renderDetailReviews() {
+        const c = document.getElementById('detail-reviews-list');
+        const list = allReviews.slice(0, 3);
+        if(!list.length) c.innerHTML = '<small class="text-muted">No reviews yet.</small>';
+        else c.innerHTML = list.map(r => `<div class="card p-3 border-0 bg-light mb-2"><div class="d-flex justify-content-between"><span class="fw-bold small">${r.name}</span><span class="text-warning small">${'★'.repeat(r.rating)}</span></div><p class="small mb-0 text-muted">${r.feedback}</p></div>`).join('');
+    }
+
+    function submitInstantReview(e) {
+        e.preventDefault();
+        const name = document.getElementById('d-r-name').value;
+        const fb = document.getElementById('d-r-feedback').value;
+        let rating = 0;
+        document.querySelectorAll('input[name="d-rating"]').forEach(r => { if(r.checked) rating = parseInt(r.value); });
+        
+        if(rating === 0) { Swal.fire('Error','Select rating','warning'); return; }
+
+        // Optimistic Update: Add to list instantly
+        const newReview = { name: name, feedback: fb, rating: rating };
+        allReviews.unshift(newReview);
+        renderDetailReviews(); // Re-render local list
+
+        // Reset Form
+        document.getElementById('d-r-name').value = "";
+        document.getElementById('d-r-feedback').value = "";
+        document.querySelectorAll('input[name="d-rating"]').forEach(r => r.checked = false);
+
+        Swal.fire({icon: 'success', title: 'Posted!', toast:true, position:'top-end', showConfirmButton:false, timer:1500});
+
+        // Send to backend
+        fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify({ action: 'submitReview', name: name, email: 'N/A', phone: 'N/A', feedback: fb, rating: rating }) });
+    }
+
+    function renderMainReviews() {
+        document.getElementById('main-reviews-list').innerHTML = allReviews.map(r => `<div class="card p-3 mb-3 border-0 shadow-sm"><div class="d-flex justify-content-between"><span class="fw-bold">${r.name}</span><span class="text-warning">${'★'.repeat(r.rating)}</span></div><p class="text-secondary small mb-0">${r.feedback}</p></div>`).join('');
+    }
+
+    // --- CHECKOUT ---
+    function initCheckout() { 
+        cartTotalAmount = cart.reduce((acc, item) => acc + (item.price * item.qty), 0); 
+        currentDonationPercent = 0; currentShippingFee = 0; 
+        document.getElementById('del-method').value = ""; ['addr-street','addr-brgy','addr-city','addr-prov','addr-region','addr-zip'].forEach(id=>document.getElementById(id).value=""); document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = 'none'); document.querySelectorAll('.donate-pill').forEach(b => b.classList.remove('selected')); document.getElementById('c-proof').value = ""; 
+        updateCheckoutCalculations(); validateCheckoutForm(); 
+    }
+
+    function toggleDeliveryOptions() { const m = document.getElementById('del-method').value; const isDel = m === 'Delivery'; document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = isDel ? 'block' : 'none'); document.querySelectorAll('.delivery-fields input, .delivery-fields select').forEach(el => el.required = isDel); calcShipping(); validateCheckoutForm(); }
+    function calcShipping() { 
+        const method = document.getElementById('del-method').value; const region = document.getElementById('addr-region').value;
+        let potentialFee = 0;
+        if(region === 'Metro Manila') potentialFee = 90; else if(region === 'Luzon') potentialFee = 150; else if(region === 'Visayas') potentialFee = 210; else if(region === 'Mindanao') potentialFee = 220; else if(region === 'Island') potentialFee = 250;
+        if (method === 'Delivery') { if(cartTotalAmount >= 3000) currentShippingFee = 0; else currentShippingFee = potentialFee; } else currentShippingFee = 0;
+        updateCheckoutCalculations(); 
+    }
+    function selectDonation(p, b) { currentDonationPercent=p; document.querySelectorAll('.donate-pill').forEach(btn=>btn.classList.remove('selected')); b.classList.add('selected'); document.getElementById('donation-note').classList.toggle('d-none', p===0); updateCheckoutCalculations(); }
+    function updateCheckoutCalculations() { const d = Math.ceil(cartTotalAmount * currentDonationPercent); const g = cartTotalAmount + currentShippingFee + d; document.getElementById('sum-subtotal').innerText = "₱" + cartTotalAmount.toLocaleString(); document.getElementById('sum-shipping').innerText = "₱" + currentShippingFee; const dr = document.getElementById('sum-donate-row'); if (currentDonationPercent > 0) { dr.classList.remove('d-none'); document.getElementById('sum-donation').innerText = "₱" + d; } else dr.classList.add('d-none'); document.getElementById('pay-total').innerText = "₱" + g.toLocaleString(); }
+    
+    function validateCheckoutForm() { 
+        const f=document.getElementById('checkout-form'); const b=document.getElementById('btn-place-order'); const hasProof = document.getElementById('c-proof').files.length > 0;
+        if(f.checkValidity() && hasProof) { b.disabled=false; b.innerText="PLACE ORDER"; b.classList.remove('opacity-50'); } else { b.disabled=true; b.innerText="FILL DETAILS"; b.classList.add('opacity-50'); } 
+    }
+    
+    function submitOrder(e) {
+        e.preventDefault(); const f = document.getElementById('c-proof').files[0]; if(!f) return;
+        Swal.fire({ title: 'Processing...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+        const r = new FileReader(); r.onload = function(evt) {
+            const d = Math.ceil(cartTotalAmount * currentDonationPercent); const g = cartTotalAmount + currentShippingFee + d;
+            let addr = "Pick-up"; if(document.getElementById('del-method').value === 'Delivery'){ addr = `${document.getElementById('addr-street').value}, ${document.getElementById('addr-brgy').value}, ${document.getElementById('addr-city').value}, ${document.getElementById('addr-prov').value}`; }
+            const p = { action: 'placeOrder', cust: { name:document.getElementById('c-name').value, phone:document.getElementById('c-phone').value, email:document.getElementById('c-email').value, addr:addr }, pay: { ref:document.getElementById('c-ref').value, image:evt.target.result, mime:f.type }, cart: cart, total: "₱" + g.toLocaleString(), donation: { percent: (currentDonationPercent * 100) + "%", amount: d, note: document.getElementById('donation-note').value }, delivery: { method: document.getElementById('del-method').value, region: document.getElementById('addr-region').value || "N/A", fee: currentShippingFee } };
+            fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(p) }).then(res => res.json()).then(d => { if(d.status === 'success') { cart = []; localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); Swal.fire('Order Placed!', `ID: ${d.orderId}`, 'success').then(() => routeTo('home')); } else Swal.fire('Error', d.error, 'error'); });
+        }; r.readAsDataURL(f);
+    }
+    
+    function doSearch() { const q = document.getElementById('searchBox').value.toLowerCase(); renderProds(allProducts.filter(p => p.name.toLowerCase().includes(q))); document.getElementById('shop-section').scrollIntoView(); }
+    function scrollToProducts() { document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); }
+    function trackOrder() {
+        const id = document.getElementById('track-id').value.trim(); if(!id) return; document.getElementById('loader').style.display = 'flex';
+        fetch(WEB_APP_URL + `?action=trackOrder&orderId=${id}`).then(r => r.json()).then(d => { document.getElementById('loader').style.display = 'none'; document.getElementById('track-result').classList.remove('d-none'); document.getElementById('t-status').innerText = d.status === 'found' ? d.currStatus : "Order Not Found"; document.getElementById('t-date').innerText = d.status === 'found' ? d.date : "-"; document.getElementById('t-total').innerText = d.status === 'found' ? d.total : "-"; });
+    }
+    function renderRelated(cat, currentId) { let related = allProducts.filter(p => p.category === cat && p.id !== currentId).sort(() => 0.5 - Math.random()).slice(0,5); document.getElementById('related-products').innerHTML = related.map(p => `<div class="related-card" onclick="openDetail('${p.id}')"><img src="${p.image}"><div class="small fw-bold text-truncate">${p.name}</div></div>`).join(''); }
+</script>
 </body>
 </html>
