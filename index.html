@@ -3,773 +3,914 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Al-Jazaa Ph. | Online Shop</title>
+    <title>Al-Jazaa Ph | Modest Fashion</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true">
 
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Google Fonts -->
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1b4d3e',
+                        'primary-dark': '#143a2f',
+                        gold: '#c5a028',
+                        'bg-soft': '#eff2f5',
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        :root {
-            --primary: #1b4d3e; 
-            --primary-dark: #143a2f;
-            --gold: #c5a028;
-            --bg-color: #eff2f5; 
-            --text: #2c3e50;
-            --nav-height: 70px;
-        }
-
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            background-color: var(--bg-color); 
-            color: var(--text); 
-            overflow-x: hidden; 
-            padding-top: 35px; 
-            padding-bottom: 80px; /* Space for sticky bar */
-        }
+        /* Custom Utilities for Hide Scrollbar & Animations */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
-        h1, h2, h3, h4, h5, .navbar-brand { font-family: 'Playfair Display', serif; }
-
-        /* Announcement Bar */
-        .announcement-bar { 
-            background: var(--primary); 
-            color: white; 
-            height: 35px;
-            overflow: hidden;
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 2000;
-            display: flex; align-items: center; justify-content: center;
-            animation: flashPulse 2s infinite alternate;
-        }
-        @keyframes flashPulse {
-            0% { opacity: 1; background-color: var(--primary); }
-            50% { opacity: 0.9; background-color: #246652; }
-            100% { opacity: 1; background-color: var(--primary); }
-        }
-        .announcement-content {
-            display: inline-block; white-space: nowrap; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
-        }
-
-        /* Navbar */
-        .navbar { 
-            background: rgba(255,255,255,0.98); backdrop-filter: blur(10px); 
-            box-shadow: 0 2px 15px rgba(0,0,0,0.04); height: var(--nav-height);
-            z-index: 1030; top: 35px; 
-        }
-        .navbar-brand { font-weight: 700; font-size: 1.5rem; color: var(--primary) !important; display: flex; align-items: center; gap: 10px; }
-        .nav-logo-img { height: 40px; width: auto; }
+        .glass-nav { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         
-        /* Sidebar */
-        .offcanvas { border-radius: 0 20px 20px 0; border: none; width: 75% !important; max-width: 350px; }
-        .offcanvas-header { background: var(--primary); color: white; }
-        .sidebar-link { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; color: var(--text); text-decoration: none; font-weight: 500; border-bottom: 1px solid #f0f0f0; transition: 0.2s; cursor: pointer; }
-        .sidebar-link:hover { background-color: #f8f9fa; color: var(--primary); }
-        .policy-box { background: #fdfdfd; border: 1px solid #eee; border-radius: 8px; padding: 15px; margin-top: 20px; max-height: 200px; overflow-y: auto; font-size: 0.85rem; color: #666; }
+        /* Accordion Animation */
+        .accordion-content { transition: max-height 0.3s ease-out, padding 0.3s ease; max-height: 0; overflow: hidden; }
+        .accordion-content.active { max-height: 500px; }
+        .accordion-icon { transition: transform 0.3s ease; }
+        .rotate-180 { transform: rotate(180deg); }
 
-        .btn-hero { background-color: var(--primary); color: var(--gold); border: 2px solid var(--gold); padding: 8px 30px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-radius: 50px; transition: all 0.3s ease; font-family: 'Playfair Display', serif; font-size: 0.9rem; }
-        .cart-btn-wrap { position: relative; display: inline-flex; align-items: center; text-decoration: none; margin-right: 15px; cursor: pointer;}
-        .cart-badge { background: var(--gold); color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: bold; position: absolute; top: -5px; right: -8px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+        /* Loader */
+        .loader-spin { border: 4px solid #f3f3f3; border-top: 4px solid #c5a028; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Category Scroll */
-        .category-scroll-container { overflow-x: auto; white-space: nowrap; position: sticky; top: calc(var(--nav-height) + 35px); z-index: 900; background: rgba(239, 242, 245, 0.95); backdrop-filter: blur(8px); padding: 15px 0; border-bottom: 1px solid rgba(0,0,0,0.05); -ms-overflow-style: none; scrollbar-width: none; }
-        .category-scroll-container::-webkit-scrollbar { display: none; }
-        .cat-item-wrapper { display: inline-flex; flex-direction: column; align-items: center; margin-right: 20px; cursor: pointer; transition: 0.2s; }
-        .cat-item-wrapper.active .cat-circle-img { border-color: var(--primary); transform: scale(1.05); box-shadow: 0 0 0 3px rgba(27, 77, 62, 0.2); }
-        .cat-item-wrapper.active .cat-title { color: var(--primary); font-weight: 700; }
-        .cat-circle-img { width: 60px; height: 60px; border-radius: 50%; object-fit: contain; background-color: white; border: 2px solid #ddd; margin-bottom: 8px; transition: 0.3s; }
-        .cat-title { font-size: 0.8rem; color: #666; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+        /* Smooth View Transitions */
+        .view-section { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Product Card */
-        .product-card { border: none; background: white; transition: 0.3s; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.03); height: 100%; position: relative; }
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
-        .card-img-wrapper { position: relative; width: 100%; padding-top: 133%; overflow: hidden; background: #f8f9fa; }
-        .mini-carousel { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-        .mini-carousel img { width: 100%; height: 100%; object-fit: contain; object-position: center; background-color: #fff; }
-        .stock-label { position: absolute; top: 10px; left: 10px; padding: 4px 10px; font-size: 0.65rem; color: white; font-weight: 700; text-transform: uppercase; border-radius: 4px; z-index: 10; }
-        .in-stock { background: rgba(27, 77, 62, 0.9); }
-        .out-stock { background: rgba(150, 150, 150, 0.9); }
-        .sale-badge { position: absolute; top: 10px; right: 10px; background: #d32f2f; color: white; padding: 4px 8px; font-size: 0.7rem; font-weight: 700; border-radius: 4px; z-index: 10; }
-        .original-price { text-decoration: line-through; color: #999; font-size: 0.85rem; margin-right: 5px; }
-        .sale-price-text { color: #d32f2f; font-weight: 700; }
-        
-        /* Detail View (Mobile Full Screen) */
-        #detail-view { 
-            position: fixed; inset: 0; background: #fff; z-index: 2000; 
-            overflow-y: auto; display: none; animation: slideUp 0.3s ease-out; 
-            padding-top: 0; padding-bottom: 90px; /* Space for Sticky Bar */
+        /* Sticky Add to Bag Button Area */
+        .sticky-bottom-action {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: white; border-top: 1px solid #eee;
+            padding: 12px 16px; z-index: 50;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-        
-        .dt-img-container { position: relative; border-radius: 0; overflow: hidden; background: #f8f9fa; margin-bottom: 15px; }
-        .dt-main-img { width: 100%; object-fit: contain; aspect-ratio: 3/4; transition: 0.3s; background-color: #fff; }
-        
-        .popular-badge-overlay { 
-            position: absolute; top: 15px; left: 15px; background: rgba(255, 255, 255, 0.95); 
-            padding: 8px 12px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            z-index: 20; display: flex; align-items: center; gap: 8px;
-        }
-        .popular-stars { color: var(--gold); font-size: 0.8rem; }
-        .popular-text { font-size: 0.75rem; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
-
-        .gallery-container { 
-            display: flex; gap: 10px; overflow-x: auto; 
-            margin-top: 15px; padding: 10px 15px; scrollbar-width: none; -ms-overflow-style: none;
-        }
-        .gallery-container::-webkit-scrollbar { display: none; }
-        .thumb-img { width: 70px; height: 70px; border-radius: 8px; object-fit: contain; background: #fff; cursor: pointer; border: 2px solid transparent; opacity: 0.6; transition: 0.2s; flex-shrink: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .thumb-img:hover { opacity: 1; }
-        .thumb-img.active { border-color: var(--primary); opacity: 1; transform: scale(1.05); }
-
-        .qty-selector { display: inline-flex; align-items: center; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; height: 45px; background: white; }
-        .qty-btn { background: white; border: none; padding: 0 15px; font-weight: bold; cursor: pointer; color: var(--primary); height: 100%; font-size: 1.2rem; }
-        .qty-input { width: 40px; border: none; text-align: center; font-weight: 600; outline: none; background: white; }
-        
-        .btn-custom { background: var(--primary); color: white; border-radius: 50px; padding: 12px 30px; font-weight: 600; border: none; text-transform: uppercase; transition: 0.3s; }
-        .btn-custom:hover { background: var(--primary-dark); color: white; transform: translateY(-2px); shadow: 0 5px 15px rgba(27, 77, 62, 0.3); }
-        .btn-custom:disabled { background: #ccc; cursor: not-allowed; transform: none; box-shadow: none; opacity: 0.7; }
-        
-        .option-btn { min-width: 40px; height: 40px; padding: 0 15px; border: 1px solid #ddd; background: white; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; margin-right: 8px; margin-bottom: 8px; font-size: 0.9rem; }
-        .option-btn:hover { border-color: var(--primary); }
-        .option-btn.selected { background: var(--primary); color: white; border-color: var(--primary); }
-
-        .desc-container { position: relative; margin-bottom: 20px; }
-        .desc-content { color: #666; font-size: 0.95rem; line-height: 1.6; }
-        
-        .related-scroll { display: flex; overflow-x: auto; gap: 15px; padding-bottom: 15px; -ms-overflow-style: none; scrollbar-width: none; }
-        .related-scroll::-webkit-scrollbar { display: none; }
-        .related-card { min-width: 140px; width: 140px; border: none; cursor: pointer; }
-        .related-card img { border-radius: 8px; width: 100%; aspect-ratio: 3/4; object-fit: contain; background:#fff; margin-bottom: 8px; }
-        
-        .marquee-container { width: 100%; overflow: hidden; background: var(--primary); color: var(--gold); padding: 10px 0; border-radius: 8px; margin-bottom: 10px; }
-        .marquee-content { display: inline-block; white-space: nowrap; animation: marquee 15s linear infinite; font-weight: 700; letter-spacing: 2px; font-family: 'Playfair Display'; }
-        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
-        .donate-pill { flex: 1; border: 1px solid var(--primary); color: var(--primary); background: transparent; padding: 8px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; }
-        .donate-pill:hover, .donate-pill.selected { background: var(--primary); color: white; }
-        .file-upload-wrapper { position: relative; }
-        .upload-helper { font-size: 0.75rem; color: #d32f2f; margin-top: 5px; display: flex; align-items: center; gap: 5px; }
-
-        /* Reviews */
-        .rating-stars { display: flex; flex-direction: row-reverse; justify-content: start; gap: 5px; }
-        .rating-stars input { display: none; }
-        .rating-stars label { cursor: pointer; color: #ddd; font-size: 1.5rem; transition: 0.2s; }
-        .rating-stars input:checked ~ label, .rating-stars input:checked ~ label ~ label { color: var(--gold); }
-        .review-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 15px; }
-        .rating-summary-bar { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; flex-grow: 1; margin: 0 10px; }
-        .rating-fill { height: 100%; background: var(--gold); }
-
-        /* Sticky Bottom Bar for Detail View (FIXED) */
-        .sticky-action-bar { 
-            position: fixed; bottom: 0; left: 0; width: 100%; 
-            background: white; border-top: 1px solid #eee; padding: 15px 20px; 
-            z-index: 3000; display: none; justify-content: space-between; align-items: center; 
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.05); 
-        }
-        .sticky-action-bar.visible { display: flex; }
-        .sticky-price { font-family: 'Playfair Display'; font-weight: 700; color: var(--primary); font-size: 1.4rem; }
-
-        /* Bundles */
-        .bundle-option { border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-bottom: 10px; cursor: pointer; transition: 0.2s; display: flex; justify-content: space-between; align-items: center; }
-        .bundle-option:hover { background: #f9f9f9; border-color: var(--primary); }
-        .bundle-option.selected { background: #f0f8f5; border-color: var(--primary); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .bundle-discount { font-size: 0.7rem; background: var(--gold); color: white; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 5px; }
-
-        footer { background: #143a2f; color: #888; padding: 60px 0 30px; margin-top: 80px; }
-        .footer-heading { color: white; font-family: 'Playfair Display'; margin-bottom: 20px; }
-        .footer-link { color: #888; text-decoration: none; display: block; margin-bottom: 10px; font-size: 0.9rem; transition: 0.3s;}
-        .footer-link:hover { color: var(--gold); padding-left: 5px; }
-
-        #loader { position: fixed; inset: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; }
     </style>
 </head>
-<body>
+<body class="bg-bg-soft text-gray-800 antialiased pt-[70px] pb-[80px]">
 
-<script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzQ3ij0tm5k-cARhUqdRdV7yYmqfudy0LJnaK70DVAMyTcjO-vcc5WvwFQ36lRxobcF/exec"; 
-</script>
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzQ3ij0tm5k-cARhUqdRdV7yYmqfudy0LJnaK70DVAMyTcjO-vcc5WvwFQ36lRxobcF/exec"; 
+    </script>
 
-<div id="loader">
-    <div class="spinner-border text-secondary" style="width:3rem;height:3rem;"></div>
-    <h3 class="mt-3" style="color:var(--primary);font-family:'Playfair Display';">Al-Jazaa</h3>
-</div>
-
-<!-- Flashing Top Bar -->
-<div class="announcement-bar" id="top-announcement">
-    <div class="announcement-content">
-        Shop & Earn Rewards • Secure GCash Payment • Nationwide Delivery • 5% of Profit Goes to Charity
+    <!-- LOADER -->
+    <div id="loader" class="fixed inset-0 bg-white z-[9999] flex flex-col justify-center items-center">
+        <div class="loader-spin mb-4"></div>
+        <h3 class="font-serif text-2xl text-primary font-bold tracking-wider">Al-Jazaa</h3>
     </div>
-</div>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg sticky-top">
-    <div class="container">
-        <a class="navbar-brand" href="#" onclick="routeTo('home')">
-            <img src="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true" alt="Logo" class="nav-logo-img">
-            Al-Jazaa Ph.
-        </a>
-        <div class="d-flex align-items-center order-lg-3 ms-auto ms-lg-0">
-             <div class="cart-btn-wrap" onclick="routeTo('cart')">
-                <i class="fas fa-shopping-bag fa-lg" style="color:#333;"></i>
-                <span id="cart-count" class="cart-badge">0</span>
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 w-full z-40 glass-nav h-[70px] flex items-center shadow-sm">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <a href="#" onclick="routeTo('home')" class="flex items-center gap-2 text-primary font-serif font-bold text-xl md:text-2xl">
+                <img src="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true" alt="Logo" class="h-10 w-auto">
+                Al-Jazaa Ph.
+            </a>
+            <div class="flex items-center gap-5">
+                <div class="relative cursor-pointer" onclick="routeTo('cart')">
+                    <i class="fas fa-shopping-bag text-2xl text-primary hover:text-gold transition"></i>
+                    <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full shadow-md">0</span>
+                </div>
+                <button onclick="toggleMobileMenu()" class="text-primary text-2xl focus:outline-none">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
-            <button class="btn btn-link text-dark p-0 border-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu">
-                <i class="fas fa-bars fa-lg"></i>
-            </button>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu" class="fixed inset-y-0 right-0 w-64 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
+        <div class="bg-primary p-5 flex justify-between items-center text-white">
+            <h5 class="font-serif font-bold text-lg">Menu</h5>
+            <button onclick="toggleMobileMenu()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="p-4 flex flex-col gap-4 overflow-y-auto">
+            <a href="#" onclick="routeTo('home'); toggleMobileMenu()" class="text-gray-700 font-medium hover:text-primary"><i class="fas fa-home mr-2"></i> Shop Home</a>
+            <a href="#" onclick="routeTo('track'); toggleMobileMenu()" class="text-gray-700 font-medium hover:text-primary"><i class="fas fa-search-location mr-2"></i> Track Order</a>
+            <a href="#" onclick="routeTo('reviews'); toggleMobileMenu()" class="text-gray-700 font-medium hover:text-primary"><i class="fas fa-star mr-2"></i> Reviews</a>
         </div>
     </div>
-</nav>
+    <div id="menu-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
 
-<!-- Sidebar -->
-<div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Menu</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body d-flex flex-column">
-        <div class="sidebar-link" onclick="routeTo('home'); closeSidebar();">Shop Home <i class="fas fa-chevron-right"></i></div>
-        <div class="sidebar-link" onclick="routeTo('track'); closeSidebar();">Track Order <i class="fas fa-chevron-right"></i></div>
-        <div class="sidebar-link" onclick="routeTo('reviews'); closeSidebar();">Customer Care & Feedback <i class="fas fa-chevron-right"></i></div>
+    <!-- MAIN APP CONTAINER -->
+    <main id="main-content" class="min-h-screen">
         
-        <hr class="my-3 opacity-25">
-        <p class="small text-uppercase text-muted fw-bold ms-2 mb-2">Categories</p>
-        <div id="sidebar-categories"></div>
-        <div class="mt-auto">
-            <div class="policy-box">
-                <h6>About Al-Jazaa Ph.</h6><p>Al-Jazaa Ph. is committed to providing timeless modesty with Islamic integrity. Our collection is designed to follow the conditions of hijab, with deep consideration for every detail.</p>
-                <h6>Payment Policy</h6><p>We strictly accept GCash payments. Verification required via uploading the proof of payment.</p>
+        <!-- PAGE: HOME -->
+        <div id="page-home" class="view-section">
+            
+            <!-- Search -->
+            <div class="container mx-auto px-4 mt-6 mb-8">
+                <div class="relative">
+                    <input type="text" id="searchBox" class="w-full pl-5 pr-12 py-3 rounded-full border border-gray-200 shadow-sm focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Search products..." onkeyup="doSearch()">
+                    <i class="fas fa-search absolute right-5 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
 
-<!-- HOME -->
-<div id="page-home">
-    <div class="container mt-2 mb-3">
-        <div class="position-relative">
-            <input type="text" id="searchBox" class="form-control rounded-pill ps-4 py-2 border-secondary bg-white" placeholder="Search products..." onkeyup="doSearch()">
-            <i class="fas fa-search position-absolute text-muted" style="right: 20px; top: 12px;"></i>
-        </div>
-    </div>
+            <!-- 1. CATEGORY SHOWCASE -->
+            <section class="container mx-auto px-4 mb-10">
+                <h2 class="font-serif text-2xl font-bold text-primary mb-4">Shop Categories</h2>
+                <!-- Responsive Grid: 2 cols Mobile, 3 cols Laptop -->
+                <div id="category-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <!-- JS Injected -->
+                </div>
+            </section>
 
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%201.png?raw=true" class="d-block w-100" alt="Slide 1">
-                <div class="carousel-caption"><button class="btn-hero shadow-lg" onclick="scrollToProducts()">Shop Now</button></div>
+            <!-- 2. SUGGESTED PRODUCTS CAROUSEL -->
+            <section class="mb-12 bg-white py-8 border-y border-gray-100 shadow-sm">
+                <div class="container mx-auto px-4">
+                    <h2 class="font-serif text-xl font-bold text-primary mb-1">Suggested Products</h2>
+                    <p class="text-xs text-gray-500 mb-4">Highly rated by our customers</p>
+                    <div id="suggested-container" class="flex overflow-x-auto gap-4 pb-4 hide-scrollbar snap-x snap-mandatory">
+                        <!-- JS Injected -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. PROMOTIONAL BANNERS -->
+            <section class="container mx-auto px-4 mb-12">
+                <h2 class="font-serif text-xl font-bold text-primary mb-4">Promotions</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="rounded-2xl overflow-hidden shadow-lg h-48 relative group">
+                        <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%201.png?raw=true" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-black/20"></div>
+                    </div>
+                    <div class="rounded-2xl overflow-hidden shadow-lg h-48 relative group">
+                        <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/big-sale-woolpack-1.jpg?raw=true" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-black/20"></div>
+                    </div>
+                    <div class="rounded-2xl overflow-hidden shadow-lg h-48 relative group">
+                        <img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%203.png?raw=true" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-black/20"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. CUSTOMER REVIEWS SLIDER & FORM -->
+            <section class="container mx-auto px-4 mb-12">
+                <h2 class="font-serif text-xl font-bold text-primary mb-4">Customer Love</h2>
+                
+                <!-- Review Slider -->
+                <div id="home-reviews-slider" class="flex overflow-x-auto gap-4 pb-6 hide-scrollbar snap-x mb-8">
+                    <!-- JS Injected -->
+                </div>
+
+                <!-- Review Form -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 max-w-lg mx-auto">
+                    <h4 class="font-bold text-sm uppercase text-gray-500 mb-3">Write a Feedback</h4>
+                    <form onsubmit="submitInstantReview(event, 'home')">
+                        <div class="flex gap-1 mb-3 text-2xl text-gray-300 flex-row-reverse justify-end">
+                            <input type="radio" name="h-rating" id="hr5" value="5" class="hidden peer/5"><label for="hr5" class="peer-checked/5:text-gold hover:text-gold cursor-pointer">★</label>
+                            <input type="radio" name="h-rating" id="hr4" value="4" class="hidden peer/4"><label for="hr4" class="peer-checked/4:text-gold hover:text-gold peer-checked/5:text-gold cursor-pointer">★</label>
+                            <input type="radio" name="h-rating" id="hr3" value="3" class="hidden peer/3"><label for="hr3" class="peer-checked/3:text-gold hover:text-gold peer-checked/4:text-gold peer-checked/5:text-gold cursor-pointer">★</label>
+                            <input type="radio" name="h-rating" id="hr2" value="2" class="hidden peer/2"><label for="hr2" class="peer-checked/2:text-gold hover:text-gold peer-checked/3:text-gold peer-checked/4:text-gold peer-checked/5:text-gold cursor-pointer">★</label>
+                            <input type="radio" name="h-rating" id="hr1" value="1" class="hidden peer/1"><label for="hr1" class="peer-checked/1:text-gold hover:text-gold peer-checked/2:text-gold peer-checked/3:text-gold peer-checked/4:text-gold peer-checked/5:text-gold cursor-pointer">★</label>
+                        </div>
+                        <input type="text" id="hr-name" class="w-full p-3 bg-gray-50 border rounded-lg text-sm mb-3 outline-none focus:border-gold" placeholder="Your Name" required>
+                        <textarea id="hr-feedback" class="w-full p-3 bg-gray-50 border rounded-lg text-sm mb-3 outline-none focus:border-gold" rows="2" placeholder="Tell us about your purchase..." required></textarea>
+                        <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-bold text-sm uppercase">Submit Review</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 5. COMPANY INFO & POLICIES (ACCORDION) -->
+            <section class="container mx-auto px-4 mb-16 max-w-2xl">
+                <h2 class="font-serif text-xl font-bold text-primary mb-4">Information</h2>
+                <div class="space-y-3">
+                    <!-- About -->
+                    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                        <button class="w-full flex justify-between items-center p-4 font-bold text-gray-700 bg-gray-50" onclick="toggleAccordion(this)">
+                            <span>About the Company</span>
+                            <i class="fas fa-chevron-down accordion-icon"></i>
+                        </button>
+                        <div class="accordion-content px-4 bg-white text-sm text-gray-600">
+                            <p class="py-4">Al-Jazaa Ph. is committed to providing timeless modesty with Islamic integrity. Our collection is designed to follow the conditions of hijab, avoiding 'Tabarruj'.</p>
+                        </div>
+                    </div>
+                    <!-- Payment -->
+                    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                        <button class="w-full flex justify-between items-center p-4 font-bold text-gray-700 bg-gray-50" onclick="toggleAccordion(this)">
+                            <span>Payment Policy</span>
+                            <i class="fas fa-chevron-down accordion-icon"></i>
+                        </button>
+                        <div class="accordion-content px-4 bg-white text-sm text-gray-600">
+                            <p class="py-4">We strictly accept GCash payments. Verification required via uploading the proof of payment.</p>
+                        </div>
+                    </div>
+                    <!-- Return -->
+                    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                        <button class="w-full flex justify-between items-center p-4 font-bold text-gray-700 bg-gray-50" onclick="toggleAccordion(this)">
+                            <span>Return Policy</span>
+                            <i class="fas fa-chevron-down accordion-icon"></i>
+                        </button>
+                        <div class="accordion-content px-4 bg-white text-sm text-gray-600">
+                            <p class="py-4">Returns accepted within 3 days for defects. Items must be unworn.</p>
+                        </div>
+                    </div>
+                    <!-- Delivery -->
+                    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                        <button class="w-full flex justify-between items-center p-4 font-bold text-gray-700 bg-gray-50" onclick="toggleAccordion(this)">
+                            <span>Delivery Information</span>
+                            <i class="fas fa-chevron-down accordion-icon"></i>
+                        </button>
+                        <div class="accordion-content px-4 bg-white text-sm text-gray-600">
+                            <p class="py-4">Nationwide delivery via J&T. Shipping fee varies by location.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PAGE: GRID (When Category Clicked) -->
+        <div id="page-grid" class="view-section hidden container mx-auto px-4 py-8">
+            <h2 id="grid-title" class="font-serif text-2xl font-bold text-primary mb-6">Products</h2>
+            <div id="full-product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+        </div>
+
+        <!-- PAGE: PRODUCT DETAIL (Full Screen Mobile Style) -->
+        <div id="page-detail" class="view-section hidden fixed inset-0 bg-white z-50 flex flex-col pb-[90px]">
+            <!-- Header -->
+            <div class="h-[60px] flex items-center px-4 border-b bg-white shadow-sm shrink-0">
+                <button onclick="window.history.back()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100">
+                    <i class="fas fa-arrow-left text-xl text-gray-700"></i>
+                </button>
+                <span class="ml-4 font-bold text-lg text-primary truncate">Product Details</span>
             </div>
-            <div class="carousel-item"><img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%202.png?raw=true" class="d-block w-100" alt="Slide 2"></div>
-            <div class="carousel-item"><img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%203.png?raw=true" class="d-block w-100" alt="Slide 3"></div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
-        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
-    </div>
 
-    <div class="container my-5" id="shop-section">
-        <div class="d-flex justify-content-between align-items-center mb-4"><h2 class="mb-0">Latest Collection</h2></div>
-        
-        <!-- Category Circles -->
-        <div id="category-list" class="category-scroll-container mb-4"></div>
-        
-        <div class="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-3 g-md-4" id="product-grid"></div>
-    </div>
-</div>
-
-<!-- DETAIL VIEW -->
-<div id="detail-view">
-    <div class="sticky-top bg-white border-bottom shadow-sm d-flex align-items-center px-3" style="height:60px;">
-        <button class="btn btn-light rounded-circle shadow-sm" style="width:40px;height:40px;" onclick="window.history.back()">
-            <i class="fas fa-arrow-left"></i>
-        </button>
-        <span class="ms-3 fw-bold fs-5 text-truncate" id="dt-header-title">Product Details</span>
-    </div>
-    
-    <div class="container py-3">
-        <div class="row gx-5">
-            <div class="col-md-5 mb-4">
-                <div class="dt-img-container">
-                    <div id="dt-pop-badge" class="popular-badge-overlay d-none">
-                        <span class="popular-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></span>
-                        <span class="popular-text" id="pop-text">Best Seller</span>
-                    </div>
-                    <img id="dt-img" src="" class="dt-main-img">
-                </div>
-                <div id="dt-gallery" class="gallery-container"></div>
-            </div>
-            <div class="col-md-7">
-                <span class="badge bg-light text-dark mb-2 border" id="dt-cat"></span>
-                <h1 id="dt-name" class="display-6 fw-bold"></h1>
-                <div class="my-3"><span id="dt-old-price" class="original-price fs-4 d-none"></span><span id="dt-price" class="text-success fw-bold fs-3"></span><span id="dt-sale-badge" class="badge bg-danger ms-2 d-none">SALE</span></div>
-                
-                <div class="desc-container">
-                    <div class="desc-content" id="dt-desc"></div>
-                </div>
-
-                <!-- Options -->
-                <div id="size-row" class="mb-3">
-                    <label class="fw-bold mb-2 small text-uppercase">Size <span class="text-danger">*</span></label>
-                    <div id="size-area" class="d-flex flex-wrap"></div>
-                </div>
-                <div class="mb-3"><label class="fw-bold mb-2 small text-uppercase">Color <span class="text-danger">*</span></label><div id="color-area" class="d-flex flex-wrap"></div></div>
-                
-                <!-- Bundles -->
-                <div id="bundle-container" class="mb-4">
-                    <label class="fw-bold mb-2 small text-uppercase text-primary">Bundle Offers</label>
-                    <div class="bundle-option selected" onclick="selectBundle(1, this)">
-                        <div><span class="fw-bold">1 Piece</span> <span class="text-muted small ms-2">Standard Price</span></div>
-                    </div>
-                    <div class="bundle-option" onclick="selectBundle(2, this)">
-                        <div><span class="fw-bold">2 Pieces</span> <span class="bundle-discount">5% OFF</span></div>
-                        <div class="fw-bold text-success" id="bundle-price-2"></div>
-                    </div>
-                    <div class="bundle-option" onclick="selectBundle(3, this)">
-                        <div><span class="fw-bold">3 Pieces</span> <span class="bundle-discount">10% OFF</span></div>
-                        <div class="fw-bold text-success" id="bundle-price-3"></div>
-                    </div>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col-12"><label class="fw-bold mb-2 small text-uppercase">Height <span class="text-danger">*</span></label><input type="text" id="height-input" class="form-control" placeholder="e.g. 5'4" oninput="checkInputs()"></div>
+            <!-- Scrollable Body -->
+            <div class="flex-1 overflow-y-auto bg-white">
+                <div class="relative w-full aspect-[3/4] bg-gray-50">
+                    <img id="dt-img" class="w-full h-full object-contain">
+                    <span id="dt-badge" class="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded hidden">SALE</span>
                 </div>
                 
-                <!-- Reviews Section inside Detail -->
-                <div class="mt-4 pt-4 border-top">
-                    <h5 class="font-playfair mb-3">Customer Reviews</h5>
+                <div id="dt-gallery" class="flex gap-2 p-4 overflow-x-auto hide-scrollbar border-b border-gray-100"></div>
+
+                <div class="p-5">
+                    <div id="dt-cat" class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-1">Category</div>
+                    <h1 id="dt-name" class="font-serif text-2xl font-bold text-gray-800 mb-2 leading-tight"></h1>
                     
-                    <div class="card p-3 bg-light border-0 mb-4">
-                        <h6 class="fw-bold text-sm">Write a Review</h6>
-                        <form onsubmit="submitInstantReview(event)">
-                            <div class="rating-stars mb-2 d-flex flex-row-reverse justify-content-end">
-                                <input type="radio" name="d-rating" id="dr5" value="5" required><label for="dr5">★</label>
-                                <input type="radio" name="d-rating" id="dr4" value="4"><label for="dr4">★</label>
-                                <input type="radio" name="d-rating" id="dr3" value="3"><label for="dr3">★</label>
-                                <input type="radio" name="d-rating" id="dr2" value="2"><label for="dr2">★</label>
-                                <input type="radio" name="d-rating" id="dr1" value="1"><label for="dr1">★</label>
+                    <div class="mb-4">
+                        <span id="dt-old-price" class="text-gray-400 line-through mr-2 hidden"></span>
+                        <span id="dt-price-display" class="text-2xl font-bold text-primary"></span>
+                    </div>
+
+                    <p id="dt-desc" class="text-gray-600 text-sm leading-relaxed mb-6"></p>
+
+                    <!-- Options -->
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-800 mb-2 uppercase">Size <span class="text-red-500">*</span></label>
+                            <div id="size-opts" class="flex flex-wrap gap-2"></div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-800 mb-2 uppercase">Color <span class="text-red-500">*</span></label>
+                            <div id="color-opts" class="flex flex-wrap gap-2"></div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-800 mb-2 uppercase">Height <span class="text-red-500">*</span></label>
+                            <input type="text" id="dt-height" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg outline-none focus:border-primary" placeholder="e.g. 5'4" oninput="checkAddBtn()">
+                        </div>
+                    </div>
+
+                    <!-- Bundles -->
+                    <div id="bundle-area" class="mb-6 hidden">
+                        <label class="block text-xs font-bold text-primary mb-2 uppercase">Bundle Offers</label>
+                        <div class="space-y-2">
+                            <div class="bundle-opt border rounded-lg p-3 flex justify-between items-center cursor-pointer bg-white" onclick="selectBundle(1, this)">
+                                <span class="text-sm font-medium">1 Piece</span>
+                                <span class="text-xs text-gray-500">Standard</span>
                             </div>
-                            <input type="text" id="d-r-name" class="form-control mb-2" placeholder="Your Name" required>
-                            <textarea id="d-r-feedback" class="form-control mb-2" rows="2" placeholder="Share your thoughts..." required></textarea>
-                            <button type="submit" class="btn btn-dark btn-sm w-100">Post Review</button>
-                        </form>
-                    </div>
-
-                    <div id="detail-reviews-list"></div>
-                </div>
-
-                <hr><h5 class="font-playfair mb-3">You might also like</h5><div id="related-products" class="related-scroll"></div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- STICKY ACTION BAR INSIDE DETAIL VIEW -->
-    <div class="sticky-action-bar visible" id="sticky-bar">
-        <div>
-            <div class="text-muted small" style="font-size:0.7rem;">Total Price</div>
-            <div class="sticky-price" id="sticky-price-display">₱0</div>
-        </div>
-        <div class="d-flex gap-2 align-items-center">
-            <div class="qty-selector">
-                <button class="qty-btn" onclick="dtQty(-1)">-</button>
-                <input type="number" id="dt-qty-val" class="qty-input" value="1" readonly>
-                <button class="qty-btn" onclick="dtQty(1)">+</button>
-            </div>
-            <button id="add-btn" class="btn btn-custom px-4" onclick="addToCart()" disabled>ADD TO BAG</button>
-        </div>
-    </div>
-</div>
-
-<!-- CART -->
-<div id="page-cart" class="container my-5 d-none">
-    <h2 class="mb-4 text-center">Your Shopping Bag</h2>
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden"><div class="table-responsive"><table class="table align-middle mb-0"><tbody id="cart-table"></tbody></table></div></div>
-            <div class="d-flex justify-content-between align-items-center bg-white p-4 rounded-4 shadow-sm border"><div><small class="text-muted d-block">Total Amount</small><div class="fs-4 fw-bold text-success" id="cart-total">₱0.00</div></div><button id="btn-checkout" class="btn btn-custom px-4" onclick="routeTo('checkout')">CHECKOUT</button></div>
-        </div>
-    </div>
-</div>
-
-<!-- CHECKOUT (Exact Original Logic) -->
-<div id="page-checkout" class="container my-5 d-none" style="max-width: 800px;">
-    <div class="card p-4 p-md-5 shadow-lg border-0 rounded-4">
-        <h3 class="text-center mb-2 font-playfair">Checkout</h3>
-        <p class="text-center text-muted small mb-4">Complete your details to place order</p>
-        <form id="checkout-form" onsubmit="submitOrder(event)" oninput="validateCheckoutForm()">
-            
-            <div class="mb-4 bg-light p-3 rounded border">
-                <div class="marquee-container shadow-sm mb-3"><div class="marquee-content">✨ DONATE TO ORPHANS • SADQA JARIYAH • HELP THOSE IN NEED • AL-JAZAA PH CHARITY ✨</div></div>
-                <p class="small text-muted mb-2 text-center fw-bold">Be among those who care for Orphans. Select Sadaqah amount (Added to Total)</p>
-                <div class="d-flex gap-2 flex-wrap justify-content-center mb-2">
-                    <button type="button" class="donate-pill" onclick="selectDonation(0.05, this)">5%</button>
-                    <button type="button" class="donate-pill" onclick="selectDonation(0.10, this)">10%</button>
-                    <button type="button" class="donate-pill" onclick="selectDonation(0.20, this)">20%</button>
-                    <button type="button" class="donate-pill" onclick="selectDonation(0.50, this)">50%</button>
-                    <button type="button" class="donate-pill" onclick="selectDonation(0, this)">None</button>
-                </div>
-                <textarea id="donation-note" class="form-control d-none mt-2" rows="2" placeholder="Special Note / Intention (Optional)"></textarea>
-            </div>
-
-            <h6 class="text-uppercase fw-bold text-muted small mb-3">1. Delivery & Address</h6>
-            <div class="row g-3 mb-4">
-                <div class="col-12"><select class="form-select py-3" id="del-method" onchange="toggleDeliveryOptions()" required><option value="" disabled selected>Select Delivery Method</option><option value="Pick-up">Pick-up (Free)</option><option value="Delivery">Delivery (Courier)</option></select></div>
-                <div class="col-md-6"><input type="text" class="form-control" id="c-name" placeholder="Full Name" required></div><div class="col-md-6"><input type="number" class="form-control" id="c-phone" placeholder="Phone Number" required></div><div class="col-12"><input type="email" class="form-control" id="c-email" placeholder="Email Address" required></div>
-                <div class="col-12 delivery-fields" style="display:none;"><hr class="opacity-25 my-1"><label class="small fw-bold text-primary mt-2">Shipping Address</label></div>
-                <div class="col-md-8 delivery-fields"><input type="text" class="form-control" id="addr-street" placeholder="House / Street / Subdivision"></div><div class="col-md-4 delivery-fields"><input type="text" class="form-control" id="addr-brgy" placeholder="Barangay"></div><div class="col-md-6 delivery-fields"><input type="text" class="form-control" id="addr-city" placeholder="City"></div><div class="col-md-6 delivery-fields"><input type="text" class="form-control" id="addr-prov" placeholder="Province"></div>
-                <div class="col-md-8 delivery-fields"><select class="form-select" id="addr-region" onchange="calcShipping()"><option value="" disabled selected>Select Region</option><option value="Metro Manila">Metro Manila</option><option value="Luzon">Luzon</option><option value="Visayas">Visayas</option><option value="Mindanao">Mindanao</option><option value="Island">Island / Remote Areas</option></select></div><div class="col-md-4 delivery-fields"><input type="text" class="form-control" id="addr-zip" placeholder="Zip Code"></div>
-            </div>
-            
-            <div class="bg-white p-3 border rounded mb-3">
-                <div class="d-flex justify-content-between mb-1"><span>Subtotal:</span><span id="sum-subtotal">₱0</span></div>
-                <div class="d-flex justify-content-between mb-1"><span>Delivery Fee:</span><span id="sum-shipping" class="text-danger">₱0</span></div>
-                <div class="d-flex justify-content-between mb-1 d-none" id="sum-donate-row"><span>Donation:</span><span id="sum-donation" class="text-success">₱0</span></div>
-                <hr><div class="d-flex justify-content-between fw-bold fs-5"><span>Grand Total:</span><span id="pay-total" class="text-primary">₱0</span></div>
-            </div>
-            
-            <h6 class="text-uppercase fw-bold text-muted small mb-3">2. Payment Summary</h6>
-            <div class="bg-light p-3 rounded-3 border mb-3">
-                <div class="d-flex align-items-center">
-                    <div class="bg-white p-2 rounded shadow-sm me-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
-                        <img src="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/GCASH.png?raw=true" alt="GCash" style="max-width: 100%; max-height: 100%;">
-                    </div>
-                    <div>
-                        <div class="fw-bold">GCash Payment</div>
-                        <div class="small text-muted mb-1">Send exact amount to: <strong>0976-551-3716</strong></div>
+                            <div class="bundle-opt border rounded-lg p-3 flex justify-between items-center cursor-pointer bg-white" onclick="selectBundle(2, this)">
+                                <div><span class="text-sm font-medium">2 Pieces</span> <span class="bg-gold text-white text-[10px] px-1 rounded ml-1">5% OFF</span></div>
+                                <span class="font-bold text-primary text-sm" id="bp-2"></span>
+                            </div>
+                            <div class="bundle-opt border rounded-lg p-3 flex justify-between items-center cursor-pointer bg-white" onclick="selectBundle(3, this)">
+                                <div><span class="text-sm font-medium">3 Pieces</span> <span class="bg-gold text-white text-[10px] px-1 rounded ml-1">10% OFF</span></div>
+                                <span class="font-bold text-primary text-sm" id="bp-3"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row g-3">
-                <div class="col-md-6"><input type="text" class="form-control" id="c-ref" placeholder="GCash Reference No." required></div>
-                <div class="col-md-6 file-upload-wrapper">
-                    <input type="file" class="form-control" id="c-proof" accept="image/*" required>
-                    <div id="upload-success-msg" class="d-none text-success small fw-bold mt-1"><i class="fas fa-check-circle me-1"></i> Image attached!</div>
-                    <div class="upload-helper"><i class="fas fa-info-circle"></i> Please upload screenshot of payment</div>
+            <!-- Sticky Bottom Add To Bag -->
+            <div class="sticky-bottom-action">
+                <div class="flex flex-col">
+                    <span class="text-[10px] text-gray-500 uppercase tracking-wide">Total Price</span>
+                    <span id="sticky-price" class="font-serif text-xl font-bold text-primary">₱0</span>
+                </div>
+                
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center bg-gray-100 rounded-lg h-10 px-1">
+                        <button onclick="changeQty(-1)" class="w-8 h-full text-gray-600 font-bold">-</button>
+                        <input type="text" id="dt-qty" value="1" readonly class="w-8 bg-transparent text-center text-sm font-bold">
+                        <button onclick="changeQty(1)" class="w-8 h-full text-gray-600 font-bold">+</button>
+                    </div>
+                    <button id="btn-add" onclick="addToCart()" disabled class="bg-primary hover:bg-primary-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-6 h-10 rounded-lg font-bold text-sm uppercase tracking-wide shadow-lg transition">
+                        Add to Bag
+                    </button>
                 </div>
             </div>
-            <div class="mt-4"><button id="btn-place-order" type="submit" class="btn btn-custom w-100 py-3" disabled>FILL DETAILS</button></div>
-        </form>
-    </div>
-</div>
-
-<!-- TRACKING -->
-<div id="page-track" class="container my-5 d-none text-center" style="max-width:500px; min-height:50vh;">
-    <h3 class="mb-3">Track Order</h3>
-    <div class="input-group mb-4 shadow-sm rounded-pill overflow-hidden"><input type="text" id="track-id" class="form-control border-0 ps-4" placeholder="Enter Order ID"><button class="btn btn-custom px-4" onclick="trackOrder()">Search</button></div>
-    <div id="track-result" class="card p-4 shadow-sm border-0 rounded-4 d-none text-start bg-white"><div class="fw-bold text-success fs-4 text-center mb-3" id="t-status"></div><hr><div class="d-flex justify-content-between"><span>Date:</span> <span id="t-date"></span></div><div class="d-flex justify-content-between mt-2"><span>Total:</span> <span id="t-total"></span></div></div>
-</div>
-
-<!-- REVIEWS (Main) -->
-<div id="page-reviews" class="container my-5 d-none">
-    <div class="row g-5">
-        <div class="col-lg-7 mx-auto">
-            <h3 class="font-playfair mb-4">What our customers say</h3>
-            <div id="reviews-list"></div>
         </div>
-    </div>
-</div>
 
-<footer>
-    <div class="container">
-        <div class="row gy-4">
-            <div class="col-md-4"><h3 class="footer-heading">Al-Jazaa Ph.</h3><p class="small text-light">Providing timeless modesty with Islamic integrity.</p></div>
-            <div class="col-md-4"><h5 class="text-white mb-3" style="font-family:'Outfit'">Links</h5><a href="#" class="footer-link" onclick="routeTo('home')">Shop Collection</a><a href="#" class="footer-link" onclick="routeTo('track')">Track Order</a><a href="#" class="footer-link" onclick="routeTo('reviews')">Customer Care</a></div>
-            <div class="col-md-4"><h5 class="text-white mb-3" style="font-family:'Outfit'">Contact</h5><p class="footer-link mb-1">aljazaa.ph@gmail.com</p><p class="footer-link">0921-429-xxxx</p></div>
+        <!-- PAGE: CART -->
+        <div id="page-cart" class="view-section hidden container mx-auto px-4 py-8 pb-32">
+            <h2 class="font-serif text-2xl font-bold text-center mb-6">Shopping Bag</h2>
+            <div id="cart-content" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6"></div>
+            <div id="cart-summary" class="hidden bg-white p-5 rounded-xl border shadow-sm sticky bottom-[90px]">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-gray-500">Subtotal</span>
+                    <span id="cart-total" class="font-bold text-xl text-primary">₱0</span>
+                </div>
+                <button onclick="routeTo('checkout')" class="w-full bg-gold text-white py-3 rounded-lg font-bold uppercase tracking-wide shadow-md hover:bg-yellow-600 transition">Checkout</button>
+            </div>
         </div>
-        <hr class="border-secondary mt-5"><p class="text-center small text-light mb-0">&copy; 2024 Al-Jazaa Ph. All rights reserved.</p>
-    </div>
-</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v14'))||[], curProduct={}, selectedSize=null, selectedColor=null;
-    let selectedBundleQty = 1;
-    let cartTotalAmount=0, currentDonationPercent=0, currentShippingFee=0;
-    let allReviews = [];
+        <!-- PAGE: CHECKOUT (Strict Logic) -->
+        <div id="page-checkout" class="view-section hidden container mx-auto px-4 py-8 pb-32 max-w-2xl">
+            <div class="bg-white rounded-xl shadow-lg p-5 border border-gray-100">
+                <h2 class="font-serif text-2xl font-bold text-primary text-center mb-1">Checkout</h2>
+                <p class="text-center text-xs text-gray-500 mb-6">Complete your details to place order</p>
 
-    const catImages = {
-        'All': 'https://cdn-icons-png.flaticon.com/512/3502/3502601.png', 
-        'Jilbab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat2.png?raw=true',
-        'Khimar': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat4.png?raw=true',
-        'Abayah': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat3.png?raw=true',
-        'Abaya': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat3.png?raw=true', 
-        'Set': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat5.png?raw=true',
-        'Skirt': 'https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/skirt.png?raw=true',
-        'Niqab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat1.png?raw=true',
-        'Sale': 'https://github.com/ianianguro-art/Menu-POS/blob/main/big-sale-woolpack-1.jpg?raw=true',
-        'Default': 'https://cdn-icons-png.flaticon.com/512/4430/4430945.png'
-    };
+                <form id="checkout-form" onsubmit="submitOrder(event)" oninput="validateCheckoutForm()">
+                    
+                    <!-- Donation -->
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-100 mb-6 text-center">
+                        <div class="font-bold text-primary text-sm mb-1">✨ Donate to Orphans (Sadaqah) ✨</div>
+                        <p class="text-xs text-gray-600 mb-3">Add a small percentage to help those in need.</p>
+                        <div class="flex flex-wrap justify-center gap-2 mb-2">
+                            <button type="button" class="donate-pill border border-primary text-primary px-3 py-1 text-xs rounded hover:bg-primary hover:text-white transition" onclick="selectDonation(0.05, this)">5%</button>
+                            <button type="button" class="donate-pill border border-primary text-primary px-3 py-1 text-xs rounded hover:bg-primary hover:text-white transition" onclick="selectDonation(0.10, this)">10%</button>
+                            <button type="button" class="donate-pill border border-primary text-primary px-3 py-1 text-xs rounded hover:bg-primary hover:text-white transition" onclick="selectDonation(0.20, this)">20%</button>
+                            <button type="button" class="donate-pill border border-primary text-primary px-3 py-1 text-xs rounded hover:bg-primary hover:text-white transition" onclick="selectDonation(0, this)">None</button>
+                        </div>
+                        <textarea id="donation-note" class="w-full p-2 text-xs border rounded bg-white mt-2 hidden" placeholder="Special Intention / Note"></textarea>
+                    </div>
 
-    const getSidebar = () => bootstrap.Offcanvas.getInstance(document.getElementById('sidebarMenu'));
-    const closeSidebar = () => { const s = getSidebar(); if(s) s.hide(); };
+                    <!-- Contact & Delivery -->
+                    <h6 class="font-bold text-xs uppercase text-gray-400 mb-3">1. Delivery & Address</h6>
+                    <div class="space-y-3 mb-6">
+                        <select id="del-method" class="w-full p-3 bg-gray-50 border rounded-lg text-sm outline-none focus:border-primary" onchange="toggleDeliveryOptions()" required>
+                            <option value="" disabled selected>Select Delivery Method</option>
+                            <option value="Pick-up">Pick-up (Free)</option>
+                            <option value="Delivery">Delivery (Courier)</option>
+                        </select>
+                        <input type="text" id="c-name" class="w-full p-3 bg-gray-50 border rounded-lg text-sm outline-none focus:border-primary" placeholder="Full Name" required>
+                        <div class="grid grid-cols-2 gap-3">
+                            <input type="number" id="c-phone" class="w-full p-3 bg-gray-50 border rounded-lg text-sm outline-none focus:border-primary" placeholder="Phone No." required>
+                            <input type="email" id="c-email" class="w-full p-3 bg-gray-50 border rounded-lg text-sm outline-none focus:border-primary" placeholder="Email" required>
+                        </div>
+                        
+                        <div id="delivery-fields" class="space-y-3 hidden border-t pt-3 mt-3">
+                            <label class="text-xs font-bold text-primary">Shipping Address</label>
+                            <input type="text" id="addr-street" class="w-full p-3 bg-gray-50 border rounded-lg text-sm" placeholder="House / Street / Subd.">
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="text" id="addr-brgy" class="w-full p-3 bg-gray-50 border rounded-lg text-sm" placeholder="Barangay">
+                                <input type="text" id="addr-city" class="w-full p-3 bg-gray-50 border rounded-lg text-sm" placeholder="City">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <input type="text" id="addr-prov" class="w-full p-3 bg-gray-50 border rounded-lg text-sm" placeholder="Province">
+                                <select id="addr-region" class="w-full p-3 bg-gray-50 border rounded-lg text-sm" onchange="calcShipping()">
+                                    <option value="" disabled selected>Region</option>
+                                    <option value="Metro Manila">Metro Manila</option>
+                                    <option value="Luzon">Luzon</option>
+                                    <option value="Visayas">Visayas</option>
+                                    <option value="Mindanao">Mindanao</option>
+                                    <option value="Island">Island</option>
+                                </select>
+                            </div>
+                            <input type="text" id="addr-zip" class="w-full p-3 bg-gray-50 border rounded-lg text-sm" placeholder="Zip Code">
+                        </div>
+                    </div>
 
-    document.addEventListener("DOMContentLoaded", () => {
-        fetchProducts(); updateCartCount();
-        
-        // --- MOBILE BACK BUTTON LOGIC ---
-        window.history.replaceState({ page: 'home' }, '', '');
-        window.onpopstate = (e) => {
-            if(e.state) renderPage(e.state.page);
-            else renderPage('home');
+                    <!-- Payment -->
+                    <h6 class="font-bold text-xs uppercase text-gray-400 mb-3">2. Payment</h6>
+                    <div class="bg-gray-50 p-4 rounded-lg border mb-4">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-blue-500 text-white font-bold p-2 rounded text-xs">GCash</div>
+                            <div class="text-sm">
+                                <div class="font-bold">Send to: 0976-551-3716</div>
+                            </div>
+                        </div>
+                        <input type="text" id="c-ref" class="w-full p-3 bg-white border rounded-lg text-sm mb-3" placeholder="GCash Reference No." required>
+                        
+                        <label class="block w-full border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:bg-white transition">
+                            <span class="text-xs text-gray-500"><i class="fas fa-camera mr-1"></i> Upload Payment Screenshot</span>
+                            <input type="file" id="c-proof" accept="image/*" class="hidden">
+                        </label>
+                        <div id="upload-msg" class="text-center text-xs text-green-600 font-bold mt-2 hidden">Screenshot Attached!</div>
+                    </div>
+
+                    <!-- Totals -->
+                    <div class="bg-white border-t border-b py-4 mb-6">
+                        <div class="flex justify-between text-sm mb-1"><span>Subtotal:</span> <span id="sum-subtotal">₱0</span></div>
+                        <div class="flex justify-between text-sm mb-1"><span>Delivery Fee:</span> <span id="sum-shipping" class="text-red-500">₱0</span></div>
+                        <div class="flex justify-between text-sm mb-1 hidden text-green-600 font-bold" id="sum-donate-row"><span>Donation:</span> <span id="sum-donation">₱0</span></div>
+                        <div class="flex justify-between text-xl font-bold text-primary mt-2 border-t pt-2"><span>Grand Total:</span> <span id="pay-total">₱0</span></div>
+                    </div>
+
+                    <button type="submit" id="btn-place-order" class="w-full bg-gray-300 text-white py-4 rounded-lg font-bold text-lg uppercase tracking-wide transition" disabled>Fill Details</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- PAGE: TRACK & REVIEWS (Placeholders for routing) -->
+        <div id="page-track" class="view-section hidden container mx-auto px-4 py-8 text-center">
+            <h2 class="font-serif text-2xl font-bold text-primary mb-4">Track Order</h2>
+            <div class="flex shadow-sm rounded-full overflow-hidden border mb-6 max-w-md mx-auto">
+                <input type="text" id="track-id" class="w-full px-5 py-3 outline-none" placeholder="Enter Order ID">
+                <button onclick="trackOrder()" class="bg-primary text-white px-6 font-bold">Search</button>
+            </div>
+            <div id="track-result" class="hidden bg-white p-6 rounded-xl shadow border text-left max-w-md mx-auto">
+                <div id="t-status" class="text-lg font-bold text-primary mb-2"></div>
+                <div class="flex justify-between text-sm text-gray-600"><span>Date:</span> <span id="t-date" class="font-bold"></span></div>
+                <div class="flex justify-between text-sm text-gray-600"><span>Total:</span> <span id="t-total" class="font-bold"></span></div>
+            </div>
+        </div>
+        <div id="page-reviews" class="view-section hidden container mx-auto px-4 py-8">
+            <h2 class="font-serif text-2xl font-bold text-primary mb-6">All Reviews</h2>
+            <div id="main-reviews-list" class="space-y-3 pb-20"></div>
+        </div>
+
+    </main>
+
+    <!-- 6. ABSOLUTE FOOTER -->
+    <footer class="bg-primary-dark text-gray-400 py-12 text-sm">
+        <div class="container mx-auto px-4 grid md:grid-cols-3 gap-8">
+            <div>
+                <h3 class="font-serif text-white text-xl mb-4">Al-Jazaa Ph.</h3>
+                <p class="mb-4">Modesty with Integrity. Serving the Ummah with high-quality Islamic wear.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="text-white hover:text-gold"><i class="fab fa-facebook fa-lg"></i></a>
+                    <a href="#" class="text-white hover:text-gold"><i class="fab fa-instagram fa-lg"></i></a>
+                    <a href="#" class="text-white hover:text-gold"><i class="fab fa-whatsapp fa-lg"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase tracking-wider">Contact</h4>
+                <p class="mb-2"><i class="fas fa-envelope mr-2"></i> aljazaa.ph@gmail.com</p>
+                <p><i class="fas fa-phone mr-2"></i> 0921-429-xxxx</p>
+            </div>
+            <div>
+                <h4 class="text-white font-bold mb-4 uppercase tracking-wider">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" onclick="routeTo('home')" class="hover:text-gold transition">Shop Home</a></li>
+                    <li><a href="#" onclick="routeTo('track')" class="hover:text-gold transition">Track Order</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center mt-12 pt-8 border-t border-gray-700">
+            &copy; 2024 Al-Jazaa Ph. All Rights Reserved.
+        </div>
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        // --- GLOBAL VARIABLES ---
+        let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v16'))||[], allReviews = [];
+        let curProduct={}, selectedSize=null, selectedColor=null, bundleQty=1;
+        let cartTotalAmount=0, currentDonationPercent=0, currentShippingFee=0;
+
+        const catImages = {
+            'All': 'https://cdn-icons-png.flaticon.com/512/3502/3502601.png', 
+            'Jilbab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat2.png?raw=true',
+            'Khimar': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat4.png?raw=true',
+            'Abaya': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat3.png?raw=true',
+            'Set': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat5.png?raw=true',
+            'Niqab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat1.png?raw=true',
+            'Default': 'https://cdn-icons-png.flaticon.com/512/4430/4430945.png'
         };
 
-        const fileInput = document.getElementById('c-proof');
-        if(fileInput) {
-            fileInput.addEventListener('change', function() {
-                validateCheckoutForm(); 
-                const msg = document.getElementById('upload-success-msg');
-                if(this.files && this.files.length > 0) msg.classList.remove('d-none');
-                else msg.classList.add('d-none');
+        // --- INIT ---
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchProducts(); updateCartBadge();
+
+            // History API
+            window.history.replaceState({ page: 'home' }, '', '');
+            window.onpopstate = (e) => {
+                if(e.state) renderPage(e.state.page);
+                else renderPage('home');
+            };
+
+            // File Upload
+            document.getElementById('c-proof').addEventListener('change', function() {
+                const msg = document.getElementById('upload-msg');
+                if(this.files.length > 0) msg.classList.remove('hidden'); else msg.classList.add('hidden');
+                validateCheckoutForm();
+            });
+        });
+
+        // --- NAVIGATION ---
+        function routeTo(pageId) {
+            window.history.pushState({ page: pageId }, '', '');
+            renderPage(pageId);
+        }
+
+        function renderPage(pageId) {
+            window.scrollTo(0,0);
+            ['page-home', 'page-grid', 'page-detail', 'page-cart', 'page-checkout', 'page-reviews', 'page-track'].forEach(id => {
+                document.getElementById(id).classList.add('hidden');
+            });
+
+            if (pageId === 'home') document.getElementById('page-home').classList.remove('hidden');
+            else if (pageId === 'cart') { renderCart(); document.getElementById('page-cart').classList.remove('hidden'); }
+            else if (pageId === 'checkout') { 
+                if(cart.length === 0) { routeTo('home'); return; }
+                initCheckout(); 
+                document.getElementById('page-checkout').classList.remove('hidden'); 
+            }
+            else if (pageId === 'detail') document.getElementById('page-detail').classList.remove('hidden');
+            else if (pageId === 'reviews') { renderReviews(allReviews, 'main-reviews-list'); document.getElementById('page-reviews').classList.remove('hidden'); }
+            else document.getElementById('page-' + pageId).classList.remove('hidden');
+        }
+
+        function toggleMobileMenu() {
+            const m = document.getElementById('mobile-menu');
+            const o = document.getElementById('menu-overlay');
+            if (m.classList.contains('translate-x-full')) {
+                m.classList.remove('translate-x-full');
+                o.classList.remove('hidden');
+            } else {
+                m.classList.add('translate-x-full');
+                o.classList.add('hidden');
+            }
+        }
+        
+        function toggleAccordion(btn) {
+            const content = btn.nextElementSibling;
+            const icon = btn.querySelector('.accordion-icon');
+            content.classList.toggle('active');
+            icon.classList.toggle('rotate-180');
+        }
+
+        // --- DATA ---
+        function fetchProducts() {
+            fetch(WEB_APP_URL + "?action=getProducts").then(r => r.json()).then(data => {
+                allProducts = data;
+                document.getElementById('loader').classList.add('hidden');
+                renderCats();
+                renderSuggested();
+                fetch(WEB_APP_URL + "?action=getReviews").then(r=>r.json()).then(revs => {
+                    allReviews = revs;
+                    renderReviews(allReviews.slice(0, 5), 'home-reviews-slider', true);
+                });
             });
         }
-    });
 
-    function routeTo(pageId) { 
-        window.history.pushState({ page: pageId }, '', ''); 
-        renderPage(pageId); 
-    }
-
-    function renderPage(pageId) {
-        ['page-home', 'page-cart', 'page-checkout', 'page-track', 'page-reviews'].forEach(id => document.getElementById(id).classList.add('d-none'));
-        document.getElementById('detail-view').style.display = 'none'; 
-        document.getElementById('heroCarousel').classList.add('d-none'); 
-        window.scrollTo(0,0);
-        
-        if(pageId === 'home') { 
-            document.getElementById('page-home').classList.remove('d-none'); 
-            document.getElementById('heroCarousel').classList.remove('d-none'); 
-            document.getElementById('top-announcement').style.display = 'flex';
-        } else if (pageId === 'detail') {
-            document.getElementById('detail-view').style.display = 'block';
-            document.getElementById('top-announcement').style.display = 'none';
-        } else { 
-            document.getElementById('page-' + pageId).classList.remove('d-none'); 
-            document.getElementById('top-announcement').style.display = 'none';
-        }
-        
-        if(pageId === 'cart') renderCart();
-        if(pageId === 'checkout') { if(cart.length === 0) { routeTo('home'); return; } initCheckout(); }
-        if(pageId === 'reviews') renderMainReviews();
-    }
-
-    // --- PRODUCTS ---
-    function fetchProducts() { 
-        fetch(WEB_APP_URL + "?action=getProducts").then(r => r.json()).then(data => { 
-            allProducts = data; document.getElementById('loader').style.display = 'none'; 
-            renderCats(); renderProds(allProducts); 
-            // Fetch reviews
-            fetch(WEB_APP_URL + "?action=getReviews").then(r=>r.json()).then(res => { allReviews = res; });
-        }); 
-    }
-    
-    function renderCats() { 
-        const cats = ['All', ...new Set(allProducts.map(p => p.category))]; 
-        document.getElementById('category-list').innerHTML = cats.map(c => {
-            let imgUrl = catImages[c] ? catImages[c] : catImages['Default'];
-            return `<div class="cat-item-wrapper" onclick="filterCat('${c}', this)"><img src="${imgUrl}" class="cat-circle-img" onerror="this.src='${catImages['Default']}'"><span class="cat-title">${c}</span></div>`; 
-        }).join(''); 
-        document.getElementById('sidebar-categories').innerHTML = cats.map(c => `<div class="sidebar-link" onclick="filterCat('${c}', null, true)">${c} <i class="fas fa-chevron-right"></i></div>`).join(''); 
-    }
-
-    function filterCat(c, el, fromSidebar = false) { 
-        if(el) { document.querySelectorAll('.cat-item-wrapper').forEach(btn => btn.classList.remove('active')); el.classList.add('active'); } 
-        renderProds(c === 'All' ? allProducts : allProducts.filter(p => p.category === c)); 
-        if(fromSidebar) { closeSidebar(); routeTo('home'); document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); } 
-    }
-    
-    function renderProds(list) { 
-        document.getElementById('product-grid').innerHTML = list.map(p => { 
-            let saleBadge = (p.salePercent > 0) ? `<span class="sale-badge">${p.salePercent}% OFF</span>` : ''; 
-            let priceDisplay = (p.salePercent > 0) ? `<span class="original-price">₱${p.originalPrice}</span> <span class="sale-price-text">₱${p.price}</span>` : `<div class="fw-bold text-dark">₱${p.price}</div>`; 
-            return `<div class="col"><div class="card product-card" onclick="openDetail('${p.id}')" style="cursor:pointer">
-            <span class="stock-label ${p.inStock?'in-stock':'out-stock'}">${p.inStock?'In Stock':'Out of Stock'}</span>${saleBadge}
-            <div class="card-img-wrapper"><img src="${p.image}" class="w-100 h-100 position-absolute start-0 top-0 object-fit-cover bg-light"></div>
-            <div class="card-body py-2"><h6 class="card-title text-dark mb-1 text-truncate">${p.name}</h6>${priceDisplay}</div></div></div>`; 
-        }).join(''); 
-    }
-
-    // --- DETAIL VIEW ---
-    function openDetail(id) {
-        // PUSH STATE for back button
-        window.history.pushState({ page: 'detail' }, '', '');
-
-        curProduct = allProducts.find(p => p.id == id); selectedSize = null; selectedColor = null; selectedBundleQty = 1;
-        document.getElementById('height-input').value = ""; document.getElementById('dt-qty-val').value = 1;
-
-        let imgList = (curProduct.images && curProduct.images.length > 0) ? curProduct.images : [curProduct.image];
-        document.getElementById('dt-img').src = imgList[0];
-        document.getElementById('dt-gallery').innerHTML = imgList.map((src, i) => `<img src="${src}" class="thumb-img ${i===0?'active':''}" onclick="document.getElementById('dt-img').src='${src}'; document.querySelectorAll('.thumb-img').forEach(e=>e.classList.remove('active')); this.classList.add('active');">`).join('');
-
-        document.getElementById('dt-cat').innerText = curProduct.category; document.getElementById('dt-name').innerText = curProduct.name; 
-        document.getElementById('dt-desc').innerText = curProduct.desc;
-
-        if(curProduct.salePercent > 0) { document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice; document.getElementById('dt-old-price').classList.remove('d-none'); document.getElementById('dt-sale-badge').innerText = curProduct.salePercent + "% OFF"; document.getElementById('dt-sale-badge').classList.remove('d-none'); document.getElementById('dt-price-display').innerText = "₱" + curProduct.price; document.getElementById('dt-price-display').classList.add('text-danger'); } else { document.getElementById('dt-old-price').classList.add('d-none'); document.getElementById('dt-sale-badge').classList.add('d-none'); document.getElementById('dt-price-display').innerText = "₱" + curProduct.price; document.getElementById('dt-price-display').classList.remove('text-danger'); }
-        
-        const isNiqab = (curProduct.category.toLowerCase() === 'niqab');
-        if(isNiqab) { 
-            document.getElementById('size-row').style.display = 'none'; 
-            document.getElementById('bundle-container').style.display = 'none';
-            selectedSize = "One Size"; 
-        } else { 
-            document.getElementById('size-row').style.display = 'block'; 
-            document.getElementById('bundle-container').style.display = 'block';
-            document.getElementById('size-area').innerHTML = ["S","M","L","XL"].map(s => `<div class="option-btn size-opt" onclick="pickOption('size','${s}', this)">${s}</div>`).join('');
-            document.getElementById('bundle-price-2').innerText = "₱" + Math.floor((curProduct.price*2)*0.95);
-            document.getElementById('bundle-price-3').innerText = "₱" + Math.floor((curProduct.price*3)*0.90);
-            selectBundle(1, document.querySelector('.bundle-option')); 
+        function renderCats() {
+            const cats = ['All', ...new Set(allProducts.map(p => p.category))];
+            document.getElementById('category-grid').innerHTML = cats.map(c => {
+                let img = catImages[c] || catImages['Default'];
+                return `<div onclick="filterCat('${c}')" class="bg-white rounded-xl shadow-sm border p-4 flex flex-col items-center justify-center cursor-pointer hover:border-gold transition h-32 group">
+                    <img src="${img}" class="w-12 h-12 mb-2 object-contain group-hover:scale-110 transition duration-300">
+                    <span class="font-bold text-sm text-gray-700">${c}</span>
+                </div>`;
+            }).join('');
         }
 
-        let colorList = curProduct.colors ? curProduct.colors.split(',') : ["Default"]; 
-        document.getElementById('color-area').innerHTML = colorList.map(c => `<div class="option-btn color-opt" onclick="pickOption('color','${c.trim()}', this)">${c.trim()}</div>`).join('');
-        
-        const badge = document.getElementById('dt-pop-badge');
-        if(curProduct.inStock) { badge.classList.remove('d-none'); } else { badge.classList.add('d-none'); }
-
-        renderRelated(curProduct.category, curProduct.id); 
-        renderDetailReviews(); 
-        
-        document.getElementById('detail-view').style.display = 'block';
-        document.getElementById('top-announcement').style.display = 'none';
-        
-        updateStickyBar();
-        checkInputs();
-    }
-
-    function pickOption(type, val, el) { let grp = type === 'size' ? '.size-opt' : '.color-opt'; document.querySelectorAll(grp).forEach(b => b.classList.remove('selected')); el.classList.add('selected'); if(type==='size') selectedSize = val; else selectedColor = val; checkInputs(); }
-
-    function checkInputs() { const h = document.getElementById('height-input').value.trim(); const btn = document.getElementById('add-btn'); btn.disabled = !(curProduct.inStock && selectedSize && selectedColor && h !== ""); }
-
-    function selectBundle(qty, el) {
-        selectedBundleQty = qty;
-        document.querySelectorAll('.bundle-option').forEach(b => b.classList.remove('selected'));
-        el.classList.add('selected');
-        document.getElementById('dt-qty-val').value = qty; 
-        updateStickyBar();
-    }
-
-    function updateStickyBar() {
-        let price = curProduct.price * selectedBundleQty;
-        if(curProduct.category.toLowerCase() !== 'niqab') {
-            if(selectedBundleQty === 2) price *= 0.95;
-            if(selectedBundleQty === 3) price *= 0.90;
+        function renderSuggested() {
+            const items = allProducts.sort(() => 0.5 - Math.random()).slice(0, 6);
+            document.getElementById('suggested-container').innerHTML = items.map(p => `
+                <div onclick="openDetail('${p.id}')" class="snap-start shrink-0 w-40 bg-white rounded-lg shadow-sm border overflow-hidden cursor-pointer">
+                    <img src="${p.image}" class="w-full h-40 object-cover">
+                    <div class="p-2">
+                        <div class="flex text-gold text-[10px] mb-1">★★★★★</div>
+                        <div class="text-xs font-bold text-gray-800 truncate">${p.name}</div>
+                        <div class="text-primary font-bold text-sm">₱${p.price}</div>
+                    </div>
+                </div>
+            `).join('');
         }
-        document.getElementById('sticky-price-display').innerText = "₱" + Math.floor(price);
-    }
 
-    function dtQty(change) { 
-        let el = document.getElementById('dt-qty-val'); let val = parseInt(el.value) + change; if(val < 1) val = 1; el.value = val; 
-        if(curProduct.category.toLowerCase() !== 'niqab') {
-            const opts = document.querySelectorAll('.bundle-option');
-            if(val===1) selectBundle(1, opts[0]); else if(val===2) selectBundle(2, opts[1]); else if(val===3) selectBundle(3, opts[2]); else { selectedBundleQty = val; updateStickyBar(); }
-        } else { selectedBundleQty = val; updateStickyBar(); }
-    }
-    
-    function addToCart() {
-        if(!selectedSize || !selectedColor || !document.getElementById('height-input').value) return;
-        let unitP = curProduct.price;
-        if(curProduct.category.toLowerCase() !== 'niqab') {
-             if(selectedBundleQty===2) unitP = (curProduct.price*2*0.95)/2; if(selectedBundleQty===3) unitP = (curProduct.price*3*0.90)/3;
+        function filterCat(c) {
+            const list = c === 'All' ? allProducts : allProducts.filter(p => p.category === c);
+            document.getElementById('grid-title').innerText = c;
+            document.getElementById('full-product-grid').innerHTML = list.map(p => `
+                <div onclick="openDetail('${p.id}')" class="bg-white rounded-lg shadow-sm border overflow-hidden cursor-pointer">
+                    <div class="relative w-full pt-[133%] bg-gray-50">
+                        <img src="${p.image}" class="absolute top-0 left-0 w-full h-full object-cover">
+                        ${p.salePercent > 0 ? `<span class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded">SALE</span>` : ''}
+                    </div>
+                    <div class="p-3">
+                        <div class="font-bold text-sm truncate mb-1">${p.name}</div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-primary font-bold">₱${p.price}</span>
+                            ${p.salePercent > 0 ? `<span class="text-[10px] text-gray-400 line-through">₱${p.originalPrice}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            routeTo('grid');
         }
-        cart.push({...curProduct, price: Math.floor(unitP), size: selectedSize, color: selectedColor, height: document.getElementById('height-input').value, qty: selectedBundleQty}); 
-        localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); updateCartCount(); Swal.fire({icon: 'success', title: 'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1500}); 
-        window.history.back(); // Use History back
-    }
-    
-    function updateCartCount() { document.getElementById('cart-count').innerText = cart.length; }
-    
-    function renderCart() { 
-        let total = 0; const tb = document.getElementById('cart-table'); 
-        if(cart.length === 0) { tb.innerHTML = '<tr><td class="text-center py-5">Shopping bag is empty</td></tr>'; document.getElementById('btn-checkout').disabled = true; } 
-        else { 
-            document.getElementById('btn-checkout').disabled = false; 
-            tb.innerHTML = cart.map((i,x) => { total += (i.price * i.qty); return `<tr style="border-bottom:1px solid #f0f0f0;"><td class="ps-3" style="width:70px;"><img src="${i.image}" width="60" class="rounded-3 shadow-sm"></td><td><div class="fw-bold">${i.name}</div><div class="small text-muted mb-1">Size: ${i.size} | Color: ${i.color}</div><div class="small text-muted mb-1">Height: ${i.height}</div><div class="text-primary fw-bold">₱${i.price}</div></td><td style="width:120px;"><div class="badge bg-secondary">Qty: ${i.qty}</div></td><td class="text-end pe-4"><i class="fas fa-trash-alt text-danger" style="cursor:pointer; opacity:0.6;" onclick="delItem(${x})"></i></td></tr>`; }).join(''); 
-        } 
-        document.getElementById('cart-total').innerText = "₱" + total.toLocaleString(); 
-    }
-    function delItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); updateCartCount(); renderCart(); }
-    
-    // --- INSTANT REVIEWS ---
-    function renderDetailReviews() {
-        const c = document.getElementById('detail-reviews-list');
-        const list = allReviews.slice(0, 3);
-        if(!list.length) c.innerHTML = '<small class="text-muted">No reviews yet.</small>';
-        else c.innerHTML = list.map(r => `<div class="card p-3 border-0 bg-light mb-2"><div class="d-flex justify-content-between"><span class="fw-bold small">${r.name}</span><span class="text-warning small">${'★'.repeat(r.rating)}</span></div><p class="small mb-0 text-muted">${r.feedback}</p></div>`).join('');
-    }
 
-    function submitInstantReview(e) {
-        e.preventDefault();
-        const name = document.getElementById('d-r-name').value;
-        const fb = document.getElementById('d-r-feedback').value;
-        let rating = 0;
-        document.querySelectorAll('input[name="d-rating"]').forEach(r => { if(r.checked) rating = parseInt(r.value); });
-        
-        if(rating === 0) { Swal.fire('Error','Select rating','warning'); return; }
+        // --- DETAIL VIEW ---
+        function openDetail(id) {
+            curProduct = allProducts.find(p => p.id == id);
+            selectedSize = null; selectedColor = null; bundleQty = 1;
+            document.getElementById('dt-height').value = '';
+            
+            document.getElementById('dt-img').src = curProduct.image;
+            document.getElementById('dt-name').innerText = curProduct.name;
+            document.getElementById('dt-cat').innerText = curProduct.category;
+            document.getElementById('dt-desc').innerText = curProduct.desc;
+            
+            if(curProduct.salePercent > 0) {
+                document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice;
+                document.getElementById('dt-old-price').classList.remove('hidden');
+                document.getElementById('dt-price-display').classList.add('text-red-600');
+                document.getElementById('dt-badge').classList.remove('hidden');
+            } else {
+                document.getElementById('dt-old-price').classList.add('hidden');
+                document.getElementById('dt-price-display').classList.remove('text-red-600');
+                document.getElementById('dt-badge').classList.add('hidden');
+            }
+            document.getElementById('dt-price-display').innerText = "₱" + curProduct.price;
 
-        // Optimistic Update: Add to list instantly
-        const newReview = { name: name, feedback: fb, rating: rating };
-        allReviews.unshift(newReview);
-        renderDetailReviews(); // Re-render local list
+            let imgs = (curProduct.images && curProduct.images.length) ? curProduct.images : [curProduct.image];
+            document.getElementById('dt-gallery').innerHTML = imgs.map(src => `<img src="${src}" class="w-16 h-16 rounded border object-cover cursor-pointer" onclick="document.getElementById('dt-img').src='${src}'">`).join('');
 
-        // Reset Form
-        document.getElementById('d-r-name').value = "";
-        document.getElementById('d-r-feedback').value = "";
-        document.querySelectorAll('input[name="d-rating"]').forEach(r => r.checked = false);
+            const isNiqab = curProduct.category.toLowerCase() === 'niqab';
+            if(isNiqab) {
+                document.getElementById('size-opts').innerHTML = '<span class="text-sm text-gray-500">Free Size</span>';
+                selectedSize = "Free Size";
+                document.getElementById('bundle-area').classList.add('hidden');
+            } else {
+                document.getElementById('size-opts').innerHTML = ['S','M','L','XL'].map(s => `<button class="opt-btn size border px-3 py-1 rounded text-sm hover:border-gold" onclick="pickOpt('size','${s}',this)">${s}</button>`).join('');
+                document.getElementById('bundle-area').classList.remove('hidden');
+                document.getElementById('bp-2').innerText = "₱" + Math.floor(curProduct.price * 2 * 0.95);
+                document.getElementById('bp-3').innerText = "₱" + Math.floor(curProduct.price * 3 * 0.90);
+                selectBundle(1, document.querySelector('.bundle-opt'));
+            }
 
-        Swal.fire({icon: 'success', title: 'Posted!', toast:true, position:'top-end', showConfirmButton:false, timer:1500});
+            let colors = curProduct.colors ? curProduct.colors.split(',') : ['Default'];
+            document.getElementById('color-opts').innerHTML = colors.map(c => `<button class="opt-btn color border px-3 py-1 rounded text-sm hover:border-gold" onclick="pickOpt('color','${c.trim()}',this)">${c.trim()}</button>`).join('');
 
-        // Send to backend
-        fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify({ action: 'submitReview', name: name, email: 'N/A', phone: 'N/A', feedback: fb, rating: rating }) });
-    }
+            updateStickyPrice(); checkAddBtn();
+            routeTo('detail');
+        }
 
-    function renderMainReviews() {
-        document.getElementById('main-reviews-list').innerHTML = allReviews.map(r => `<div class="card p-3 mb-3 border-0 shadow-sm"><div class="d-flex justify-content-between"><span class="fw-bold">${r.name}</span><span class="text-warning">${'★'.repeat(r.rating)}</span></div><p class="text-secondary small mb-0">${r.feedback}</p></div>`).join('');
-    }
+        function pickOpt(type, val, el) {
+            const grp = type === 'size' ? '.opt-btn.size' : '.opt-btn.color';
+            document.querySelectorAll(grp).forEach(b => b.classList.remove('bg-primary', 'text-white'));
+            el.classList.add('bg-primary', 'text-white');
+            if(type === 'size') selectedSize = val; else selectedColor = val;
+            checkAddBtn();
+        }
 
-    // --- CHECKOUT ---
-    function initCheckout() { 
-        cartTotalAmount = cart.reduce((acc, item) => acc + (item.price * item.qty), 0); 
-        currentDonationPercent = 0; currentShippingFee = 0; 
-        document.getElementById('del-method').value = ""; ['addr-street','addr-brgy','addr-city','addr-prov','addr-region','addr-zip'].forEach(id=>document.getElementById(id).value=""); document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = 'none'); document.querySelectorAll('.donate-pill').forEach(b => b.classList.remove('selected')); document.getElementById('c-proof').value = ""; 
-        updateCheckoutCalculations(); validateCheckoutForm(); 
-    }
+        function selectBundle(q, el) {
+            bundleQty = q;
+            document.querySelectorAll('.bundle-opt').forEach(b => b.classList.remove('border-gold', 'bg-yellow-50'));
+            el.classList.add('border-gold', 'bg-yellow-50');
+            document.getElementById('dt-qty').value = q;
+            updateStickyPrice();
+        }
 
-    function toggleDeliveryOptions() { const m = document.getElementById('del-method').value; const isDel = m === 'Delivery'; document.querySelectorAll('.delivery-fields').forEach(el => el.style.display = isDel ? 'block' : 'none'); document.querySelectorAll('.delivery-fields input, .delivery-fields select').forEach(el => el.required = isDel); calcShipping(); validateCheckoutForm(); }
-    function calcShipping() { 
-        const method = document.getElementById('del-method').value; const region = document.getElementById('addr-region').value;
-        let potentialFee = 0;
-        if(region === 'Metro Manila') potentialFee = 90; else if(region === 'Luzon') potentialFee = 150; else if(region === 'Visayas') potentialFee = 210; else if(region === 'Mindanao') potentialFee = 220; else if(region === 'Island') potentialFee = 250;
-        if (method === 'Delivery') { if(cartTotalAmount >= 3000) currentShippingFee = 0; else currentShippingFee = potentialFee; } else currentShippingFee = 0;
-        updateCheckoutCalculations(); 
-    }
-    function selectDonation(p, b) { currentDonationPercent=p; document.querySelectorAll('.donate-pill').forEach(btn=>btn.classList.remove('selected')); b.classList.add('selected'); document.getElementById('donation-note').classList.toggle('d-none', p===0); updateCheckoutCalculations(); }
-    function updateCheckoutCalculations() { const d = Math.ceil(cartTotalAmount * currentDonationPercent); const g = cartTotalAmount + currentShippingFee + d; document.getElementById('sum-subtotal').innerText = "₱" + cartTotalAmount.toLocaleString(); document.getElementById('sum-shipping').innerText = "₱" + currentShippingFee; const dr = document.getElementById('sum-donate-row'); if (currentDonationPercent > 0) { dr.classList.remove('d-none'); document.getElementById('sum-donation').innerText = "₱" + d; } else dr.classList.add('d-none'); document.getElementById('pay-total').innerText = "₱" + g.toLocaleString(); }
-    
-    function validateCheckoutForm() { 
-        const f=document.getElementById('checkout-form'); const b=document.getElementById('btn-place-order'); const hasProof = document.getElementById('c-proof').files.length > 0;
-        if(f.checkValidity() && hasProof) { b.disabled=false; b.innerText="PLACE ORDER"; b.classList.remove('opacity-50'); } else { b.disabled=true; b.innerText="FILL DETAILS"; b.classList.add('opacity-50'); } 
-    }
-    
-    function submitOrder(e) {
-        e.preventDefault(); const f = document.getElementById('c-proof').files[0]; if(!f) return;
-        Swal.fire({ title: 'Processing...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-        const r = new FileReader(); r.onload = function(evt) {
-            const d = Math.ceil(cartTotalAmount * currentDonationPercent); const g = cartTotalAmount + currentShippingFee + d;
-            let addr = "Pick-up"; if(document.getElementById('del-method').value === 'Delivery'){ addr = `${document.getElementById('addr-street').value}, ${document.getElementById('addr-brgy').value}, ${document.getElementById('addr-city').value}, ${document.getElementById('addr-prov').value}`; }
-            const p = { action: 'placeOrder', cust: { name:document.getElementById('c-name').value, phone:document.getElementById('c-phone').value, email:document.getElementById('c-email').value, addr:addr }, pay: { ref:document.getElementById('c-ref').value, image:evt.target.result, mime:f.type }, cart: cart, total: "₱" + g.toLocaleString(), donation: { percent: (currentDonationPercent * 100) + "%", amount: d, note: document.getElementById('donation-note').value }, delivery: { method: document.getElementById('del-method').value, region: document.getElementById('addr-region').value || "N/A", fee: currentShippingFee } };
-            fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(p) }).then(res => res.json()).then(d => { if(d.status === 'success') { cart = []; localStorage.setItem('alj_cart_v14', JSON.stringify(cart)); Swal.fire('Order Placed!', `ID: ${d.orderId}`, 'success').then(() => routeTo('home')); } else Swal.fire('Error', d.error, 'error'); });
-        }; r.readAsDataURL(f);
-    }
-    
-    function doSearch() { const q = document.getElementById('searchBox').value.toLowerCase(); renderProds(allProducts.filter(p => p.name.toLowerCase().includes(q))); document.getElementById('shop-section').scrollIntoView(); }
-    function scrollToProducts() { document.getElementById('shop-section').scrollIntoView({behavior:'smooth'}); }
-    function trackOrder() {
-        const id = document.getElementById('track-id').value.trim(); if(!id) return; document.getElementById('loader').style.display = 'flex';
-        fetch(WEB_APP_URL + `?action=trackOrder&orderId=${id}`).then(r => r.json()).then(d => { document.getElementById('loader').style.display = 'none'; document.getElementById('track-result').classList.remove('d-none'); document.getElementById('t-status').innerText = d.status === 'found' ? d.currStatus : "Order Not Found"; document.getElementById('t-date').innerText = d.status === 'found' ? d.date : "-"; document.getElementById('t-total').innerText = d.status === 'found' ? d.total : "-"; });
-    }
-    function renderRelated(cat, currentId) { let related = allProducts.filter(p => p.category === cat && p.id !== currentId).sort(() => 0.5 - Math.random()).slice(0,5); document.getElementById('related-products').innerHTML = related.map(p => `<div class="related-card" onclick="openDetail('${p.id}')"><img src="${p.image}"><div class="small fw-bold text-truncate">${p.name}</div></div>`).join(''); }
-</script>
+        function changeQty(n) {
+            let v = parseInt(document.getElementById('dt-qty').value) + n;
+            if (v < 1) v = 1;
+            document.getElementById('dt-qty').value = v;
+            if(curProduct.category.toLowerCase() !== 'niqab') {
+                const opts = document.querySelectorAll('.bundle-opt');
+                if(v===1) selectBundle(1, opts[0]);
+                else if(v===2) selectBundle(2, opts[1]);
+                else if(v===3) selectBundle(3, opts[2]);
+                else { bundleQty = v; updateStickyPrice(); }
+            } else { bundleQty = v; updateStickyPrice(); }
+        }
+
+        function updateStickyPrice() {
+            let p = curProduct.price * bundleQty;
+            if(curProduct.category.toLowerCase() !== 'niqab') {
+                if(bundleQty === 2) p = p * 0.95;
+                if(bundleQty === 3) p = p * 0.90;
+            }
+            document.getElementById('sticky-price').innerText = "₱" + Math.ceil(p);
+        }
+
+        function checkAddBtn() {
+            const h = document.getElementById('dt-height').value;
+            const btn = document.getElementById('btn-add');
+            if(selectedSize && selectedColor && h) btn.disabled = false; else btn.disabled = true;
+        }
+
+        function addToCart() {
+            let unitP = curProduct.price;
+            if(curProduct.category.toLowerCase() !== 'niqab') {
+                if(bundleQty===2) unitP = (curProduct.price * 2 * 0.95) / 2;
+                if(bundleQty===3) unitP = (curProduct.price * 3 * 0.90) / 3;
+            }
+            cart.push({ ...curProduct, size: selectedSize, color: selectedColor, height: document.getElementById('dt-height').value, qty: bundleQty, price: Math.ceil(unitP) });
+            localStorage.setItem('alj_cart_v16', JSON.stringify(cart));
+            updateCartBadge();
+            Swal.fire({icon:'success', title:'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1500});
+            window.history.back();
+        }
+
+        function updateCartBadge() { document.getElementById('cart-count').innerText = cart.length; }
+
+        // --- CART ---
+        function renderCart() {
+            const c = document.getElementById('cart-content');
+            if(cart.length === 0) {
+                c.innerHTML = '<div class="p-10 text-center text-gray-500">Your bag is empty</div>';
+                document.getElementById('cart-summary').classList.add('hidden');
+                return;
+            }
+            document.getElementById('cart-summary').classList.remove('hidden');
+            let t = 0;
+            c.innerHTML = cart.map((i, idx) => {
+                t += i.price * i.qty;
+                return `<div class="flex gap-3 p-4 border-b last:border-0">
+                    <img src="${i.image}" class="w-20 h-20 object-cover rounded bg-gray-50">
+                    <div class="flex-1">
+                        <div class="flex justify-between">
+                            <h4 class="font-bold text-sm text-gray-800">${i.name}</h4>
+                            <button onclick="remItem(${idx})" class="text-red-400"><i class="fas fa-trash"></i></button>
+                        </div>
+                        <div class="text-xs text-gray-500 mb-1">${i.size} | ${i.color}</div>
+                        <div class="flex justify-between items-end">
+                            <span class="text-primary font-bold">₱${i.price}</span>
+                            <span class="text-xs bg-gray-100 px-2 py-1 rounded">Qty: ${i.qty}</span>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+            document.getElementById('cart-total').innerText = "₱" + t.toLocaleString();
+        }
+        function remItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v16', JSON.stringify(cart)); updateCartBadge(); renderCart(); }
+
+        // --- CHECKOUT ---
+        function initCheckout() {
+            cartTotalAmount = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            currentDonationPercent = 0; currentShippingFee = 0;
+            document.getElementById('del-method').value = "";
+            document.getElementById('delivery-fields').classList.add('hidden');
+            document.getElementById('c-proof').value = "";
+            document.getElementById('upload-msg').classList.add('hidden');
+            document.querySelectorAll('.donate-pill').forEach(b => b.classList.remove('bg-primary', 'text-white'));
+            updateCheckoutCalc();
+        }
+
+        function toggleDeliveryOptions() {
+            const m = document.getElementById('del-method').value;
+            const fields = document.getElementById('delivery-fields');
+            const inputs = fields.querySelectorAll('input, select');
+            if (m === 'Delivery') {
+                fields.classList.remove('hidden');
+                inputs.forEach(i => i.required = true);
+                calcShipping(); 
+            } else {
+                fields.classList.add('hidden');
+                inputs.forEach(i => i.required = false);
+                currentShippingFee = 0;
+            }
+            updateCheckoutCalc();
+        }
+
+        function calcShipping() {
+            if (document.getElementById('del-method').value !== 'Delivery') return;
+            const region = document.getElementById('addr-region').value;
+            let fee = 0;
+            if(region === 'Metro Manila') fee = 90; else if(region === 'Luzon') fee = 150; else if(region === 'Visayas') fee = 210; else if(region === 'Mindanao') fee = 220; else if(region === 'Island') fee = 250;
+            if(cartTotalAmount >= 3000) fee = 0;
+            currentShippingFee = fee; updateCheckoutCalc();
+        }
+
+        function selectDonation(p, el) {
+            currentDonationPercent = p;
+            document.querySelectorAll('.donate-pill').forEach(b => b.classList.remove('bg-primary', 'text-white'));
+            el.classList.add('bg-primary', 'text-white');
+            if(p > 0) document.getElementById('donation-note').classList.remove('hidden'); else document.getElementById('donation-note').classList.add('hidden');
+            updateCheckoutCalc();
+        }
+
+        function updateCheckoutCalc() {
+            const don = Math.ceil(cartTotalAmount * currentDonationPercent);
+            const total = cartTotalAmount + currentShippingFee + don;
+            document.getElementById('sum-subtotal').innerText = "₱" + cartTotalAmount.toLocaleString();
+            document.getElementById('sum-shipping').innerText = "₱" + currentShippingFee;
+            if(don > 0) { document.getElementById('sum-donate-row').classList.remove('hidden'); document.getElementById('sum-donation').innerText = "₱" + don; } else document.getElementById('sum-donate-row').classList.add('hidden');
+            document.getElementById('pay-total').innerText = "₱" + total.toLocaleString();
+            validateCheckoutForm();
+        }
+
+        function validateCheckoutForm() {
+            const f = document.getElementById('checkout-form');
+            const hasFile = document.getElementById('c-proof').files.length > 0;
+            const btn = document.getElementById('btn-place-order');
+            if(f.checkValidity() && hasFile) { btn.disabled = false; btn.innerText = "Place Order"; btn.classList.remove('bg-gray-300'); btn.classList.add('bg-primary', 'shadow-lg'); } else { btn.disabled = true; btn.innerText = "Fill All Details"; btn.classList.add('bg-gray-300'); btn.classList.remove('bg-primary', 'shadow-lg'); }
+        }
+
+        function submitOrder(e) {
+            e.preventDefault();
+            const file = document.getElementById('c-proof').files[0];
+            Swal.fire({ title: 'Processing Order...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const don = Math.ceil(cartTotalAmount * currentDonationPercent);
+                const totalVal = cartTotalAmount + currentShippingFee + don;
+                let addr = "Pick-up";
+                if (document.getElementById('del-method').value === 'Delivery') {
+                    addr = `${document.getElementById('addr-street').value}, ${document.getElementById('addr-brgy').value}, ${document.getElementById('addr-city').value}, ${document.getElementById('addr-prov').value}`;
+                }
+                const payload = {
+                    action: 'placeOrder',
+                    cust: { name: document.getElementById('c-name').value, phone: document.getElementById('c-phone').value, email: document.getElementById('c-email').value, addr: addr },
+                    pay: { ref: document.getElementById('c-ref').value, image: evt.target.result, mime: file.type },
+                    cart: cart, total: "₱" + totalVal.toLocaleString(),
+                    donation: { percent: (currentDonationPercent * 100) + "%", amount: don, note: document.getElementById('donation-note').value },
+                    delivery: { method: document.getElementById('del-method').value, region: document.getElementById('addr-region').value || "N/A", fee: currentShippingFee }
+                };
+                fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r => r.json()).then(d => {
+                    if(d.status === 'success') { cart = []; localStorage.setItem('alj_cart_v16', JSON.stringify(cart)); Swal.fire({ icon:'success', title: 'Order Placed!', text: `Order ID: ${d.orderId}` }).then(() => window.location.reload()); } else Swal.fire('Error', d.error, 'error');
+                });
+            }; reader.readAsDataURL(file);
+        }
+
+        // --- REVIEWS ---
+        function renderReviews(list, containerId, isSlider = false) {
+            const container = document.getElementById(containerId);
+            if(!list || list.length === 0) { container.innerHTML = '<div class="text-sm text-gray-500 italic">No reviews yet.</div>'; return; }
+            
+            const cardClass = isSlider ? "snap-start shrink-0 w-[280px] bg-white p-5 rounded-xl shadow-sm border border-gray-100" : "bg-white p-4 rounded-xl border shadow-sm";
+            
+            container.innerHTML = list.map(r => `
+                <div class="${cardClass}">
+                    <div class="flex justify-between items-start mb-2">
+                        <div>
+                            <span class="font-bold text-sm block">${r.name}</span>
+                            <span class="text-gold text-xs">${'★'.repeat(r.rating)}</span>
+                        </div>
+                        <span class="text-[10px] text-gray-400">${r.date || 'Just now'}</span>
+                    </div>
+                    <p class="text-sm text-gray-600 italic">"${r.feedback}"</p>
+                </div>
+            `).join('');
+        }
+
+        function submitInstantReview(e, loc) {
+            e.preventDefault();
+            const prefix = loc === 'home' ? 'h' : 'd'; // handle home review vs detail review ids if you want, using home ids here
+            const name = document.getElementById('hr-name').value;
+            const fb = document.getElementById('hr-feedback').value;
+            let rating = 0;
+            document.querySelectorAll(`input[name="h-rating"]`).forEach(r => { if(r.checked) rating = parseInt(r.value); });
+            
+            if(rating === 0) { Swal.fire('Oops','Please select a star rating','warning'); return; }
+
+            const newReview = { name: name, feedback: fb, rating: rating, date: new Date().toLocaleDateString() };
+            allReviews.unshift(newReview);
+            renderReviews(allReviews.slice(0, 5), 'home-reviews-slider', true);
+            
+            document.getElementById('hr-name').value = ""; document.getElementById('hr-feedback').value = "";
+            document.querySelectorAll(`input[name="h-rating"]`).forEach(r => r.checked = false);
+            
+            Swal.fire({icon:'success', title:'Posted!', toast:true, position:'top-end', showConfirmButton:false, timer:1500});
+            fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify({ action: 'submitReview', name: name, email: 'N/A', phone: 'N/A', feedback: fb, rating: rating }) });
+        }
+
+        function doSearch() {
+            const q = document.getElementById('searchBox').value.toLowerCase();
+            if(q.length < 2) return;
+            const matches = allProducts.filter(p => p.name.toLowerCase().includes(q));
+            document.getElementById('grid-title').innerText = `Search: "${q}"`;
+            document.getElementById('full-product-grid').innerHTML = matches.map(p => `
+                <div onclick="openDetail('${p.id}')" class="bg-white rounded-lg shadow-sm border overflow-hidden cursor-pointer">
+                    <img src="${p.image}" class="w-full h-40 object-cover">
+                    <div class="p-2 font-bold text-sm">${p.name}</div>
+                </div>`).join('');
+            routeTo('grid');
+        }
+
+        function trackOrder() {
+            const id = document.getElementById('track-id').value; if(!id) return; Swal.fire({didOpen:()=>Swal.showLoading()});
+            fetch(`${WEB_APP_URL}?action=trackOrder&orderId=${id}`).then(r=>r.json()).then(d => {
+                Swal.close(); document.getElementById('track-result').classList.remove('hidden');
+                document.getElementById('t-status').innerText = d.status === 'found' ? d.currStatus : "Order Not Found";
+                document.getElementById('t-date').innerText = d.date || '-'; document.getElementById('t-total').innerText = d.total || '-';
+            });
+        }
+    </script>
 </body>
 </html>
