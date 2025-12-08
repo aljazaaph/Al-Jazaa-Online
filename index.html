@@ -1,869 +1,877 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Al-Jazaa Ph</title>
     
+    <!-- BRAND ASSETS -->
     <link rel="icon" type="image/png" href="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- FONTS: Playfair (Serif), Outfit (Sans), Amiri (Arabic) -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- ICONS & CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- ADDED HTML2CANVAS FOR RECEIPT GENERATION -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
-                    colors: { primary: '#1b4d3e', 'primary-dark': '#143a2f', gold: '#c5a028', 'bg-soft': '#f8fafc' },
-                    fontFamily: { sans: ['Outfit', 'sans-serif'], serif: ['Playfair Display', 'serif'] }
+                    colors: { 
+                        primary: '#1b4d3e',     // Deep Olive
+                        'primary-dark': '#143a2f',
+                        secondary: '#d4af37',   // Metallic Gold
+                        sand: '#f5f5f0',        // Light Beige Background
+                        dark: '#1a1a1a',        // Soft Black
+                        darkbg: '#121212'
+                    },
+                    fontFamily: { 
+                        sans: ['Outfit', 'sans-serif'], 
+                        serif: ['Playfair Display', 'serif'],
+                        arabic: ['Amiri', 'serif']
+                    }
                 }
             }
         }
     </script>
 
     <style>
+        /* CUSTOM UTILITIES */
+        body { background-color: #f5f5f0; color: #333; transition: background-color 0.3s, color 0.3s; }
+        .dark body { background-color: #121212; color: #e5e5e5; }
+        
+        /* Typography Polish */
+        h1, h2, h3, h4 { letter-spacing: -0.02em; }
+        .islamic-pattern { background-image: radial-gradient(#d4af37 1px, transparent 1px); background-size: 20px 20px; opacity: 0.05; }
+        
+        /* UI Elements */
+        .glass-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.04); }
+        .dark .glass-nav { background: rgba(18, 18, 18, 0.95); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        
+        .btn-primary { background-color: #1b4d3e; color: white; padding: 12px 24px; border-radius: 2px; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 600; transition: all 0.3s; }
+        .btn-primary:hover { background-color: #143a2f; transform: translateY(-2px); }
+        .btn-outline { border: 1px solid #1b4d3e; color: #1b4d3e; padding: 11px 23px; border-radius: 2px; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em; font-weight: 600; transition: all 0.3s; }
+        .btn-outline:hover { background-color: #1b4d3e; color: white; }
+        .dark .btn-outline { border-color: #d4af37; color: #d4af37; }
+        .dark .btn-outline:hover { background-color: #d4af37; color: #000; }
+
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .glass-nav { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .accordion-content { transition: max-height 0.3s ease-out; max-height: 0; overflow: hidden; }
-        .accordion-content.active { max-height: 500px; }
-        .rotate-180 { transform: rotate(180deg); }
-        .loader-spin { border: 4px solid #f3f3f3; border-top: 4px solid #c5a028; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .view-section { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .modal-enter { animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes modalPop { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
-        .sticky-bottom-action { position: fixed; bottom: 0; left: 0; width: 100%; background: white; border-top: 1px solid #eee; padding: 12px 16px; z-index: 50; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1); }
         
-        /* Stepper CSS */
-        .step-item { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; z-index: 10; }
-        .step-circle { width: 35px; height: 35px; border-radius: 50%; background: #e5e7eb; color: #9ca3af; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; transition: all 0.4s ease; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .step-item.active .step-circle { background: #c5a028; color: white; transform: scale(1.1); box-shadow: 0 0 10px rgba(197, 160, 40, 0.5); }
-        .step-item.completed .step-circle { background: #1b4d3e; color: white; }
-        .step-line { position: absolute; top: 18px; left: -50%; width: 100%; height: 3px; background: #e5e7eb; z-index: 0; transition: all 0.4s ease; }
-        .step-item.active .step-line, .step-item.completed .step-line { background: #1b4d3e; }
-        .step-text { font-size: 10px; font-weight: 600; color: #9ca3af; margin-top: 8px; text-align: center; text-transform: uppercase; letter-spacing: 0.5px; transition: color 0.3s; }
-        .step-item.active .step-text { color: #1b4d3e; }
+        /* Loaders & Animations */
+        .loader-spin { border: 3px solid #eee; border-top: 3px solid #d4af37; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
-        /* Receipt Styles */
-        #receipt-render-area { font-family: 'Courier New', Courier, monospace; background: #fff; width: 380px; padding: 20px; color: #000; position: absolute; top: -9999px; left: -9999px; border: 1px solid #ddd; }
-        .dashed-line { border-bottom: 1px dashed #000; margin: 10px 0; }
+        /* Stepper & Receipt (Hidden) */
+        #receipt-render-area { font-family: 'Courier New', Courier, monospace; background: #fff; width: 380px; padding: 25px; color: #000; position: absolute; top: -9999px; left: -9999px; }
     </style>
 </head>
-<!-- ADJUSTED PADDING TOP TO 100px TO FIT BANNER + NAV -->
-<body class="bg-bg-soft text-gray-800 antialiased pt-[100px] pb-[80px]">
 
-    <script>const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzQ3ij0tm5k-cARhUqdRdV7yYmqfudy0LJnaK70DVAMyTcjO-vcc5WvwFQ36lRxobcF/exec";</script>
+<body class="antialiased font-sans dark:bg-darkbg dark:text-gray-100">
 
-    <div id="loader" class="fixed inset-0 bg-white z-[9999] flex flex-col justify-center items-center">
-        <div class="loader-spin mb-4"></div><h3 class="font-serif text-2xl text-primary font-bold">Al-Jazaa</h3>
+    <!-- UPDATE THIS URL -->
+    <script>const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw-g3tQy6O3l4HjN-vX7_g4yB_pX6gD9dC3q1K5j8f9/exec";</script>
+
+    <!-- LOADING SCREEN -->
+    <div id="loader" class="fixed inset-0 bg-sand dark:bg-darkbg z-[9999] flex flex-col justify-center items-center">
+        <div class="loader-spin mb-6"></div>
+        <h3 class="font-serif text-3xl text-primary dark:text-secondary font-bold tracking-widest">AL-JAZAA</h3>
+        <p class="text-xs text-gray-500 mt-2 uppercase tracking-[0.3em]">Modesty . Integrity</p>
     </div>
 
-    <!-- TOP OFFER BANNER -->
-    <div class="fixed top-0 left-0 w-full h-[30px] bg-primary text-white text-[11px] font-bold tracking-wider z-[60] flex items-center justify-center uppercase">
-        <i class="fas fa-shipping-fast mr-2"></i> Free Shipping on orders over ₱3,000!
-    </div>
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 w-full z-50 glass-nav h-[80px] flex items-center transition-all duration-300">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <!-- Mobile Menu Btn -->
+            <button onclick="toggleMobileMenu()" class="lg:hidden text-primary dark:text-white text-2xl"><i class="fas fa-bars"></i></button>
 
-    <!-- NAVBAR (Top adjusted to 30px) -->
-    <nav class="fixed top-[30px] w-full z-40 glass-nav h-[70px] flex items-center shadow-sm">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <a href="#" onclick="routeTo('home')" class="flex items-center gap-2 text-primary font-serif font-bold text-xl md:text-2xl">
-                <img src="https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/Jaz%20Logo%20gold.png?raw=true" alt="Logo" class="h-10 w-auto"> Al-Jazaa Ph.
+            <!-- Logo -->
+            <a href="#" onclick="routeTo('home')" class="flex flex-col items-center justify-center group mx-auto lg:mx-0">
+                <span class="font-serif text-2xl lg:text-3xl font-bold text-primary dark:text-white tracking-wide group-hover:text-secondary transition">AL-JAZAA</span>
+                <span class="text-[0.6rem] font-sans uppercase tracking-[0.3em] text-gray-500 hidden lg:block">The Modest Choice</span>
             </a>
+
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex gap-8 items-center text-sm font-medium uppercase tracking-widest text-gray-600 dark:text-gray-300">
+                <a onclick="routeTo('home')" class="cursor-pointer hover:text-primary dark:hover:text-secondary transition">Home</a>
+                <a onclick="filterGender('Men')" class="cursor-pointer hover:text-primary dark:hover:text-secondary transition">Men</a>
+                <a onclick="filterGender('Women')" class="cursor-pointer hover:text-primary dark:hover:text-secondary transition">Women</a>
+                <a onclick="routeTo('about')" class="cursor-pointer hover:text-primary dark:hover:text-secondary transition">Our Story</a>
+                <a onclick="routeTo('contact')" class="cursor-pointer hover:text-primary dark:hover:text-secondary transition">Contact</a>
+            </div>
+
+            <!-- Icons -->
             <div class="flex items-center gap-5">
-                <div class="relative cursor-pointer" onclick="routeTo('cart')">
-                    <i class="fas fa-shopping-bag text-2xl text-primary hover:text-gold transition"></i>
-                    <span id="cart-count" class="absolute -top-2 -right-2 bg-gold text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full shadow-md">0</span>
+                <button onclick="toggleDarkMode()" class="text-gray-600 dark:text-secondary hover:text-primary transition"><i class="fas fa-moon"></i></button>
+                <div class="relative cursor-pointer group" onclick="routeTo('cart')">
+                    <i class="fas fa-shopping-bag text-xl text-primary dark:text-white group-hover:text-secondary transition"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-2 bg-secondary text-white text-[9px] font-bold h-4 w-4 flex items-center justify-center rounded-full">0</span>
                 </div>
-                <button onclick="toggleMobileMenu()" class="text-primary text-2xl focus:outline-none"><i class="fas fa-bars"></i></button>
             </div>
         </div>
     </nav>
 
-    <!-- HIDDEN RECEIPT TEMPLATE -->
-    <div id="receipt-render-area">
-        <div class="text-center mb-4">
-            <h2 class="font-bold text-xl">AL-JAZAA PH.</h2>
-            <div class="text-xs">Modesty with Integrity</div>
-            <div class="text-xs mt-1">aljazaa.ph@gmail.com</div>
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu" class="fixed inset-y-0 left-0 w-64 bg-sand dark:bg-darkbg shadow-2xl transform -translate-x-full transition-transform duration-300 z-[60] flex flex-col pt-24 px-6 border-r dark:border-gray-800">
+        <button onclick="toggleMobileMenu()" class="absolute top-6 right-6 text-2xl text-gray-500"><i class="fas fa-times"></i></button>
+        <div class="flex flex-col gap-6 text-sm font-bold uppercase tracking-widest text-primary dark:text-gray-200">
+            <a onclick="routeTo('home'); toggleMobileMenu()">Home</a>
+            <a onclick="filterGender('Men'); toggleMobileMenu()">Shop Men</a>
+            <a onclick="filterGender('Women'); toggleMobileMenu()">Shop Women</a>
+            <a onclick="routeTo('about'); toggleMobileMenu()">Our Story</a>
+            <a onclick="routeTo('contact'); toggleMobileMenu()">Contact</a>
+            <a onclick="openModal('track'); toggleMobileMenu()" class="text-secondary">Track Order</a>
         </div>
-        <div class="dashed-line"></div>
-        <div class="flex justify-between text-xs mb-1"><span>Date:</span> <span id="rec-date"></span></div>
-        <div class="flex justify-between text-xs mb-1"><span>Order ID:</span> <span id="rec-id" class="font-bold"></span></div>
-        <div class="flex justify-between text-xs mb-1"><span>Customer:</span> <span id="rec-name"></span></div>
-        <div class="dashed-line"></div>
-        <div id="rec-items" class="text-xs space-y-2"></div>
-        <div class="dashed-line"></div>
-        <div class="flex justify-between text-xs"><span>Subtotal:</span> <span id="rec-sub"></span></div>
-        <div class="flex justify-between text-xs"><span>Shipping:</span> <span id="rec-ship"></span></div>
-        <div class="flex justify-between text-xs" id="rec-don-row"><span>Donation:</span> <span id="rec-don"></span></div>
-        <div class="flex justify-between text-xs font-bold mt-2 text-sm"><span>TOTAL:</span> <span id="rec-total"></span></div>
-        <div class="dashed-line"></div>
-        <div class="text-center text-[10px] mt-4">Thank you for supporting our small business!<br>Jazakallahu Khairan.</div>
-    </div>
-
-    <!-- MENU DASHBOARD -->
-    <div id="mobile-menu" class="fixed inset-y-0 right-0 w-72 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
-        <div class="bg-primary p-5 flex justify-between items-center text-white">
-            <h5 class="font-serif font-bold text-lg">Menu</h5>
-            <button onclick="toggleMobileMenu()"><i class="fas fa-times text-xl"></i></button>
-        </div>
-        <div class="p-4 flex-1 overflow-y-auto">
-            <div class="flex flex-col gap-2 mb-6">
-                <a href="#" onclick="routeTo('home'); toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 text-gray-700 font-medium"><i class="fas fa-home text-primary w-6"></i> Shop Home</a>
-                <a href="#" onclick="event.preventDefault(); openModal('track'); toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 text-gray-700 font-medium"><i class="fas fa-search-location text-primary w-6"></i> Track Order</a>
-                <a href="#" onclick="event.preventDefault(); openModal('reviews'); toggleMobileMenu()" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 text-gray-700 font-medium"><i class="fas fa-star text-primary w-6"></i> Reviews</a>
-            </div>
-            <hr class="border-gray-100 mb-6">
-            <h6 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Categories</h6>
-            <div id="sidebar-cats-list" class="flex flex-col gap-1"></div>
+        <div class="mt-auto mb-8 text-center">
+            <div class="font-arabic text-xl text-gray-400 mb-2">الجزاء</div>
+            <p class="text-[10px] text-gray-400">© 2024 Al-Jazaa Ph.</p>
         </div>
     </div>
-    <div id="menu-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <div id="menu-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-black/60 z-[55] hidden backdrop-blur-sm"></div>
 
-    <!-- MAIN CONTENT -->
-    <main id="main-content" class="min-h-screen">
-        
-        <!-- HOME PAGE -->
-        <div id="page-home" class="view-section">
-            <div class="container mx-auto px-4 mt-6 mb-8">
-                <!-- SEARCH BAR -->
-                <div class="relative flex shadow-sm rounded-full overflow-hidden border border-gray-200">
-                    <input type="text" id="searchBox" class="w-full pl-5 pr-12 py-3 outline-none focus:ring-1 focus:ring-primary bg-white text-sm" placeholder="Search products..." onkeydown="if(event.key === 'Enter') doSearch()">
-                    <button onclick="doSearch()" class="bg-primary text-white px-5 hover:bg-primary-dark transition"><i class="fas fa-search"></i></button>
+    <!-- MAIN CONTENT AREA -->
+    <main id="main-content" class="pt-[80px] min-h-screen relative">
+        <div class="islamic-pattern absolute inset-0 pointer-events-none z-0"></div>
+
+        <!-- 1. HOME PAGE -->
+        <div id="page-home" class="page-section relative z-10">
+            
+            <!-- Hero Banner -->
+            <section class="relative h-[85vh] w-full bg-cover bg-center flex items-center justify-center text-center px-4" style="background-image: url('https://images.unsplash.com/photo-1596131460596-f9479b128503?q=80&w=2070&auto=format&fit=crop');">
+                <div class="absolute inset-0 bg-black/40"></div>
+                <div class="relative z-10 text-white max-w-2xl fade-in-up">
+                    <div class="font-arabic text-4xl mb-2 text-secondary">الجزاء</div>
+                    <h1 class="font-serif text-5xl md:text-7xl font-bold mb-4 leading-tight">Modesty.<br>Elevated.</h1>
+                    <p class="text-sm md:text-lg font-light tracking-wider mb-8 opacity-90">Premium Halal attire combining tradition with contemporary elegance.</p>
+                    <div class="flex gap-4 justify-center">
+                        <button onclick="filterGender('Men')" class="bg-white text-dark px-8 py-3 uppercase text-xs font-bold tracking-widest hover:bg-secondary hover:text-white transition duration-300">Shop Men</button>
+                        <button onclick="filterGender('Women')" class="border border-white text-white px-8 py-3 uppercase text-xs font-bold tracking-widest hover:bg-white hover:text-dark transition duration-300">Shop Women</button>
+                    </div>
                 </div>
-            </div>
-
-            <!-- Categories -->
-            <section class="container mx-auto px-4 mb-10">
-                <h2 class="font-serif text-2xl font-bold text-primary mb-4">Shop Categories</h2>
-                <div id="category-grid" class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"></div>
             </section>
 
-            <!-- Suggested -->
-            <section class="mb-12 bg-white py-8 border-y border-gray-100 shadow-sm">
+            <!-- Collections Grid -->
+            <section class="container mx-auto px-4 py-20">
+                <div class="text-center mb-12">
+                    <h2 class="font-serif text-3xl font-bold text-primary dark:text-white mb-2">Curated Collections</h2>
+                    <div class="h-0.5 w-16 bg-secondary mx-auto"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div onclick="filterGender('Women')" class="group relative h-[400px] overflow-hidden cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1621609172088-75d1d69d4e9d?auto=format&fit=crop&q=80" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition"></div>
+                        <div class="absolute bottom-8 left-8 text-white">
+                            <h3 class="font-serif text-3xl italic mb-2">For Her</h3>
+                            <span class="uppercase text-xs tracking-widest border-b border-white pb-1">View Collection</span>
+                        </div>
+                    </div>
+                    <div onclick="filterGender('Men')" class="group relative h-[400px] overflow-hidden cursor-pointer">
+                        <img src="https://images.unsplash.com/photo-1594576722212-3f140d342203?auto=format&fit=crop&q=80" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition"></div>
+                        <div class="absolute bottom-8 left-8 text-white">
+                            <h3 class="font-serif text-3xl italic mb-2">For Him</h3>
+                            <span class="uppercase text-xs tracking-widest border-b border-white pb-1">View Collection</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- New Arrivals Carousel -->
+            <section class="bg-white dark:bg-dark py-20">
                 <div class="container mx-auto px-4">
-                    <h2 class="font-serif text-xl font-bold text-primary mb-1">Suggested For You</h2>
-                    <p class="text-xs text-gray-500 mb-4">Top picks based on trends</p>
-                    <div id="suggested-container" class="flex overflow-x-auto gap-4 pb-4 hide-scrollbar snap-x snap-mandatory"></div>
+                    <div class="flex justify-between items-end mb-10">
+                        <h2 class="font-serif text-2xl font-bold text-primary dark:text-white">New Arrivals</h2>
+                        <button onclick="routeTo('grid')" class="text-xs uppercase tracking-widest text-secondary hover:text-primary transition">View All</button>
+                    </div>
+                    <div id="home-products-slider" class="flex overflow-x-auto gap-6 pb-8 hide-scrollbar snap-x">
+                        <!-- Dynamic Content -->
+                    </div>
                 </div>
             </section>
 
-            <!-- Banners -->
-            <section class="container mx-auto px-4 mb-12">
-                <h2 class="font-serif text-xl font-bold text-primary mb-4">Promotions</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="rounded-2xl overflow-hidden shadow-lg h-48 group relative"><img src="https://github.com/ianianguro-art/Menu-POS/blob/main/HEADER%202.jpg?raw=true" class="w-full h-full object-cover transition duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/10"></div></div>
-                    <div class="rounded-2xl overflow-hidden shadow-lg h-48 group relative"><img src="https://github.com/ianianguro-art/Menu-POS/blob/main/big%20sale.jpg?raw=true" class="w-full h-full object-cover transition duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/10"></div></div>
-                    <div class="rounded-2xl overflow-hidden shadow-lg h-48 group relative"><img src="https://github.com/ianianguro-art/Menu-POS/blob/main/Header%203.png?raw=true" class="w-full h-full object-cover transition duration-500 group-hover:scale-105"><div class="absolute inset-0 bg-black/10"></div></div>
-                </div>
+            <!-- Testimonials -->
+            <section class="container mx-auto px-4 py-20 text-center">
+                <i class="fas fa-quote-right text-4xl text-secondary mb-6 opacity-30"></i>
+                <h2 class="font-serif text-2xl font-bold text-primary dark:text-white mb-8">Voices of Al-Jazaa</h2>
+                <div id="home-reviews-container" class="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6"></div>
             </section>
 
-            <!-- Reviews Slider -->
-            <section class="container mx-auto px-4 mb-12">
-                <div class="flex justify-between items-end mb-4">
-                    <h2 class="font-serif text-xl font-bold text-primary">Customer Love</h2>
-                    <button onclick="openModal('reviews')" class="text-xs font-bold text-gold hover:text-primary transition uppercase tracking-wider">View All</button>
-                </div>
-                <div id="home-reviews-slider" class="flex overflow-x-auto gap-4 pb-6 hide-scrollbar snap-x mb-8"></div>
-            </section>
-
-            <!-- Policies -->
-            <section class="container mx-auto px-4 mb-16 max-w-2xl">
-                <h2 class="font-serif text-xl font-bold text-primary mb-4">Information</h2>
-                <div class="space-y-3">
-                    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden"><button class="w-full flex justify-between items-center p-4 font-bold text-gray-700 bg-white" onclick="toggleAccordion(this)"><span>About Al-Jazaa</span><i class="fas fa-chevron-down accordion-icon text-gray-400 transition-transform duration-300"></i></button><div class="accordion-content px-4 bg-gray-50 text-sm text-gray-600"><p class="py-4 border-t border-gray-100">Al-Jazaa Ph. is committed to providing timeless modesty with Islamic integrity.</p></div></div>
-                    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden"><button class="w-full flex justify-between items-center p-4 font-bold text-gray-700 bg-white" onclick="toggleAccordion(this)"><span>Payment Policy</span><i class="fas fa-chevron-down accordion-icon text-gray-400 transition-transform duration-300"></i></button><div class="accordion-content px-4 bg-gray-50 text-sm text-gray-600"><p class="py-4 border-t border-gray-100">We strictly accept GCash payments. Verification required.</p></div></div>
-                    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden"><button class="w-full flex justify-between items-center p-4 font-bold text-gray-700 bg-white" onclick="toggleAccordion(this)"><span>Return & Delivery</span><i class="fas fa-chevron-down accordion-icon text-gray-400 transition-transform duration-300"></i></button><div class="accordion-content px-4 bg-gray-50 text-sm text-gray-600"><p class="py-4 border-t border-gray-100">We accept returns within 2 days for defective items, provided the item has not been used or washed. We offer nationwide delivery via J&T.</p></div></div>
-                </div>
-            </section>
-        </div>
-
-        <!-- GRID PAGE -->
-        <div id="page-grid" class="view-section hidden container mx-auto px-4 py-8">
-            <h2 id="grid-title" class="font-serif text-2xl font-bold text-primary mb-6">Products</h2>
-            <div id="full-product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
-        </div>
-
-        <!-- DETAIL PAGE -->
-        <div id="page-detail" class="view-section hidden pb-[90px] md:pb-12 bg-white min-h-screen">
-            <div class="md:hidden h-[60px] flex items-center px-4 border-b bg-white shadow-sm shrink-0 sticky top-[30px] z-40">
-                <button onclick="window.history.back()" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100"><i class="fas fa-arrow-left text-xl text-gray-700"></i></button>
-                <span class="ml-4 font-bold text-lg text-primary truncate">Product Details</span>
-            </div>
-            <div class="hidden md:block container mx-auto px-4 py-6"><button onclick="window.history.back()" class="flex items-center text-gray-500 hover:text-primary transition"><i class="fas fa-arrow-left mr-2"></i> Back to Shop</button></div>
-            
-            <div class="container mx-auto px-0 md:px-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-12">
-                    <div class="relative w-full bg-gray-50 md:rounded-3xl overflow-hidden aspect-[3/4] md:aspect-[4/5] md:sticky md:top-32">
-                        <img id="dt-img" class="w-full h-full object-contain md:object-cover">
-                        <span id="dt-badge" class="absolute top-4 left-4 bg-primary text-white text-xs font-bold px-3 py-1 rounded hidden">SALE</span>
-                        <div id="dt-gallery" class="absolute bottom-4 left-0 w-full flex justify-center gap-2 px-4 overflow-x-auto hide-scrollbar"></div>
-                    </div>
-                    <div class="p-5 md:p-0 md:pt-4">
-                        <div id="dt-cat" class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 border border-gray-200 inline-block px-2 py-1 rounded">Category</div>
-                        <h1 id="dt-name" class="font-serif text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight"></h1>
-                        <div class="mb-6 flex items-center gap-3"><span id="dt-price-display" class="text-2xl md:text-3xl font-bold text-green-700"></span><span id="dt-old-price" class="text-lg text-gray-400 line-through hidden"></span></div>
-                        <p id="dt-desc" class="text-gray-600 text-sm leading-relaxed mb-8 border-b border-gray-100 pb-6"></p>
-                        
-                        <div class="space-y-6 mb-8">
-                            <div><label class="block text-xs font-bold text-gray-800 mb-2 uppercase tracking-wide">Size <span class="text-red-500">*</span></label><div id="size-opts" class="flex flex-wrap gap-3"></div></div>
-                            <div><label class="block text-xs font-bold text-gray-800 mb-2 uppercase tracking-wide">Color <span class="text-red-500">*</span></label><div id="color-opts" class="flex flex-wrap gap-3"></div></div>
-                            <div><label class="block text-xs font-bold text-gray-800 mb-2 uppercase tracking-wide">Height <span class="text-red-500">*</span></label><input type="text" id="dt-height" class="w-full md:w-full p-3 bg-white border border-gray-300 rounded focus:border-primary outline-none text-sm transition" placeholder="e.g. 5'4" oninput="checkAddBtn()"></div>
-                            
-                            <div class="pt-4 flex flex-col md:flex-row gap-4 items-stretch">
-                                <div class="w-full md:w-32 shrink-0">
-                                    <label class="block text-xs font-bold text-gray-800 mb-2 uppercase tracking-wide">Quantity</label>
-                                    <div class="flex items-center border border-gray-300 rounded-lg h-12 bg-white w-full">
-                                        <button onclick="changeQty(-1)" class="w-10 h-full text-gray-600 hover:bg-gray-50 rounded-l-lg font-bold">-</button>
-                                        <input type="text" id="dt-qty" value="1" readonly class="flex-1 text-center font-bold text-gray-800 outline-none h-full bg-transparent w-full">
-                                        <button onclick="changeQty(1)" class="w-10 h-full text-gray-600 hover:bg-gray-50 rounded-r-lg font-bold">+</button>
-                                    </div>
-                                </div>
-                                <div class="hidden md:flex flex-1 flex-col justify-end">
-                                    <button id="btn-add-desktop" onclick="addToCart()" disabled class="h-12 w-full bg-primary hover:bg-primary-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-8 rounded font-bold uppercase tracking-wide shadow-lg transition">
-                                        Add to Cart
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="bundle-area" class="mb-10 hidden bg-gray-50 p-4 rounded-xl border border-gray-100">
-                            <label class="block text-xs font-bold text-primary mb-3 uppercase">Bundle Offers</label>
-                            <div class="space-y-3">
-                                <div class="bundle-opt bg-white border rounded p-3 flex justify-between items-center cursor-pointer hover:border-primary transition" onclick="selectBundle(1, this)"><span class="text-sm font-medium">1 Piece</span><span class="text-xs text-gray-500">Standard</span></div>
-                                <div class="bundle-opt bg-white border rounded p-3 flex justify-between items-center cursor-pointer hover:border-primary transition" onclick="selectBundle(2, this)"><div><span class="text-sm font-medium">2 Pieces</span> <span class="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full ml-2">5% OFF</span></div><span class="font-bold text-primary text-sm" id="bp-2"></span></div>
-                                <div class="bundle-opt bg-white border rounded p-3 flex justify-between items-center cursor-pointer hover:border-primary transition" onclick="selectBundle(3, this)"><div><span class="text-sm font-medium">3 Pieces</span> <span class="bg-primary text-white text-[10px] px-2 py-0.5 rounded-full ml-2">10% OFF</span></div><span class="font-bold text-primary text-sm" id="bp-3"></span></div>
-                            </div>
-                        </div>
-                        <div class="pt-8 border-t border-gray-200"><h3 class="font-serif text-xl font-bold text-gray-800 mb-4">You might also like</h3><div id="related-products-area" class="flex gap-4 overflow-x-auto hide-scrollbar pb-2"></div></div>
-                    </div>
-                </div>
-            </div>
-            <div class="md:hidden sticky-bottom-action">
-                <div class="flex flex-col"><span class="text-[10px] text-gray-500 uppercase tracking-wide">Total Price</span><span id="sticky-price" class="font-serif text-xl font-bold text-primary">₱0</span></div>
-                <button id="btn-add" onclick="addToCart()" disabled class="bg-primary hover:bg-primary-dark disabled:bg-gray-300 disabled:cursor-not-allowed text-white px-8 h-11 rounded font-bold text-sm uppercase tracking-wide shadow-lg transition">Add to Bag</button>
-            </div>
-        </div>
-
-        <!-- CART PAGE -->
-        <div id="page-cart" class="view-section hidden container mx-auto px-4 py-8 pb-32">
-            <h2 class="font-serif text-2xl font-bold text-center mb-6">Shopping Bag</h2>
-            <div id="cart-content" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6"></div>
-            
-            <div id="cart-related-section" class="hidden mb-6">
-                 <h3 class="font-bold text-gray-700 mb-3 text-sm uppercase tracking-wide">You May Also Like</h3>
-                 <div id="cart-related-items" class="flex overflow-x-auto gap-3 pb-2 hide-scrollbar"></div>
-            </div>
-
-            <div id="cart-summary" class="hidden bg-white p-5 rounded-xl border shadow-sm sticky bottom-[90px]">
-                <div class="flex justify-between items-center mb-4"><span class="text-gray-500">Subtotal</span><span id="cart-total" class="font-bold text-xl text-primary">₱0</span></div>
-                <div class="max-w-md mx-auto">
-                    <button onclick="routeTo('checkout')" class="w-full bg-gold text-white py-3 rounded-lg font-bold uppercase tracking-wide shadow-md hover:bg-yellow-600 transition">Checkout</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- CHECKOUT PAGE -->
-        <div id="page-checkout" class="view-section hidden container mx-auto px-4 py-8 pb-32 max-w-2xl">
-            <div class="bg-white rounded-xl shadow-lg p-5 border border-gray-100">
-                <h2 class="font-serif text-2xl font-bold text-primary text-center mb-1">Checkout</h2>
-                <p class="text-center text-xs text-gray-500 mb-6">Complete your details</p>
-                
-                <div class="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
-                    <h6 class="font-bold text-xs uppercase text-gray-500 mb-3">Order Summary</h6>
-                    <div id="checkout-items-list" class="space-y-3 mb-3"></div>
-                </div>
-
-                <form id="checkout-form" onsubmit="submitOrder(event)" oninput="validateCheckoutForm()">
-                    <!-- Donation -->
-                    <div class="bg-green-50 p-4 rounded-lg border border-green-100 mb-6 text-center">
-                        <div class="font-bold text-primary text-sm mb-1">✨ Donate to Orphans (Sadaqah) ✨</div>
-                        <p class="text-xs text-gray-600 mb-3">Add a small percentage to help those in need.</p>
-                        <div class="flex flex-wrap justify-center gap-2 mb-2">
-                            <button type="button" class="donate-pill border border-primary text-primary px-3 py-1 text-xs rounded hover:bg-primary hover:text-white transition" onclick="selectDonation(0.05, this)">5%</button>
-                            <button type="button" class="donate-pill border border-primary text-primary px-3 py-1 text-xs rounded hover:bg-primary hover:text-white transition" onclick="selectDonation(0.10, this)">10%</button>
-                            <button type="button" class="donate-pill border border-primary text-primary px-3 py-1 text-xs rounded hover:bg-primary hover:text-white transition" onclick="selectDonation(0.20, this)">20%</button>
-                            <button type="button" class="donate-pill border border-primary text-primary px-3 py-1 text-xs rounded hover:bg-primary hover:text-white transition" onclick="selectDonation(0, this)">None</button>
-                        </div>
-                        <textarea id="donation-note" class="w-full p-2 text-xs border rounded bg-white mt-2 hidden" placeholder="Special Intention / Note"></textarea>
-                    </div>
-                    <!-- Contact/Del -->
-                    <h6 class="font-bold text-xs uppercase text-gray-400 mb-3">1. Delivery & Address</h6>
-                    <div class="space-y-3 mb-6">
-                        <select id="del-method" class="w-full p-3 bg-gray-50 border rounded-lg text-sm outline-none focus:border-primary" onchange="toggleDeliveryOptions()" required><option value="" disabled selected>Select Delivery Method</option><option value="Pick-up">Pick-up (Free)</option><option value="Delivery">Delivery (Courier)</option></select>
-                        <input type="text" id="c-name" class="w-full p-3 bg-gray-50 border rounded-lg text-sm outline-none focus:border-primary" placeholder="Full Name" required>
-                        <div class="grid grid-cols-2 gap-3"><input type="number" id="c-phone" class="w-full p-3 bg-gray-50 border rounded-lg text-sm outline-none focus:border-primary" placeholder="Phone No." required><input type="email" id="c-email" class="w-full p-3 bg-gray-50 border rounded-lg text-sm outline-none focus:border-primary" placeholder="Email" required></div>
-                        <div id="delivery-fields" class="space-y-3 hidden border-t pt-3 mt-3">
-                            <label class="text-xs font-bold text-primary">Shipping Address</label><input type="text" id="addr-street" class="w-full p-3 bg-gray-50 border rounded-lg text-sm" placeholder="House / Street / Subd.">
-                            <div class="grid grid-cols-2 gap-3"><input type="text" id="addr-brgy" class="w-full p-3 bg-gray-50 border rounded-lg text-sm" placeholder="Barangay"><input type="text" id="addr-city" class="w-full p-3 bg-gray-50 border rounded-lg text-sm" placeholder="City"></div>
-                            <div class="grid grid-cols-2 gap-3"><input type="text" id="addr-prov" class="w-full p-3 bg-gray-50 border rounded-lg text-sm" placeholder="Province"><select id="addr-region" class="w-full p-3 bg-gray-50 border rounded-lg text-sm" onchange="calcShipping()"><option value="" disabled selected>Region</option><option value="Metro Manila">Metro Manila</option><option value="Luzon">Luzon</option><option value="Visayas">Visayas</option><option value="Mindanao">Mindanao</option><option value="Island">Island</option></select></div>
-                            <input type="text" id="addr-zip" class="w-full p-3 bg-gray-50 border rounded-lg text-sm" placeholder="Zip Code">
-                        </div>
-                    </div>
-                    <!-- Payment -->
-                    <h6 class="font-bold text-xs uppercase text-gray-400 mb-3">2. Payment</h6>
-                    <div class="bg-gray-50 p-4 rounded-lg border mb-4">
-                        <div class="flex items-center gap-3 mb-3"><div class="bg-blue-500 text-white font-bold p-2 rounded text-xs">GCash</div><div class="text-sm"><div class="font-bold">Send to: 0976-551-3716</div></div></div>
-                        <input type="text" id="c-ref" class="w-full p-3 bg-white border rounded-lg text-sm mb-3" placeholder="GCash Reference No." required>
-                        <label class="block w-full border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:bg-white transition"><span class="text-xs text-gray-500"><i class="fas fa-camera mr-1"></i> Upload Payment Screenshot</span><input type="file" id="c-proof" accept="image/*" class="hidden"></label><div id="upload-msg" class="text-center text-xs text-green-600 font-bold mt-2 hidden">Screenshot Attached!</div>
-                    </div>
-                    <!-- Totals -->
-                    <div class="bg-white border-t border-b py-4 mb-6">
-                        <div class="flex justify-between text-sm mb-1"><span>Subtotal:</span> <span id="sum-subtotal">₱0</span></div>
-                        <div class="flex justify-between text-sm mb-1"><span>Delivery Fee:</span> <span id="sum-shipping" class="text-red-500">₱0</span></div>
-                        <div class="flex justify-between text-sm mb-1 hidden text-green-600 font-bold" id="sum-donate-row"><span>Donation:</span> <span id="sum-donation">₱0</span></div>
-                        <div class="flex justify-between text-xl font-bold text-primary mt-2 border-t pt-2"><span>Grand Total:</span> <span id="pay-total">₱0</span></div>
-                        <div id="sum-discount-row" class="flex justify-between text-sm mt-2 text-green-600 hidden bg-green-50 px-2 py-1 rounded">
-                            <span class="font-bold">Total Savings:</span> <span id="sum-discount">₱0</span>
-                        </div>
-                    </div>
-                    <button type="submit" id="btn-place-order" class="w-full bg-gray-300 text-white py-4 rounded-lg font-bold text-lg uppercase tracking-wide transition" disabled>Fill Details</button>
-                </form>
-            </div>
-        </div>
-    </main>
-
-    <!-- POPUP MODALS -->
-    
-    <!-- Track Order Modal -->
-    <div id="modal-track" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="closeModal('track')">
-        <div class="bg-white w-full max-w-lg rounded-2xl p-6 shadow-2xl relative transform transition-all" onclick="event.stopPropagation()">
-            <button onclick="closeModal('track')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700"><i class="fas fa-times text-xl"></i></button>
-            <h3 class="font-serif text-2xl font-bold text-primary mb-4 text-center">Track Your Order</h3>
-            <div class="flex shadow-sm rounded-full overflow-hidden border mb-6 bg-gray-50">
-                <input type="text" id="track-id" class="w-full px-5 py-3 bg-transparent outline-none text-sm" placeholder="Enter Order ID (e.g. ALJ-12345)">
-                <button onclick="trackOrder()" class="bg-primary text-white px-6 font-bold hover:bg-primary-dark transition text-sm">Search</button>
-            </div>
-            
-            <div id="track-result" class="hidden">
-                <div class="flex justify-between items-center mb-8 relative px-2">
-                    <div class="step-item" id="step-pending">
-                        <div class="step-circle"><i class="fas fa-hourglass-start"></i></div>
-                        <div class="step-text">Pending</div>
-                    </div>
-                    <div class="step-item" id="step-verified">
-                        <div class="step-line"></div>
-                        <div class="step-circle"><i class="fas fa-check-circle"></i></div>
-                        <div class="step-text">Verified</div>
-                    </div>
-                    <div class="step-item" id="step-progress">
-                        <div class="step-line"></div>
-                        <div class="step-circle"><i class="fas fa-box-open"></i></div>
-                        <div class="step-text">Packing</div>
-                    </div>
-                    <div class="step-item" id="step-ready">
-                        <div class="step-line"></div>
-                        <div class="step-circle"><i class="fas fa-shipping-fast"></i></div>
-                        <div class="step-text">Ready</div>
-                    </div>
-                    <div class="step-item" id="step-delivered">
-                        <div class="step-line"></div>
-                        <div class="step-circle"><i class="fas fa-home"></i></div>
-                        <div class="step-text">Delivered</div>
-                    </div>
-                </div>
-
-                <div class="bg-gray-50 p-4 rounded-xl border border-gray-100 text-left">
-                    <div class="flex justify-between text-sm text-gray-600"><span>Order Date:</span> <span id="t-date" class="font-bold"></span></div>
-                    <div class="flex justify-between text-sm text-gray-600 mt-1"><span>Amount:</span> <span id="t-total" class="font-bold"></span></div>
-                    <div class="mt-3 pt-3 border-t text-center text-xs text-gray-500" id="t-msg"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Reviews Modal -->
-    <div id="modal-reviews" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-4 backdrop-blur-sm" onclick="closeModal('reviews')">
-        <div class="bg-white w-full max-w-lg h-[80vh] rounded-2xl shadow-2xl relative flex flex-col transform transition-all" onclick="event.stopPropagation()">
-            <div class="p-5 border-b flex justify-between items-center bg-gray-50 rounded-t-2xl">
-                <h3 class="font-serif text-xl font-bold text-primary">Customer Reviews</h3>
-                <button onclick="closeModal('reviews')" class="text-gray-400 hover:text-gray-700"><i class="fas fa-times text-xl"></i></button>
-            </div>
-            <div class="flex-1 overflow-y-auto p-5 space-y-4" id="main-reviews-list"></div>
-            <div class="p-4 border-t bg-gray-50 rounded-b-2xl">
-                <button onclick="document.getElementById('modal-review-form').classList.toggle('hidden')" class="w-full bg-primary text-white py-3 rounded-lg font-bold text-sm uppercase shadow hover:bg-primary-dark transition">Write a Review</button>
-                <div id="modal-review-form" class="hidden mt-4 pt-4 border-t border-gray-200">
-                    <form onsubmit="submitInstantReview(event, 'modal')">
-                        <div class="flex gap-1 mb-3 text-2xl text-gray-300 flex-row-reverse justify-end"><input type="radio" name="m-rating" id="mr5" value="5" class="hidden peer/5"><label for="mr5" class="peer-checked/5:text-gold hover:text-gold cursor-pointer">★</label><input type="radio" name="m-rating" id="mr4" value="4" class="hidden peer/4"><label for="mr4" class="peer-checked/4:text-gold hover:text-gold peer-checked/5:text-gold cursor-pointer">★</label><input type="radio" name="m-rating" id="mr3" value="3" class="hidden peer/3"><label for="mr3" class="peer-checked/3:text-gold hover:text-gold peer-checked/4:text-gold peer-checked/5:text-gold cursor-pointer">★</label><input type="radio" name="m-rating" id="mr2" value="2" class="hidden peer/2"><label for="mr2" class="peer-checked/2:text-gold hover:text-gold peer-checked/3:text-gold peer-checked/4:text-gold peer-checked/5:text-gold cursor-pointer">★</label><input type="radio" name="m-rating" id="mr1" value="1" class="hidden peer/1"><label for="mr1" class="peer-checked/1:text-gold hover:text-gold peer-checked/2:text-gold peer-checked/3:text-gold peer-checked/4:text-gold peer-checked/5:text-gold cursor-pointer">★</label></div>
-                        <input type="text" id="mr-name" class="w-full p-2 bg-white border rounded mb-2 text-sm" placeholder="Name" required><textarea id="mr-feedback" class="w-full p-2 bg-white border rounded mb-2 text-sm" rows="2" placeholder="Experience..." required></textarea>
-                        <button type="submit" class="w-full bg-gray-800 text-white py-2 rounded text-xs font-bold uppercase">Post</button>
+            <!-- Newsletter -->
+            <section class="bg-primary dark:bg-black text-white py-16">
+                <div class="container mx-auto px-4 text-center max-w-xl">
+                    <h3 class="font-serif text-2xl mb-2">Join Our Community</h3>
+                    <p class="text-sm opacity-70 mb-6 font-light">Subscribe for exclusive releases and Islamic lifestyle inspiration.</p>
+                    <form onsubmit="subscribeNewsletter(event)" class="flex border-b border-white/30 pb-2">
+                        <input type="email" id="sub-email" placeholder="Email Address" class="bg-transparent w-full outline-none text-white placeholder-white/50" required>
+                        <button type="submit" class="uppercase text-xs font-bold tracking-widest hover:text-secondary transition">Join</button>
                     </form>
                 </div>
+            </section>
+        </div>
+
+        <!-- 2. SHOP GRID PAGE -->
+        <div id="page-grid" class="page-section hidden px-4 py-10 container mx-auto min-h-screen">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-10 mt-4">
+                <h2 id="grid-title" class="font-serif text-3xl font-bold text-primary dark:text-white">Shop All</h2>
+                <div class="flex gap-4 mt-4 md:mt-0 overflow-x-auto w-full md:w-auto pb-2">
+                    <button onclick="renderGrid(allProducts)" class="text-xs uppercase tracking-widest font-bold text-gray-400 hover:text-primary focus:text-primary">All</button>
+                    <button onclick="filterGender('Men')" class="text-xs uppercase tracking-widest font-bold text-gray-400 hover:text-primary focus:text-primary">Men</button>
+                    <button onclick="filterGender('Women')" class="text-xs uppercase tracking-widest font-bold text-gray-400 hover:text-primary focus:text-primary">Women</button>
+                </div>
             </div>
+            
+            <!-- Search -->
+            <div class="mb-8 relative max-w-md mx-auto">
+                <input type="text" id="searchBox" placeholder="Search..." class="w-full bg-white dark:bg-dark border border-gray-200 dark:border-gray-700 px-4 py-3 pl-10 text-sm focus:border-secondary outline-none rounded-none" onkeyup="if(event.key==='Enter') doSearch()">
+                <i class="fas fa-search absolute left-4 top-4 text-gray-300"></i>
+            </div>
+
+            <div id="full-product-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10"></div>
+        </div>
+
+        <!-- 3. PRODUCT DETAIL PAGE -->
+        <div id="page-detail" class="page-section hidden bg-white dark:bg-darkbg min-h-screen pb-20">
+            <div class="container mx-auto px-4 py-6">
+                <button onclick="window.history.back()" class="text-xs uppercase tracking-widest text-gray-400 mb-6 hover:text-primary"><i class="fas fa-arrow-left mr-2"></i> Back</button>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16">
+                    <!-- Image -->
+                    <div class="space-y-4">
+                        <div class="aspect-[3/4] bg-gray-50 overflow-hidden relative">
+                            <img id="dt-img" class="w-full h-full object-cover">
+                            <span id="dt-badge" class="absolute top-4 left-4 bg-secondary text-white text-[10px] uppercase font-bold px-3 py-1 hidden">Sale</span>
+                        </div>
+                        <div id="dt-gallery" class="flex gap-2 overflow-x-auto hide-scrollbar"></div>
+                    </div>
+
+                    <!-- Info -->
+                    <div class="flex flex-col justify-center">
+                        <div id="dt-cat" class="text-xs font-bold text-secondary uppercase tracking-widest mb-2">Category</div>
+                        <h1 id="dt-name" class="font-serif text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4"></h1>
+                        <div class="flex items-center gap-4 mb-8">
+                            <span id="dt-price-display" class="text-2xl font-bold text-primary dark:text-gray-200"></span>
+                            <span id="dt-old-price" class="text-sm text-gray-400 line-through hidden"></span>
+                        </div>
+                        
+                        <p id="dt-desc" class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-8 font-light"></p>
+
+                        <!-- Selectors -->
+                        <div class="space-y-6 mb-8 border-t border-gray-100 dark:border-gray-800 pt-6">
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wide mb-2">Size</label>
+                                <div id="size-opts" class="flex flex-wrap gap-2"></div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wide mb-2">Color</label>
+                                <div id="color-opts" class="flex flex-wrap gap-2"></div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold uppercase tracking-wide mb-2">Height Preference</label>
+                                <input type="text" id="dt-height" class="w-full p-3 bg-transparent border border-gray-300 dark:border-gray-700 text-sm focus:border-primary outline-none" placeholder="e.g. 5'6 (for length adjustments)" oninput="checkAddBtn()">
+                            </div>
+                            
+                            <!-- Quantity -->
+                            <div class="flex items-center gap-4">
+                                <label class="text-xs font-bold uppercase tracking-wide">Qty</label>
+                                <div class="flex items-center border border-gray-300 dark:border-gray-700 h-10 w-32">
+                                    <button onclick="changeQty(-1)" class="w-10 h-full hover:bg-gray-100 dark:hover:bg-gray-800">-</button>
+                                    <input type="text" id="dt-qty" value="1" readonly class="flex-1 text-center bg-transparent outline-none text-sm font-bold">
+                                    <button onclick="changeQty(1)" class="w-10 h-full hover:bg-gray-100 dark:hover:bg-gray-800">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-4 sticky bottom-0 bg-white dark:bg-darkbg p-4 md:p-0 md:static border-t md:border-t-0 shadow-lg md:shadow-none z-30">
+                            <button id="btn-add" onclick="addToCart()" disabled class="flex-1 bg-primary disabled:bg-gray-300 text-white py-4 uppercase text-xs font-bold tracking-widest hover:bg-primary-dark transition">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. ABOUT PAGE -->
+        <div id="page-about" class="page-section hidden container mx-auto px-4 py-12 max-w-3xl text-center">
+            <h1 class="font-serif text-4xl font-bold text-primary dark:text-white mb-6">Our Story</h1>
+            <div class="font-arabic text-2xl text-secondary mb-8">بسم الله الرحمن الرحيم</div>
+            <div class="prose dark:prose-invert mx-auto text-sm leading-relaxed text-gray-600 dark:text-gray-300 space-y-6">
+                <p>Welcome to <strong>Al-Jazaa</strong>. Born from a desire to merge unwavering faith with contemporary aesthetics, we are a brand dedicated to the modern Muslim.</p>
+                <p>We believe that modesty is not just a dress code, but a lifestyle of dignity and elegance. Our collections are curated to honor Islamic values while ensuring you feel confident and comfortable in every setting.</p>
+                <p>Every piece is chosen with the intention of <em>Ihsan</em> (excellence) — high-quality fabrics, modest cuts, and timeless designs.</p>
+            </div>
+            <div class="mt-12 p-8 bg-sand dark:bg-gray-900 rounded-sm border border-secondary/20">
+                <h3 class="font-serif text-xl mb-2">Our Promise</h3>
+                <p class="text-xs uppercase tracking-widest text-gray-500">Halal. Modest. Ethical.</p>
+            </div>
+        </div>
+
+        <!-- 5. CONTACT PAGE -->
+        <div id="page-contact" class="page-section hidden container mx-auto px-4 py-12 max-w-xl">
+            <h1 class="font-serif text-3xl font-bold text-center mb-2">Contact Us</h1>
+            <p class="text-center text-gray-500 text-sm mb-10">We'd love to hear from you.</p>
+            
+            <div class="bg-white dark:bg-dark p-8 shadow-sm border border-gray-100 dark:border-gray-800">
+                <div class="space-y-4 mb-8">
+                    <input type="text" placeholder="Your Name" class="w-full p-3 bg-sand dark:bg-darkbg border-b border-gray-300 dark:border-gray-700 outline-none focus:border-primary text-sm">
+                    <input type="email" placeholder="Your Email" class="w-full p-3 bg-sand dark:bg-darkbg border-b border-gray-300 dark:border-gray-700 outline-none focus:border-primary text-sm">
+                    <textarea rows="4" placeholder="Message" class="w-full p-3 bg-sand dark:bg-darkbg border-b border-gray-300 dark:border-gray-700 outline-none focus:border-primary text-sm"></textarea>
+                </div>
+                <button class="w-full btn-primary">Send Message</button>
+            </div>
+            <div class="mt-8 text-center space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <p><i class="fas fa-envelope mr-2 text-secondary"></i> aljazaa.ph@gmail.com</p>
+                <p><i class="fab fa-whatsapp mr-2 text-secondary"></i> +63 976 551 3716</p>
+            </div>
+        </div>
+
+        <!-- 6. CART & CHECKOUT (Kept functional logic but styled) -->
+        <div id="page-cart" class="page-section hidden container mx-auto px-4 py-12 max-w-2xl">
+            <h1 class="font-serif text-3xl font-bold mb-8 text-center">Your Bag</h1>
+            <div id="cart-items" class="space-y-4 mb-8"></div>
+            <div id="cart-summary" class="bg-white dark:bg-dark p-6 border dark:border-gray-800 hidden">
+                <div class="flex justify-between font-bold text-xl mb-6"><span>Total</span><span id="cart-total-display"></span></div>
+                <button onclick="routeTo('checkout')" class="w-full btn-primary">Proceed to Checkout</button>
+            </div>
+        </div>
+
+        <div id="page-checkout" class="page-section hidden container mx-auto px-4 py-12 max-w-2xl">
+            <h1 class="font-serif text-2xl font-bold mb-6 text-center">Checkout</h1>
+            <form id="checkout-form" onsubmit="submitOrder(event)" class="space-y-4">
+                <!-- Details -->
+                <div class="bg-white dark:bg-dark p-6 border dark:border-gray-800">
+                    <h3 class="text-xs font-bold uppercase tracking-widest mb-4 text-secondary">1. Shipping Details</h3>
+                    <div class="space-y-3">
+                         <input id="c-name" type="text" placeholder="Full Name" required class="w-full p-3 border text-sm outline-none focus:border-primary dark:bg-darkbg dark:border-gray-700">
+                         <div class="grid grid-cols-2 gap-3">
+                             <input id="c-phone" type="text" placeholder="Phone" required class="w-full p-3 border text-sm outline-none focus:border-primary dark:bg-darkbg dark:border-gray-700">
+                             <input id="c-email" type="email" placeholder="Email" required class="w-full p-3 border text-sm outline-none focus:border-primary dark:bg-darkbg dark:border-gray-700">
+                         </div>
+                         <select id="del-method" onchange="toggleDelivery()" class="w-full p-3 border text-sm outline-none bg-white dark:bg-darkbg dark:border-gray-700" required>
+                             <option value="" disabled selected>Select Delivery Method</option>
+                             <option value="Pick-up">Pick-up (Free)</option>
+                             <option value="Delivery">Nationwide Delivery</option>
+                         </select>
+                         <div id="del-fields" class="hidden space-y-3 pt-3">
+                             <input id="addr-full" placeholder="Full Address" class="w-full p-3 border text-sm outline-none dark:bg-darkbg dark:border-gray-700">
+                             <select id="addr-region" onchange="calcTotal()" class="w-full p-3 border text-sm outline-none dark:bg-darkbg dark:border-gray-700">
+                                 <option value="" disabled selected>Select Region</option>
+                                 <option value="Metro Manila">Metro Manila (₱90)</option>
+                                 <option value="Luzon">Luzon (₱150)</option>
+                                 <option value="Visayas">Visayas (₱210)</option>
+                                 <option value="Mindanao">Mindanao (₱220)</option>
+                             </select>
+                         </div>
+                    </div>
+                </div>
+
+                <!-- Payment -->
+                <div class="bg-white dark:bg-dark p-6 border dark:border-gray-800">
+                    <h3 class="text-xs font-bold uppercase tracking-widest mb-4 text-secondary">2. Payment (GCash)</h3>
+                    <p class="text-sm mb-4">Send to: <strong>0976-551-3716</strong></p>
+                    <input id="c-ref" type="text" placeholder="Reference Number" required class="w-full p-3 border text-sm outline-none mb-3 dark:bg-darkbg dark:border-gray-700">
+                    <input id="c-proof" type="file" accept="image/*" required class="text-sm">
+                </div>
+
+                <!-- Donation -->
+                <div class="bg-primary/5 p-6 border border-primary/20 rounded">
+                    <h3 class="text-xs font-bold uppercase tracking-widest mb-2 text-primary">Optional Sadaqah</h3>
+                    <div class="flex gap-2 text-xs mb-2">
+                        <button type="button" onclick="setDonation(0.05)" class="border px-2 py-1 hover:bg-primary hover:text-white transition">5%</button>
+                        <button type="button" onclick="setDonation(0.10)" class="border px-2 py-1 hover:bg-primary hover:text-white transition">10%</button>
+                        <button type="button" onclick="setDonation(0)" class="border px-2 py-1 hover:bg-primary hover:text-white transition">None</button>
+                    </div>
+                    <p class="text-[10px] text-gray-500">Proceeds go to orphan support.</p>
+                </div>
+
+                <div class="bg-white dark:bg-dark p-6 border-t dark:border-gray-800 flex justify-between items-center">
+                    <div>
+                        <div class="text-xs text-gray-500">Total Amount</div>
+                        <div id="final-total" class="text-2xl font-bold text-primary">₱0</div>
+                    </div>
+                    <button type="submit" id="btn-submit-order" class="btn-primary">Place Order</button>
+                </div>
+            </form>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white pt-16 pb-8 border-t border-gray-800">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-10 text-center md:text-left">
+            <div>
+                <h4 class="font-serif text-2xl mb-4">Al-Jazaa</h4>
+                <p class="text-xs text-gray-400 leading-loose">Premium modest fashion for the modern Muslim. <br>Design with integrity.</p>
+            </div>
+            <div>
+                <h5 class="text-secondary text-xs font-bold uppercase tracking-widest mb-4">Explore</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="#" onclick="filterGender('Men')" class="hover:text-white">Men's Collection</a></li>
+                    <li><a href="#" onclick="filterGender('Women')" class="hover:text-white">Women's Collection</a></li>
+                    <li><a href="#" onclick="routeTo('about')" class="hover:text-white">About Us</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-secondary text-xs font-bold uppercase tracking-widest mb-4">Customer Care</h5>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="#" onclick="openModal('track')" class="hover:text-white">Track Order</a></li>
+                    <li><a href="#" onclick="routeTo('contact')" class="hover:text-white">Contact Support</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="text-center mt-16 pt-8 border-t border-gray-800 text-[10px] text-gray-600 uppercase tracking-widest">
+            &copy; 2024 Al-Jazaa Ph. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- MODALS (Track Order) -->
+    <div id="modal-track" class="fixed inset-0 bg-black/80 z-[100] hidden flex items-center justify-center p-4" onclick="document.getElementById('modal-track').classList.add('hidden')">
+        <div class="bg-white dark:bg-dark w-full max-w-md p-6 rounded relative" onclick="event.stopPropagation()">
+            <h3 class="font-serif text-xl mb-4 text-center dark:text-white">Track Order</h3>
+            <div class="flex border dark:border-gray-700 p-1 mb-4">
+                <input id="track-id" type="text" placeholder="Order ID (ALJ-xxxxx)" class="flex-1 p-2 outline-none dark:bg-transparent dark:text-white">
+                <button onclick="trackOrder()" class="bg-primary text-white px-4 text-xs font-bold uppercase">Search</button>
+            </div>
+            <div id="track-res" class="text-center text-sm dark:text-gray-300"></div>
         </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="bg-primary-dark text-gray-400 py-12 text-sm">
-        <div class="container mx-auto px-4 grid md:grid-cols-3 gap-8">
-            <div><h3 class="font-serif text-white text-xl mb-4">Al-Jazaa Ph.</h3><p class="mb-4">Modesty with Integrity.</p><div class="flex gap-4"><a href="#" class="text-white hover:text-gold"><i class="fab fa-facebook fa-lg"></i></a><a href="#" class="text-white hover:text-gold"><i class="fab fa-instagram fa-lg"></i></a><a href="#" class="text-white hover:text-gold"><i class="fab fa-whatsapp fa-lg"></i></a></div></div>
-            <div><h4 class="text-white font-bold mb-4 uppercase tracking-wider">Contact</h4><p class="mb-2"><i class="fas fa-envelope mr-2"></i> aljazaa.ph@gmail.com</p><p><i class="fas fa-phone mr-2"></i> 0921-429-xxxx</p></div>
-            <div><h4 class="text-white font-bold mb-4 uppercase tracking-wider">Links</h4><ul class="space-y-2"><li><a href="#" onclick="routeTo('home')" class="hover:text-gold cursor-pointer">Shop Home</a></li><li><a href="#" onclick="openModal('track')" class="hover:text-gold cursor-pointer">Track Order</a></li></ul></div>
+    <!-- HIDDEN RECEIPT -->
+    <div id="receipt-render-area">
+        <div class="text-center border-b border-dashed border-black pb-2 mb-2">
+            <h2 class="font-bold text-xl">AL-JAZAA</h2>
+            <div class="text-xs">Modesty & Integrity</div>
         </div>
-        <div class="text-center mt-12 pt-8 border-t border-gray-700">&copy; 2024 Al-Jazaa Ph. All Rights Reserved.</div>
-    </footer>
+        <div id="rec-details" class="text-xs space-y-1 mb-2"></div>
+        <div class="border-b border-dashed border-black mb-2"></div>
+        <div id="rec-items" class="text-xs space-y-1 mb-2"></div>
+        <div class="border-t border-dashed border-black pt-2 flex justify-between font-bold text-sm">
+            <span>Total</span><span id="rec-total"></span>
+        </div>
+    </div>
 
     <!-- LOGIC -->
     <script>
-        let allProducts=[], cart=JSON.parse(localStorage.getItem('alj_cart_v17'))||[], allReviews = [];
-        let curProduct={}, selectedSize=null, selectedColor=null, bundleQty=1;
-        let cartTotalAmount=0, currentDonationPercent=0, currentShippingFee=0;
-
-        const catImages = {
-            'All': 'https://github.com/ianianguro-art/Menu-POS/blob/main/Screenshot%202025-12-03%20121224.jpg?raw=true', 
-            'Jilbab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat2.png?raw=true',
-            'Khimar': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat4.png?raw=true',
-            'Abaya': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat3.png?raw=true',
-            'Set': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat5.png?raw=true',
-            'Niqab': 'https://github.com/ianianguro-art/Menu-POS/blob/main/cat1.png?raw=true',
-            'Skirt': 'https://github.com/ianianguro-art/Website-Gallery-Image/blob/main/skirt.png?raw=true',
-            'Sale': 'https://github.com/ianianguro-art/Menu-POS/blob/main/big%20sale.jpg?raw=true',
-            'Default': 'https://cdn-icons-png.flaticon.com/512/4430/4430945.png'
-        };
+        // State
+        let allProducts = [], cart = JSON.parse(localStorage.getItem('alj_cart_premium')) || [];
+        let curProduct = {}, donationPct = 0;
+        
+        // Categorization Logic
+        const MEN_CATS = ['Thobe', 'Kufi', 'Men', 'Sunnah', 'Jubba']; // Add your sheet categories here
+        const WOMEN_CATS = ['Abaya', 'Khimar', 'Jilbab', 'Niqab', 'Skirt', 'Set', 'Women', 'Hijab'];
 
         document.addEventListener("DOMContentLoaded", () => {
-            fetchProducts(); updateCartBadge();
-            window.history.replaceState({ page: 'home' }, '', '');
+            fetchProducts();
+            updateCartBadge();
+            
+            // Initial Animation
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => document.getElementById('loader').remove(), 1000);
+            }, 1500);
+
+            // Back button handling
             window.onpopstate = (e) => {
                 if(e.state) renderPage(e.state.page); else renderPage('home');
             };
-            document.getElementById('c-proof').addEventListener('change', function() {
-                const msg = document.getElementById('upload-msg');
-                if(this.files.length > 0) msg.classList.remove('hidden'); else msg.classList.add('hidden');
-                validateCheckoutForm();
-            });
         });
 
-        function routeTo(pageId) { window.history.pushState({ page: pageId }, '', ''); renderPage(pageId); }
+        // --- NAVIGATION ---
+        function routeTo(page) {
+            window.history.pushState({page}, '', '');
+            renderPage(page);
+        }
 
         function renderPage(pageId) {
             window.scrollTo(0,0);
-            ['page-home', 'page-grid', 'page-detail', 'page-cart', 'page-checkout'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
-            closeModal('track'); closeModal('reviews');
-
-            if (pageId === 'home') document.getElementById('page-home').classList.remove('hidden');
-            else if (pageId === 'cart') { renderCart(); document.getElementById('page-cart').classList.remove('hidden'); }
-            else if (pageId === 'checkout') { 
-                if(cart.length === 0) { routeTo('home'); return; }
-                initCheckout(); 
-                document.getElementById('page-checkout').classList.remove('hidden'); 
-            }
-            else if (pageId === 'detail') document.getElementById('page-detail').classList.remove('hidden');
-            else document.getElementById('page-' + pageId).classList.remove('hidden');
-        }
-
-        // --- MODAL LOGIC ---
-        function openModal(type) {
-            const modal = document.getElementById('modal-' + type);
-            if(modal) {
-                modal.classList.remove('hidden');
-                modal.firstElementChild.classList.add('modal-enter');
-                if(type === 'reviews') renderReviews(allReviews, 'main-reviews-list');
-                if(type === 'track') {
-                    document.getElementById('track-result').classList.add('hidden');
-                    document.getElementById('track-id').value = '';
-                }
-            }
-        }
-
-        function closeModal(type) {
-            const modal = document.getElementById('modal-' + type);
-            if(modal) modal.classList.add('hidden');
+            document.querySelectorAll('.page-section').forEach(el => el.classList.add('hidden'));
+            
+            if(pageId === 'home') document.getElementById('page-home').classList.remove('hidden');
+            else if(pageId === 'grid') { document.getElementById('page-grid').classList.remove('hidden'); renderGrid(allProducts); }
+            else if(pageId === 'detail') document.getElementById('page-detail').classList.remove('hidden');
+            else if(pageId === 'cart') { document.getElementById('page-cart').classList.remove('hidden'); renderCart(); }
+            else if(pageId === 'checkout') { if(cart.length===0) routeTo('home'); else { document.getElementById('page-checkout').classList.remove('hidden'); calcTotal(); }}
+            else document.getElementById('page-'+pageId).classList.remove('hidden');
         }
 
         function toggleMobileMenu() {
-            const m = document.getElementById('mobile-menu');
-            const o = document.getElementById('menu-overlay');
-            if (m.classList.contains('translate-x-full')) {
-                m.classList.remove('translate-x-full');
-                o.classList.remove('hidden');
+            const menu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('menu-overlay');
+            if (menu.classList.contains('-translate-x-full')) {
+                menu.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
             } else {
-                m.classList.add('translate-x-full');
-                o.classList.add('hidden');
+                menu.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
             }
         }
-        
-        function toggleAccordion(btn) {
-            btn.nextElementSibling.classList.toggle('active');
-            btn.querySelector('i').classList.toggle('rotate-180');
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
         }
 
-        // --- DATA ---
+        // --- DATA & PRODUCTS ---
         function fetchProducts() {
-            fetch(WEB_APP_URL + "?action=getProducts").then(r => r.json()).then(data => {
+            fetch(WEB_APP_URL + "?action=getProducts")
+            .then(r => r.json())
+            .then(data => {
                 allProducts = data;
-                document.getElementById('loader').classList.add('hidden');
-                renderCats(); renderSuggested();
-                fetch(WEB_APP_URL + "?action=getReviews").then(r=>r.json()).then(revs => {
-                    allReviews = revs;
-                    renderReviews(allReviews.slice(0, 5), 'home-reviews-slider', true);
-                });
+                renderNewArrivals();
+                // Load reviews as well
+                fetch(WEB_APP_URL + "?action=getReviews").then(r=>r.json()).then(revs => renderHomeReviews(revs));
             });
         }
 
-        function renderCats() {
-            const cats = ['All', ...new Set(allProducts.map(p => p.category))];
-            document.getElementById('category-grid').innerHTML = cats.map(c => {
-                let img = catImages[c] || catImages['Default'];
-                return `<div onclick="filterCat('${c}')" class="flex flex-col gap-2 cursor-pointer group">
-                    <div class="relative w-full aspect-square rounded-xl overflow-hidden bg-gray-100 shadow-sm border border-gray-100 group-hover:border-gold transition">
-                        <img src="${img}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='${catImages['Default']}'">
+        function renderNewArrivals() {
+            const container = document.getElementById('home-products-slider');
+            const newItems = allProducts.slice(0, 6); // Grab first 6
+            container.innerHTML = newItems.map(p => `
+                <div onclick="openDetail('${p.id}')" class="snap-start shrink-0 w-[200px] cursor-pointer group">
+                    <div class="h-[250px] overflow-hidden mb-3 bg-gray-100 relative">
+                        <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        ${p.salePercent > 0 ? '<span class="absolute top-2 left-2 bg-secondary text-white text-[9px] font-bold px-2 py-1">SALE</span>' : ''}
                     </div>
-                    <div class="text-center">
-                        <span class="font-bold text-gray-800 text-sm uppercase tracking-wide group-hover:text-primary transition">${c}</span>
-                    </div>
-                </div>`;
-            }).join('');
-            document.getElementById('sidebar-cats-list').innerHTML = cats.map(c => 
-                `<div onclick="filterCat('${c}'); toggleMobileMenu()" class="px-3 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded cursor-pointer transition flex items-center justify-between">
-                    ${c} <i class="fas fa-chevron-right text-xs opacity-50"></i>
-                </div>`
-            ).join('');
+                    <h4 class="font-serif text-sm font-bold truncate text-primary dark:text-gray-200">${p.name}</h4>
+                    <p class="text-xs text-gray-500">₱${p.price}</p>
+                </div>
+            `).join('');
         }
 
-        function renderSuggested() {
-            const items = allProducts.sort(() => 0.5 - Math.random()).slice(0, 6);
-            document.getElementById('suggested-container').innerHTML = items.map(p => `
-                <div onclick="openDetail('${p.id}')" class="snap-start shrink-0 w-40 bg-white rounded-lg shadow-sm border overflow-hidden cursor-pointer">
-                    <img src="${p.image}" class="w-full h-40 object-cover">
-                    <div class="p-2">
-                        <div class="flex text-gold text-[10px] mb-1">★★★★★</div>
-                        <div class="text-xs font-bold text-gray-800 truncate">${p.name}</div>
-                        <div class="text-primary font-bold text-sm">₱${p.price}</div>
-                    </div>
-                </div>`).join('');
+        function renderHomeReviews(reviews) {
+            const container = document.getElementById('home-reviews-container');
+            const featured = reviews.slice(0, 2); // Show 2 reviews
+            if(featured.length === 0) { container.innerHTML = '<p class="text-center w-full col-span-2 italic text-gray-400">Be the first to review.</p>'; return; }
+            container.innerHTML = featured.map(r => `
+                <div class="bg-white dark:bg-dark p-6 border-t-2 border-secondary shadow-sm">
+                    <div class="text-secondary text-xs mb-2">${'★'.repeat(r.rating)}</div>
+                    <p class="text-sm italic mb-4 text-gray-600 dark:text-gray-300">"${r.feedback}"</p>
+                    <div class="font-bold text-xs uppercase tracking-widest text-primary dark:text-white">— ${r.name}</div>
+                </div>
+            `).join('');
         }
 
-        function filterCat(c) {
-            const list = c === 'All' ? allProducts : allProducts.filter(p => p.category === c);
-            document.getElementById('grid-title').innerText = c;
-            document.getElementById('full-product-grid').innerHTML = list.map(p => `
-                <div onclick="openDetail('${p.id}')" class="bg-white rounded-lg shadow-sm border overflow-hidden cursor-pointer">
-                    <div class="relative w-full pt-[133%] bg-gray-50">
-                        <img src="${p.image}" class="absolute top-0 left-0 w-full h-full object-cover">
-                        ${p.salePercent > 0 ? `<span class="absolute top-2 left-2 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded">SALE</span>` : ''}
-                    </div>
-                    <div class="p-3">
-                        <div class="font-bold text-sm truncate mb-1">${p.name}</div>
-                        <div class="flex items-center gap-2">
-                            <span class="text-primary font-bold">₱${p.price}</span>
-                            ${p.salePercent > 0 ? `<span class="text-[10px] text-gray-400 line-through">₱${p.originalPrice}</span>` : ''}
-                        </div>
-                    </div>
-                </div>`).join('');
+        // --- FILTERING ---
+        function filterGender(gender) {
+            const cats = gender === 'Men' ? MEN_CATS : WOMEN_CATS;
+            // Filter products where category partially matches list
+            const filtered = allProducts.filter(p => cats.some(c => p.category.includes(c)));
+            document.getElementById('grid-title').innerText = `Shop ${gender}`;
+            renderGrid(filtered);
             routeTo('grid');
         }
 
-        // --- DETAIL VIEW ---
+        function renderGrid(products) {
+            const grid = document.getElementById('full-product-grid');
+            if(products.length === 0) { grid.innerHTML = '<div class="col-span-full text-center py-20 opacity-50">No products found.</div>'; return; }
+            
+            grid.innerHTML = products.map(p => `
+                <div onclick="openDetail('${p.id}')" class="cursor-pointer group animate-fade-in-up">
+                    <div class="relative aspect-[3/4] mb-3 overflow-hidden bg-gray-100">
+                        <img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        ${p.salePercent > 0 ? `<div class="absolute bottom-0 left-0 bg-red-600 text-white text-[10px] w-full text-center py-1 font-bold">SALE ${p.salePercent}% OFF</div>` : ''}
+                        <button class="absolute bottom-4 right-4 bg-white text-dark w-8 h-8 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition shadow-lg"><i class="fas fa-eye"></i></button>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-serif font-bold text-gray-900 dark:text-white truncate">${p.name}</h3>
+                        <p class="text-xs text-secondary font-bold mt-1">₱${p.price}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function doSearch() {
+            const q = document.getElementById('searchBox').value.toLowerCase();
+            const res = allProducts.filter(p => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+            renderGrid(res);
+        }
+
+        // --- PRODUCT DETAILS ---
         function openDetail(id) {
             curProduct = allProducts.find(p => p.id == id);
-            selectedSize = null; selectedColor = null; bundleQty = 1; document.getElementById('dt-height').value = '';
+            
+            // Populate Data
             document.getElementById('dt-img').src = curProduct.image;
             document.getElementById('dt-name').innerText = curProduct.name;
             document.getElementById('dt-cat').innerText = curProduct.category;
-            document.getElementById('dt-desc').innerText = curProduct.desc;
-            if(curProduct.salePercent > 0) {
-                document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice;
-                document.getElementById('dt-old-price').classList.remove('hidden');
-                document.getElementById('dt-price-display').classList.add('text-red-600');
-                document.getElementById('dt-badge').classList.remove('hidden');
-            } else {
-                document.getElementById('dt-old-price').classList.add('hidden');
-                document.getElementById('dt-price-display').classList.remove('text-red-600');
-                document.getElementById('dt-badge').classList.add('hidden');
-            }
+            document.getElementById('dt-desc').innerText = curProduct.desc || "Experience premium quality and comfort.";
             document.getElementById('dt-price-display').innerText = "₱" + curProduct.price;
-
-            let imgs = (curProduct.images && curProduct.images.length) ? curProduct.images : [curProduct.image];
-            document.getElementById('dt-gallery').innerHTML = imgs.map(src => `<img src="${src}" class="w-16 h-16 rounded border object-cover cursor-pointer" onclick="document.getElementById('dt-img').src='${src}'">`).join('');
-
-            const isNiqab = curProduct.category.toLowerCase() === 'niqab';
-            if(isNiqab) {
-                document.getElementById('size-opts').innerHTML = '<span class="text-sm text-gray-500">Free Size</span>';
-                selectedSize = "Free Size"; document.getElementById('bundle-area').classList.add('hidden');
+            
+            if(curProduct.salePercent > 0) {
+                document.getElementById('dt-badge').classList.remove('hidden');
+                document.getElementById('dt-old-price').classList.remove('hidden');
+                document.getElementById('dt-old-price').innerText = "₱" + curProduct.originalPrice;
             } else {
-                document.getElementById('size-opts').innerHTML = ['S','M','L','XL'].map(s => `<button class="opt-btn size border border-gray-300 text-gray-600 px-4 py-2 rounded hover:border-primary transition font-medium text-sm" onclick="pickOpt('size','${s}',this)">${s}</button>`).join('');
-                document.getElementById('bundle-area').classList.remove('hidden');
-                document.getElementById('bp-2').innerText = "₱" + Math.floor(curProduct.price * 2 * 0.95);
-                document.getElementById('bp-3').innerText = "₱" + Math.floor(curProduct.price * 3 * 0.90);
-                selectBundle(1, document.querySelector('.bundle-opt'));
+                document.getElementById('dt-badge').classList.add('hidden');
+                document.getElementById('dt-old-price').classList.add('hidden');
             }
 
-            let colors = curProduct.colors ? curProduct.colors.split(',') : ['Default'];
-            document.getElementById('color-opts').innerHTML = colors.map(c => `<button class="opt-btn color border border-gray-300 text-gray-600 px-4 py-2 rounded hover:border-primary transition font-medium text-sm" onclick="pickOpt('color','${c.trim()}',this)">${c.trim()}</button>`).join('');
+            // Gallery
+            const gallery = curProduct.images || [curProduct.image];
+            document.getElementById('dt-gallery').innerHTML = gallery.map(src => 
+                `<img src="${src}" onclick="document.getElementById('dt-img').src='${src}'" class="w-16 h-20 object-cover cursor-pointer border hover:border-secondary">`
+            ).join('');
 
-            renderRelated(curProduct.category, curProduct.id);
-            updateStickyPrice(); checkAddBtn();
+            // Options
+            const isAcc = !['Abaya','Thobe'].some(c => curProduct.category.includes(c)); // Simple logic, refine as needed
+            const sizes = isAcc ? ['Free Size'] : ['S','M','L','XL'];
+            document.getElementById('size-opts').innerHTML = sizes.map(s => 
+                `<button class="opt-btn size border px-4 py-2 text-xs hover:border-primary dark:border-gray-700 dark:hover:border-secondary transition" onclick="selectOpt(this, 'size', '${s}')">${s}</button>`
+            ).join('');
+
+            const colors = curProduct.colors ? curProduct.colors.split(',') : ['Standard'];
+            document.getElementById('color-opts').innerHTML = colors.map(c => 
+                `<button class="opt-btn color border px-4 py-2 text-xs hover:border-primary dark:border-gray-700 dark:hover:border-secondary transition" onclick="selectOpt(this, 'color', '${c.trim()}')">${c.trim()}</button>`
+            ).join('');
+
+            // Reset Form
+            curProduct.selSize = null; curProduct.selColor = null; curProduct.selQty = 1;
+            document.getElementById('dt-height').value = '';
+            document.getElementById('dt-qty').value = 1;
+            checkAddBtn();
+
             routeTo('detail');
         }
 
-        function renderRelated(cat, id) {
-            const related = allProducts.filter(p => p.category === cat && p.id !== id).sort(()=>0.5-Math.random()).slice(0,5);
-            document.getElementById('related-products-area').innerHTML = related.map(p => `
-                <div onclick="openDetail('${p.id}')" class="shrink-0 w-32 cursor-pointer group"><div class="w-full h-40 rounded-lg mb-2 bg-gray-50 overflow-hidden"><img src="${p.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300"></div><div class="text-xs font-bold truncate text-gray-800">${p.name}</div><div class="text-xs text-primary font-bold">₱${p.price}</div></div>`).join('');
-        }
-
-        function pickOpt(type, val, el) {
-            const grp = type === 'size' ? '.opt-btn.size' : '.opt-btn.color';
-            document.querySelectorAll(grp).forEach(b => {
+        function selectOpt(el, type, val) {
+            document.querySelectorAll(`.opt-btn.${type}`).forEach(b => {
                 b.classList.remove('bg-primary', 'text-white', 'border-primary');
-                b.classList.add('text-gray-600', 'border-gray-300');
+                b.classList.add('border-gray-200');
             });
-            el.classList.remove('text-gray-600', 'border-gray-300');
+            el.classList.remove('border-gray-200');
             el.classList.add('bg-primary', 'text-white', 'border-primary');
-            if(type === 'size') selectedSize = val; else selectedColor = val; checkAddBtn();
-        }
-
-        function selectBundle(q, el) {
-            bundleQty = q; document.querySelectorAll('.bundle-opt').forEach(b => b.classList.remove('border-primary', 'bg-green-50'));
-            el.classList.add('border-primary', 'bg-green-50'); document.getElementById('dt-qty').value = q; updateStickyPrice();
+            
+            if(type === 'size') curProduct.selSize = val;
+            if(type === 'color') curProduct.selColor = val;
+            checkAddBtn();
         }
 
         function changeQty(n) {
-            let v = parseInt(document.getElementById('dt-qty').value) + n; if(v < 1) v = 1;
-            document.getElementById('dt-qty').value = v;
-            if(curProduct.category.toLowerCase() !== 'niqab') {
-                const opts = document.querySelectorAll('.bundle-opt');
-                if(v===1) selectBundle(1, opts[0]); else if(v===2) selectBundle(2, opts[1]); else if(v===3) selectBundle(3, opts[2]); else { bundleQty = v; updateStickyPrice(); }
-            } else { bundleQty = v; updateStickyPrice(); }
-        }
-
-        function updateStickyPrice() {
-            let p = curProduct.price * bundleQty;
-            if(curProduct.category.toLowerCase() !== 'niqab') { if(bundleQty === 2) p*=0.95; if(bundleQty === 3) p*=0.90; }
-            document.getElementById('sticky-price').innerText = "₱" + Math.ceil(p);
+            let q = parseInt(document.getElementById('dt-qty').value) + n;
+            if(q < 1) q = 1;
+            document.getElementById('dt-qty').value = q;
+            curProduct.selQty = q;
         }
 
         function checkAddBtn() {
-            const h = document.getElementById('dt-height').value; const btns = [document.getElementById('btn-add'), document.getElementById('btn-add-desktop')];
-            const isValid = selectedSize && selectedColor && h;
-            btns.forEach(btn => { if(isValid) btn.disabled = false; else btn.disabled = true; });
+            const h = document.getElementById('dt-height').value;
+            const valid = curProduct.selSize && curProduct.selColor && h.length > 0;
+            const btn = document.getElementById('btn-add');
+            btn.disabled = !valid;
         }
 
         function addToCart() {
-            let unitP = curProduct.price;
-            if(curProduct.category.toLowerCase() !== 'niqab') { if(bundleQty===2) unitP=(curProduct.price*2*0.95)/2; if(bundleQty===3) unitP=(curProduct.price*3*0.90)/3; }
-            cart.push({ ...curProduct, size: selectedSize, color: selectedColor, height: document.getElementById('dt-height').value, qty: bundleQty, price: Math.ceil(unitP), basePrice: curProduct.price });
-            localStorage.setItem('alj_cart_v17', JSON.stringify(cart)); updateCartBadge();
-            Swal.fire({icon:'success', title:'Added to Bag', toast:true, position:'top-end', showConfirmButton:false, timer:1500});
+            cart.push({
+                ...curProduct,
+                size: curProduct.selSize,
+                color: curProduct.selColor,
+                qty: curProduct.selQty,
+                height: document.getElementById('dt-height').value
+            });
+            localStorage.setItem('alj_cart_premium', JSON.stringify(cart));
+            updateCartBadge();
+            Swal.fire({
+                title: 'Added to Bag',
+                icon: 'success',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 1500,
+                background: '#1b4d3e',
+                color: '#fff'
+            });
             window.history.back();
         }
 
-        function updateCartBadge() { document.getElementById('cart-count').innerText = cart.length; }
+        function updateCartBadge() {
+            document.getElementById('cart-count').innerText = cart.length;
+        }
 
+        // --- CART ---
         function renderCart() {
-            const c = document.getElementById('cart-content');
-            if(cart.length === 0) { c.innerHTML = '<div class="p-10 text-center text-gray-500">Your bag is empty</div>'; document.getElementById('cart-summary').classList.add('hidden'); document.getElementById('cart-related-section').classList.add('hidden'); return; }
-            document.getElementById('cart-summary').classList.remove('hidden');
-            let t = 0;
-            c.innerHTML = cart.map((i, idx) => {
-                t += i.price * i.qty;
-                return `<div class="flex gap-3 p-4 border-b last:border-0"><img src="${i.image}" class="w-20 h-20 object-cover rounded bg-gray-50"><div class="flex-1"><div class="flex justify-between"><h4 class="font-bold text-sm text-gray-800">${i.name}</h4><button onclick="remItem(${idx})" class="text-red-400"><i class="fas fa-trash"></i></button></div><div class="text-xs text-gray-500 mb-1">${i.size} | ${i.color}</div><div class="flex justify-between items-end"><span class="text-primary font-bold">₱${i.price}</span><span class="text-xs bg-gray-100 px-2 py-1 rounded">Qty: ${i.qty}</span></div></div></div>`;
+            const div = document.getElementById('cart-items');
+            const summary = document.getElementById('cart-summary');
+            
+            if(cart.length === 0) {
+                div.innerHTML = '<div class="text-center py-10 opacity-50">Your bag is empty.</div>';
+                summary.classList.add('hidden');
+                return;
+            }
+            summary.classList.remove('hidden');
+
+            let total = 0;
+            div.innerHTML = cart.map((item, idx) => {
+                total += item.price * item.qty;
+                return `
+                <div class="flex gap-4 border-b border-gray-100 dark:border-gray-800 pb-4">
+                    <img src="${item.image}" class="w-20 h-24 object-cover bg-gray-50">
+                    <div class="flex-1">
+                        <div class="flex justify-between">
+                            <h4 class="font-serif font-bold text-sm">${item.name}</h4>
+                            <button onclick="remItem(${idx})" class="text-red-400 text-xs hover:text-red-600">REMOVE</button>
+                        </div>
+                        <p class="text-xs text-gray-500 mb-2">${item.size} / ${item.color}</p>
+                        <div class="flex justify-between items-end">
+                            <span class="text-xs border px-2 py-1">Qty: ${item.qty}</span>
+                            <span class="font-bold text-primary dark:text-secondary">₱${(item.price * item.qty).toLocaleString()}</span>
+                        </div>
+                    </div>
+                </div>`;
             }).join('');
-            document.getElementById('cart-total').innerText = "₱" + t.toLocaleString();
-            renderCartRelated();
+            
+            document.getElementById('cart-total-display').innerText = "₱" + total.toLocaleString();
         }
 
-        function renderCartRelated() {
-            const section = document.getElementById('cart-related-section'); const container = document.getElementById('cart-related-items');
-            const cartIds = cart.map(i => i.id); const suggestions = allProducts.filter(p => !cartIds.includes(p.id)).sort(()=>0.5-Math.random()).slice(0, 4);
-            if(suggestions.length > 0) { section.classList.remove('hidden'); container.innerHTML = suggestions.map(p => `<div onclick="openDetail('${p.id}')" class="min-w-[100px] w-[100px] cursor-pointer group"><div class="w-full h-24 rounded bg-gray-100 overflow-hidden mb-1 relative border border-gray-100"><img src="${p.image}" class="w-full h-full object-cover"></div><div class="text-[10px] font-bold truncate">${p.name}</div><div class="text-[10px] text-primary font-bold">₱${p.price}</div></div>`).join(''); } else { section.classList.add('hidden'); }
+        function remItem(i) {
+            cart.splice(i, 1);
+            localStorage.setItem('alj_cart_premium', JSON.stringify(cart));
+            updateCartBadge();
+            renderCart();
         }
 
-        function remItem(i) { cart.splice(i,1); localStorage.setItem('alj_cart_v17', JSON.stringify(cart)); updateCartBadge(); renderCart(); }
-
-        function initCheckout() {
-            cartTotalAmount = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
-            document.getElementById('checkout-items-list').innerHTML = cart.map(item => `<div class="flex gap-3 items-center border-b border-gray-100 pb-2 last:border-0 last:pb-0"><img src="${item.image}" class="w-10 h-10 rounded object-cover bg-white border"><div class="flex-1"><div class="text-xs font-bold text-gray-800 truncate">${item.name}</div><div class="text-[10px] text-gray-500">${item.size} / ${item.color}</div></div><div class="text-xs font-bold text-primary">x${item.qty}</div><div class="text-xs font-bold">₱${(item.price * item.qty).toLocaleString()}</div></div>`).join('');
-            currentDonationPercent = 0; currentShippingFee = 0;
-            document.getElementById('del-method').value = ""; document.getElementById('delivery-fields').classList.add('hidden');
-            document.getElementById('c-proof').value = ""; document.getElementById('upload-msg').classList.add('hidden');
-            document.querySelectorAll('.donate-pill').forEach(b => b.classList.remove('bg-primary', 'text-white'));
-            updateCheckoutCalc();
+        // --- CHECKOUT ---
+        function toggleDelivery() {
+            const method = document.getElementById('del-method').value;
+            const fields = document.getElementById('del-fields');
+            if(method === 'Delivery') {
+                fields.classList.remove('hidden');
+                document.getElementById('addr-full').required = true;
+                document.getElementById('addr-region').required = true;
+            } else {
+                fields.classList.add('hidden');
+                document.getElementById('addr-full').required = false;
+                document.getElementById('addr-region').required = false;
+            }
+            calcTotal();
         }
 
-        function toggleDeliveryOptions() {
-            const m = document.getElementById('del-method').value; const fields = document.getElementById('delivery-fields'); const inputs = fields.querySelectorAll('input, select');
-            if (m === 'Delivery') { fields.classList.remove('hidden'); inputs.forEach(i => i.required = true); calcShipping(); } else { fields.classList.add('hidden'); inputs.forEach(i => i.required = false); currentShippingFee = 0; }
-            updateCheckoutCalc();
+        function setDonation(pct) {
+            donationPct = pct;
+            calcTotal();
         }
 
-        function calcShipping() {
-            if (document.getElementById('del-method').value !== 'Delivery') return;
-            const region = document.getElementById('addr-region').value; let fee = 0;
-            if(region === 'Metro Manila') fee = 90; else if(region === 'Luzon') fee = 150; else if(region === 'Visayas') fee = 210; else if(region === 'Mindanao') fee = 220; else if(region === 'Island') fee = 250;
-            if(cartTotalAmount >= 3000) fee = 0; // FREE SHIPPING LOGIC
-            currentShippingFee = fee; updateCheckoutCalc();
-        }
+        function calcTotal() {
+            let subtotal = cart.reduce((a,b) => a + (b.price*b.qty), 0);
+            let shipping = 0;
+            
+            if(document.getElementById('del-method').value === 'Delivery') {
+                const reg = document.getElementById('addr-region').value;
+                if(subtotal < 3000) { // Free shipping threshold logic
+                    if(reg.includes('Manila')) shipping = 90;
+                    else if(reg.includes('Luzon')) shipping = 150;
+                    else if(reg.includes('Visayas')) shipping = 210;
+                    else if(reg.includes('Mindanao')) shipping = 220;
+                }
+            }
 
-        function selectDonation(p, el) {
-            currentDonationPercent = p; document.querySelectorAll('.donate-pill').forEach(b => b.classList.remove('bg-primary', 'text-white')); el.classList.add('bg-primary', 'text-white');
-            if(p > 0) document.getElementById('donation-note').classList.remove('hidden'); else document.getElementById('donation-note').classList.add('hidden');
-            updateCheckoutCalc();
-        }
-
-        function updateCheckoutCalc() {
-            const don = Math.ceil(cartTotalAmount * currentDonationPercent); const total = cartTotalAmount + currentShippingFee + don;
-            let theoreticalTotal = 0; cart.forEach(item => { const bp = item.basePrice || item.price; theoreticalTotal += (bp * item.qty); });
-            const discount = theoreticalTotal - cartTotalAmount;
-            document.getElementById('sum-subtotal').innerText = "₱" + cartTotalAmount.toLocaleString(); document.getElementById('sum-shipping').innerText = "₱" + currentShippingFee;
-            if(don > 0) { document.getElementById('sum-donate-row').classList.remove('hidden'); document.getElementById('sum-donation').innerText = "₱" + don; } else document.getElementById('sum-donate-row').classList.add('hidden');
-            if(discount > 0) { document.getElementById('sum-discount-row').classList.remove('hidden'); document.getElementById('sum-discount').innerText = "₱" + discount.toLocaleString(); } else { document.getElementById('sum-discount-row').classList.add('hidden'); }
-            document.getElementById('pay-total').innerText = "₱" + total.toLocaleString(); validateCheckoutForm();
-        }
-
-        function validateCheckoutForm() {
-            const f = document.getElementById('checkout-form'); const hasFile = document.getElementById('c-proof').files.length > 0; const btn = document.getElementById('btn-place-order');
-            if(f.checkValidity() && hasFile) { btn.disabled = false; btn.innerText = "Place Order"; btn.classList.remove('bg-gray-300'); btn.classList.add('bg-primary', 'shadow-lg'); } else { btn.disabled = true; btn.innerText = "Fill All Details"; btn.classList.add('bg-gray-300'); btn.classList.remove('bg-primary', 'shadow-lg'); }
+            let donation = Math.ceil(subtotal * donationPct);
+            let total = subtotal + shipping + donation;
+            
+            document.getElementById('final-total').innerText = "₱" + total.toLocaleString();
+            return { total, subtotal, shipping, donation };
         }
 
         function submitOrder(e) {
-            e.preventDefault(); const file = document.getElementById('c-proof').files[0];
-            Swal.fire({ title: 'Processing...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-order');
+            btn.disabled = true; btn.innerText = "Processing...";
             
-            // Prepare Data for Receipt before sending
-            const custName = document.getElementById('c-name').value;
-            const donationAmt = Math.ceil(cartTotalAmount * currentDonationPercent);
-            const totalVal = "₱" + (cartTotalAmount + currentShippingFee + donationAmt).toLocaleString();
-            const receiptItems = [...cart]; // Copy cart items
-            const receiptSub = "₱" + cartTotalAmount.toLocaleString();
-            const receiptShip = "₱" + currentShippingFee;
-            const receiptDon = "₱" + donationAmt;
-
+            const file = document.getElementById('c-proof').files[0];
             const reader = new FileReader();
+            
             reader.onload = function(evt) {
-                const payload = {
-                    action: 'placeOrder', cust: { name: custName, phone: document.getElementById('c-phone').value, email: document.getElementById('c-email').value, addr: (document.getElementById('del-method').value === 'Delivery') ? `${document.getElementById('addr-street').value}, ${document.getElementById('addr-brgy').value}, ${document.getElementById('addr-city').value}` : "Pick-up" },
-                    pay: { ref: document.getElementById('c-ref').value, image: evt.target.result, mime: file.type }, cart: cart, total: totalVal,
-                    donation: { percent: (currentDonationPercent * 100) + "%", amount: donationAmt, note: document.getElementById('donation-note').value }, delivery: { method: document.getElementById('del-method').value, region: document.getElementById('addr-region').value || "N/A", fee: currentShippingFee }
-                };
+                const calcs = calcTotal();
+                const address = document.getElementById('del-method').value === 'Delivery' ? 
+                    `${document.getElementById('addr-full').value} (${document.getElementById('addr-region').value})` : "Pick-up";
                 
-                fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r => r.json()).then(d => {
-                    if(d.status === 'success') { 
-                        cart = []; localStorage.setItem('alj_cart_v17', JSON.stringify(cart)); 
-                        
-                        // SHOW DOWNLOAD PROMPT
-                        Swal.fire({ 
-                            icon:'success', 
-                            title: 'Order Placed!', 
-                            text: `ID: ${d.orderId}. Download your receipt?`,
-                            showCancelButton: true,
-                            confirmButtonText: 'Download Receipt',
-                            cancelButtonText: 'No, Thanks'
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                downloadReceipt(d.orderId, custName, receiptItems, receiptSub, receiptShip, receiptDon, totalVal);
-                            } else {
-                                window.location.reload();
-                            }
+                const payload = {
+                    action: 'placeOrder',
+                    cust: {
+                        name: document.getElementById('c-name').value,
+                        phone: document.getElementById('c-phone').value,
+                        email: document.getElementById('c-email').value,
+                        addr: address
+                    },
+                    pay: {
+                        ref: document.getElementById('c-ref').value,
+                        image: evt.target.result,
+                        mime: file.type
+                    },
+                    cart: cart,
+                    total: "₱" + calcs.total.toLocaleString(),
+                    donation: { percent: donationPct * 100 + "%", amount: calcs.donation },
+                    delivery: { 
+                        method: document.getElementById('del-method').value, 
+                        region: document.getElementById('addr-region').value || "N/A", 
+                        fee: calcs.shipping 
+                    }
+                };
+
+                fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload)
+                }).then(r => r.json()).then(d => {
+                    if(d.status === 'success') {
+                        generateReceipt(d.orderId, payload.cust.name, calcs);
+                        cart = []; localStorage.setItem('alj_cart_premium', '[]');
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Order Placed',
+                            text: 'Your Order ID: ' + d.orderId,
+                            confirmButtonColor: '#1b4d3e'
+                        }).then(() => {
+                            window.location.reload();
                         });
-                    } else Swal.fire('Error', d.error, 'error');
+                    } else {
+                        Swal.fire('Error', d.error, 'error');
+                        btn.disabled = false; btn.innerText = "Place Order";
+                    }
                 });
-            }; reader.readAsDataURL(file);
+            };
+            reader.readAsDataURL(file);
         }
 
-        function downloadReceipt(id, name, items, sub, ship, don, total) {
-            // Populate Hidden Receipt
-            document.getElementById('rec-date').innerText = new Date().toLocaleString();
-            document.getElementById('rec-id').innerText = id;
-            document.getElementById('rec-name').innerText = name;
-            document.getElementById('rec-sub').innerText = sub;
-            document.getElementById('rec-ship').innerText = ship;
-            if(don !== "₱0") { 
-                document.getElementById('rec-don-row').classList.remove('hidden'); 
-                document.getElementById('rec-don').innerText = don; 
-            } else { 
-                document.getElementById('rec-don-row').classList.add('hidden'); 
-            }
-            document.getElementById('rec-total').innerText = total;
+        function generateReceipt(id, name, calcs) {
+            document.getElementById('rec-details').innerHTML = `ID: ${id}<br>Date: ${new Date().toLocaleDateString()}<br>Cust: ${name}`;
+            document.getElementById('rec-items').innerHTML = cart.map(i => `<div class="flex justify-between"><span>${i.qty}x ${i.name}</span><span>${i.price*i.qty}</span></div>`).join('');
+            document.getElementById('rec-total').innerText = "₱" + calcs.total.toLocaleString();
 
-            document.getElementById('rec-items').innerHTML = items.map(i => `
-                <div class="flex justify-between">
-                    <span>${i.qty}x ${i.name.substring(0,20)}</span>
-                    <span>₱${(i.price * i.qty).toLocaleString()}</span>
-                </div>
-                <div class="text-[10px] text-gray-500 pl-4">${i.size}, ${i.color}</div>
-            `).join('');
-
-            // Generate Image
-            const element = document.getElementById('receipt-render-area');
-            html2canvas(element).then(canvas => {
+            html2canvas(document.getElementById('receipt-render-area')).then(canvas => {
                 const link = document.createElement('a');
-                link.download = `Receipt-${id}.png`;
+                link.download = `ALJ-Receipt-${id}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
-                setTimeout(() => window.location.reload(), 2000); // Reload after download
             });
         }
 
-        function renderReviews(list, containerId, isSlider = false) {
-            const container = document.getElementById(containerId);
-            if(!list || list.length === 0) { container.innerHTML = '<div class="text-sm text-gray-500 italic">No reviews yet.</div>'; return; }
-            const cardClass = isSlider ? "snap-start shrink-0 w-[280px] bg-white p-5 rounded-xl shadow-sm border border-gray-100" : "bg-white p-4 rounded-xl border shadow-sm";
-            container.innerHTML = list.map(r => `
-                <div class="${cardClass}">
-                    <div class="flex justify-between items-start mb-2"><div><span class="font-bold text-sm block">${r.name}</span><span class="text-gold text-xs">${'★'.repeat(r.rating)}</span></div><span class="text-[10px] text-gray-400">${r.date || 'Just now'}</span></div>
-                    <p class="text-sm text-gray-600 italic">"${r.feedback}"</p>
-                    ${r.reply ? `<div class="mt-3 bg-gray-50 p-3 rounded-lg border-l-4 border-primary text-xs text-gray-600"><span class="font-bold text-primary block mb-1">Admin Response</span>${r.reply}</div>` : ''}
-                </div>`).join('');
-        }
-
-        function submitInstantReview(e, loc) {
-            e.preventDefault(); 
-            const prefix = loc === 'home' ? 'h' : 'm'; 
-            const name = document.getElementById(prefix + 'r-name').value; 
-            const fb = document.getElementById(prefix + 'r-feedback').value;
-            let rating = 0; document.querySelectorAll(`input[name="${prefix}-rating"]`).forEach(r => { if(r.checked) rating = parseInt(r.value); });
-            if(rating === 0) { Swal.fire('Oops','Select rating','warning'); return; }
-            const newReview = { name: name, feedback: fb, rating: rating, date: new Date().toLocaleDateString() };
-            allReviews.unshift(newReview); renderReviews(allReviews.slice(0, 5), 'home-reviews-slider', true);
-            if(loc==='modal') renderReviews(allReviews, 'main-reviews-list');
-            document.getElementById(prefix + 'r-name').value = ""; document.getElementById(prefix + 'r-feedback').value = "";
-            document.querySelectorAll(`input[name="${prefix}-rating"]`).forEach(r => r.checked = false);
-            Swal.fire({icon:'success', title:'Posted!', toast:true, position:'top-end', showConfirmButton:false, timer:1500});
-            if(loc==='modal') document.getElementById('modal-review-form').classList.add('hidden');
-            fetch(WEB_APP_URL, { method: 'POST', body: JSON.stringify({ action: 'submitReview', name: name, email: 'N/A', phone: 'N/A', feedback: fb, rating: rating }) });
-        }
-
-        function doSearch() {
-            const q = document.getElementById('searchBox').value.toLowerCase(); if(!q) return;
-            const matches = allProducts.filter(p => p.name.toLowerCase().includes(q));
-            document.getElementById('grid-title').innerText = `Search: "${q}"`;
-            document.getElementById('full-product-grid').innerHTML = matches.map(p => `<div onclick="openDetail('${p.id}')" class="bg-white rounded-lg shadow-sm border overflow-hidden cursor-pointer"><img src="${p.image}" class="w-full h-40 object-cover"><div class="p-2 font-bold text-sm">${p.name}</div></div>`).join('');
-            routeTo('grid');
-        }
-
+        // --- UTILS ---
         function trackOrder() {
-            const id = document.getElementById('track-id').value; if(!id) return; 
-            Swal.fire({didOpen:()=>Swal.showLoading()});
-            fetch(`${WEB_APP_URL}?action=trackOrder&orderId=${id}`).then(r=>r.json()).then(d => {
-                Swal.close(); 
-                document.getElementById('track-result').classList.remove('hidden');
-                if (d.status === 'found') {
-                    document.querySelectorAll('.step-item').forEach(s => s.classList.remove('active', 'completed'));
-                    const statusMap = {'Pending': 1, 'Verified': 2, 'In Progress': 3, 'Ready': 4, 'Delivered': 5};
-                    const s = d.currStatus || 'Pending'; const level = statusMap[s] || 1;
-                    const steps = ['pending', 'verified', 'progress', 'ready', 'delivered'];
-                    for(let i=0; i < 5; i++) {
-                        const el = document.getElementById('step-' + steps[i]);
-                        if(i + 1 < level) el.classList.add('completed'); else if(i + 1 === level) el.classList.add('active');
-                    }
-                    document.getElementById('t-date').innerText = d.date || '-'; 
-                    document.getElementById('t-total').innerText = d.total || '-';
-                    document.getElementById('t-msg').innerText = `Status: ${s}`;
+            const id = document.getElementById('track-id').value;
+            fetch(`${WEB_APP_URL}?action=trackOrder&orderId=${id}`)
+            .then(r => r.json())
+            .then(d => {
+                const res = document.getElementById('track-res');
+                if(d.status === 'found') {
+                    res.innerHTML = `<div class="mt-4 p-3 bg-primary/10 rounded"><div class="font-bold text-primary">${d.currStatus}</div><div class="text-xs text-gray-500">${d.date} | ${d.total}</div></div>`;
                 } else {
-                    document.querySelectorAll('.step-item').forEach(s => s.classList.remove('active', 'completed'));
-                    document.getElementById('t-msg').innerText = "Order ID not found.";
-                    document.getElementById('t-date').innerText = "-"; 
-                    document.getElementById('t-total').innerText = "-";
+                    res.innerHTML = `<div class="mt-4 text-red-500">Order not found.</div>`;
                 }
+            });
+        }
+
+        function subscribeNewsletter(e) {
+            e.preventDefault();
+            const email = document.getElementById('sub-email').value;
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'subscribe', email: email })
+            }).then(() => {
+                Swal.fire({ icon: 'success', title: 'Subscribed', toast: true, position: 'top-end', showConfirmButton: false, timer: 1500 });
+                document.getElementById('sub-email').value = "";
             });
         }
     </script>
